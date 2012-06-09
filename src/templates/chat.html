@@ -1,0 +1,8 @@
+{% extends 'layout.html' %}
+{% block content %}
+{{ nick }}
+<form method="POST" action="/quit">
+    {{ form.quit }}
+</form>
+{% endblock %}
+
