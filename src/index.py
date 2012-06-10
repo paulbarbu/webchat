@@ -6,7 +6,7 @@ from simplekv.fs import FilesystemStore
 from flaskext.kvsession import KVSessionExtension
 
 app = Flask(__name__)
-app.secret_key = '\xf8\x8a\xda\r\x81C\xc5O\xc5E\xa6\xb1\xa2"\x8eb\xdb\xca3\xfe\x86eZ%'
+app.secret_key = 'populate this string yourself!'
 
 store = FilesystemStore('data')
 sess_ext = KVSessionExtension(store, app)
