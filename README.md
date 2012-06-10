@@ -1,8 +1,7 @@
 Webchat
 =======
 
-Web application for chatting with friends, built on the OOP paradigm with
-Flask (python micro web framework) and jQuery.
+Real time chat for the web, using AJAX and Flask
 
 License
 =======
