@@ -1,8 +1,15 @@
 {% extends 'layout.html' %}
 {% block content %}
 {{ nick }}
-<form method="POST" action="/quit">
+<form method="POST">
+    {{ form.text }}
+    {{ form.send }}
     {{ form.quit }}
 </form>
+{% if form.errors %}
+{% for error in form.text.errors %}
+    {{ error }}
+{% endfor %}
+{% endif %}
 {% endblock %}
 

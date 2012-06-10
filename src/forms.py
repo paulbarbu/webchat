@@ -1,4 +1,4 @@
-from flaskext.wtf import Form, TextField, validators, SubmitField
+from flaskext.wtf import Form, TextField, validators, SubmitField, Required
 
 #TODO: reCaptcha form
 class ConnectForm(Form):
@@ -6,5 +6,7 @@ class ConnectForm(Form):
         message="Only alphanumeric characters and underscores allowed!")])
     submit = SubmitField('Connect!')
 
-class DisconnectForm(Form):
+class ChatForm(Form):
+    text = TextField(validators=[Required('Your message cannot be empty!')])
+    send =  SubmitField('Send!')
     quit = SubmitField('Quit!')

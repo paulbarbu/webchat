@@ -1,7 +1,7 @@
 #! /usr/bin/env python2.7
 
-from flask import Flask, render_template, redirect, url_for, session, request
-from forms import ConnectForm, DisconnectForm
+from flask import Flask, render_template, redirect, url_for, session
+from forms import ConnectForm, ChatForm
 from simplekv.fs import FilesystemStore
 from flaskext.kvsession import KVSessionExtension
 
@@ -29,22 +29,25 @@ def index():
     return render_template('index.html', form=form)
 
 
-@app.route('/chat', methods=['GET'])
+@app.route('/chat', methods=['GET', 'POST'])
 def chat():
     sess_ext.cleanup_sessions()
-    form = DisconnectForm()
+    form = ChatForm()
 
-    if 'nick' in session:
-        return render_template('chat.html', nick=session['nick'], form=form)
+    if 'nick' not in session: #user has no nickname
+        return redirect(url_for('index'))
 
-    return redirect(url_for('index'))
+    if form.quit.data:
+        session.destroy()
+        sess_ext.cleanup_sessions()
 
-@app.route('/quit', methods=['POST'])
-def quit():
-    session.destroy()
-    sess_ext.cleanup_sessions()
+        return redirect(url_for('index'))
 
-    return redirect(url_for('index'))
+    if form.send.data and form.text.validate(form):
+        #TODO: send AJAX request!
+        pass
+
+    return render_template('chat.html', nick=session['nick'], form=form)
 
 
 if __name__ == '__main__':
