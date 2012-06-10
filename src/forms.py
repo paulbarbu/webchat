@@ -1,6 +1,6 @@
 from flaskext.wtf import Form, TextField, validators, SubmitField, Required
 
-#TODO: reCaptcha form
+#TODO: add reCaptcha field
 class ConnectForm(Form):
     nick = TextField('Nick', [validators.Length(min=3), validators.Regexp('\w',
         message="Only alphanumeric characters and underscores allowed!")])
