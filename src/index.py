@@ -1,13 +1,14 @@
 #! /usr/bin/env python2.7
 
 from flask import (
-    Flask, render_template, redirect, url_for, session, Response, request
+    Flask, render_template, redirect, url_for, session, Response, request, json
 )
 from forms import ConnectForm, ChatForm
 from simplekv.fs import FilesystemStore
 from flaskext.kvsession import KVSessionExtension
 import redis
 import logging
+from datetime import datetime
 
 import err
 
@@ -61,9 +62,13 @@ def chat():
 def publish_message():
     try:
         #TODO: sanitize data and pack it into JSON before publishing
-        #security: Redis, XSS
+        #security: XSS
         #validity: non-blank msg and len(msg) >= 1
-        r.publish('webchat', request.form['message'])
+        r.publish('webchat', json.dumps({
+            'message': request.form['message'],
+            'author': session['nick'],
+            'date': str(datetime.now()),
+        }))
     except redis.ConnectionError as e:
         logging.critical(e)
         return Response(err.ConnectionError, 500)
@@ -110,3 +115,5 @@ if __name__ == '__main__':
     #TODO: show a user list
     #TODO: add class for the yielded events
     #TODO: usage limiter (per user)!
+    #TODO: secure the _* methods by checking if the user is logged in
+    #TODO: timezones?
