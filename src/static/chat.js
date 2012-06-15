@@ -12,6 +12,7 @@ function publish_message(e){
     e.preventDefault();
     $.post('/_publish_message', {'message': $('input:text').val()})
         .fail(display_publish_error);
+    $('input:text').val('');
 }
 
 function handle_event_error(e){
