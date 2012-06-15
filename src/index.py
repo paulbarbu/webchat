@@ -6,11 +6,12 @@ from flask import (
 from forms import ConnectForm, ChatForm
 from simplekv.fs import FilesystemStore
 from flaskext.kvsession import KVSessionExtension
+from jinja2 import utils
 import redis
 import logging
-from datetime import datetime
+import time
 
-import err
+import const
 
 app = Flask(__name__)
 app.secret_key = 'populate this string yourself!'
@@ -61,25 +62,27 @@ def chat():
 @app.route('/_publish_message', methods=['POST'])
 def publish_message():
     try:
-        #TODO: sanitize data and pack it into JSON before publishing
-        #security: XSS
-        #validity: non-blank msg and len(msg) >= 1
-        r.publish('webchat', json.dumps({
-            'message': request.form['message'],
-            'author': session['nick'],
-            'date': str(datetime.now()),
-        }))
+        message = request.form['message'].strip()
+
+        if message and len(message) >= 1:
+            r.publish('webchat', json.dumps({
+                'message': str(utils.escape(message)),
+                'author': session['nick'],
+                'date': time.strftime('%H:%M'),
+            }))
+        else:
+            return Response(const.EmptyMessage, 204)
     except redis.ConnectionError as e:
         logging.critical(e)
-        return Response(err.ConnectionError, 500)
+        return Response(const.ConnectionError, 500)
     except redis.RedisError as e:
         logging.critical(e)
-        return Response(err.UnexpectedBackendError, 500)
+        return Response(const.UnexpectedBackendError, 500)
     except Exception as e:
         logging.critical(e)
-        return Response(err.UnexpectedError, 500)
+        return Response(const.UnexpectedError, 500)
 
-    return 'Received!'
+    return const.Received
 
 
 @app.route('/_sse_stream')
@@ -94,10 +97,10 @@ def get_event():
         pubsub.subscribe('webchat')
     except redis.RedisError as e:
         logging.critical(e)
-        yield 'event: error\ndata: {0}\n\n'.format(err.UnexpectedBackendError)
+        yield 'event: error\ndata: {0}\n\n'.format(const.UnexpectedBackendError)
     except Exception as e:
         logging.critical(e)
-        yield 'event: error\ndata: {0}\n\n'.format(err.UnexpectedError)
+        yield 'event: error\ndata: {0}\n\n'.format(const.UnexpectedError)
     else:
         for event in pubsub.listen():
             yield 'data: {0}\n\n'.format(event['data'])
