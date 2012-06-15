@@ -61,6 +61,9 @@ def chat():
 
 @app.route('/_publish_message', methods=['POST'])
 def publish_message():
+    if 'nick' not in session:
+        return Response(const.NotAuthentifiedError, 403)
+
     try:
         message = request.form['message'].strip()
 
@@ -87,6 +90,9 @@ def publish_message():
 
 @app.route('/_sse_stream')
 def sse_stream():
+    if 'nick' not in session:
+        return Response(const.NotAuthentifiedError, 403)
+
     return Response(get_event(), mimetype='text/event-stream',
         headers={'Cache-Control': 'no-cache'})
 
@@ -118,5 +124,5 @@ if __name__ == '__main__':
     #TODO: show a user list
     #TODO: add class for the yielded events
     #TODO: usage limiter (per user)!
-    #TODO: secure the _* methods by checking if the user is logged in
     #TODO: timezones?
+    #TODO: on IE the page reloads, not good
