@@ -70,8 +70,8 @@ def publish_message():
         if message and len(message) >= 1:
             r.publish('webchat', json.dumps({
                 'message': str(utils.escape(message)),
-                'author': session['nick'],
-                'date': time.strftime('%H:%M'),
+                'nick': session['nick'],
+                'time': time.strftime('%H:%M'),
             }))
         else:
             return Response(const.EmptyMessage, 204)
