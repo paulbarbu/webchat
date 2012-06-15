@@ -1,6 +1,11 @@
 function display_publish_error(){
-    //TODO: display an error to the user (into the chat)
-    console.log('xhr fail')
+    var lineDiv = document.createElement('div');
+
+    lineDiv.className = 'line error';
+
+    lineDiv.innerHTML = 'Error sending your message!';
+
+    $('#chat').append(lineDiv);
 }
 
 function publish_message(e){
@@ -18,8 +23,31 @@ function handle_event_error(e){
 }
 
 function handle_message_event(e){
-    //TODO: display the message unpacked from JSON into the chat
-    console.log(e);
+    var lineDiv = document.createElement('div');
+
+    var timeSpan = document.createElement('span');
+    var nickSpan = document.createElement('span');
+    var msgSpan = document.createElement('span');
+
+    var data = JSON.parse(e.data);
+
+    lineDiv.className = 'line';
+
+    timeSpan.innerHTML = data['time'] + ' ';
+    timeSpan.className = 'time';
+
+    nickSpan.innerHTML = data['nick'] + ': ';
+    nickSpan.className = 'nick';
+
+    msgSpan.innerHTML = data['message'] + ' ';
+    msgSpan.className = 'msg';
+
+
+    lineDiv.appendChild(timeSpan);
+    lineDiv.appendChild(nickSpan);
+    lineDiv.appendChild(msgSpan);
+
+    $('#chat').append(lineDiv);
 }
 
 function load_chat(){
