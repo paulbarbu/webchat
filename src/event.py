@@ -15,3 +15,7 @@ class MessageEvent(Event):
 class ErrorEvent(Event):
     def __str__(self):
         return self.format_string.format(type='error', data=self.data)
+
+class UsersEvent(Event):
+    def __str__(self):
+        return self.format_string.format(type='users', data=self.data)

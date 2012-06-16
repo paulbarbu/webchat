@@ -29,6 +29,19 @@ Handler = {
         //than the div
     },
 
+    event_users: function handle_event_users(e){
+        var users = $.parseJSON(e.data);
+        var usersDiv = $('#user-list')[0];
+
+        usersDiv.innerHTML = '';
+
+        for(i=0; i<users.length-1; i++){
+            usersDiv.innerHTML += users[i] + ', ';
+        }
+
+        usersDiv.innerHTML += users[users.length-1];
+    },
+
     publish_error: function handle_publish_error(){
         var lineDiv = document.createElement('div');
 
@@ -59,6 +72,8 @@ function load_chat(){
 
     stream.onmessage = Handler.event_message;
     stream.onerror = Handler.event_error;
+
+    stream.addEventListener('users', Handler.event_users);
 }
 
 load_chat();

@@ -11,7 +11,7 @@ import redis
 import logging
 import time
 
-from event import MessageEvent, ErrorEvent
+from event import MessageEvent, ErrorEvent, UsersEvent
 import const
 
 app = Flask(__name__)
@@ -32,11 +32,22 @@ def index():
     form = ConnectForm()
 
     if form.validate_on_submit():
-        #TODO: check the uniqness of the name
-        session['nick'] = form.nick.data
-        session.regenerate() # anti session-fixation attack
+        # TODO: think using try, except for catching the Redis errs
+        if r.sismember('users', form.nick.data):
+            form.nick.errors.append(const.UsedNickError)
+        else:
+            r.sadd('users', form.nick.data)
+            session['nick'] = form.nick.data
+            session.regenerate() # anti session-fixation attack
 
-        return redirect(url_for('chat'))
+            try:
+                users = r.sort('users', alpha=True)
+                r.publish('webchat.users', json.dumps(users))
+            except Exception as e:
+                #TODO: think!
+                logging.critical(e)
+
+            return redirect(url_for('chat'))
 
     return render_template('index.html', form=form)
 
@@ -57,7 +68,13 @@ def chat():
 
         return redirect(url_for('index'))
 
-    return render_template('chat.html', nick=session['nick'], form=form)
+    try:
+        users = r.sort('users', alpha=True)
+    except Exception as e:
+        #TODO: think!
+        logging.critical(e)
+
+    return render_template('chat.html', nick=session['nick'], form=form, users=users)
 
 
 @app.route('/_publish_message', methods=['POST'])
@@ -103,7 +120,7 @@ def get_event():
 
     try:
         pubsub = r.pubsub()
-        pubsub.subscribe('webchat')
+        pubsub.subscribe(['webchat', 'webchat.users'])
     except redis.RedisError as e:
         logging.critical(e)
         yield ErrorEvent(const.UnexpectedBackendError)
@@ -112,7 +129,11 @@ def get_event():
         yield ErrorEvent(const.UnexpectedError)
     else:
         for event in pubsub.listen():
-            yield MessageEvent(event['data'])
+            if 'message' == event['type']:
+                if 'webchat' == event['channel']:
+                    yield MessageEvent(event['data'])
+                elif 'webchat.users' == event['channel']:
+                    yield UsersEvent(event['data'])
 
 
 if __name__ == '__main__':
@@ -123,8 +144,9 @@ if __name__ == '__main__':
     sess_ext.cleanup_sessions()
     app.run(debug=True, threaded=True, port=5001)
 
-    #TODO: handle the user logout, via PING-PONG maybe?
-    #TODO: show a user list
+    #TODO: handle the user logout(browser exit, button, computer restart,
+    # network down), via PING-PONG maybe?
+    #TODO: show a user list (update on logout)
     #TODO: usage limiter (per user)!
     #TODO: timezones?
     #TODO: on IE the page reloads, not good
