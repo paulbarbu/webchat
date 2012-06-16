@@ -11,6 +11,7 @@ import redis
 import logging
 import time
 
+from event import MessageEvent, ErrorEvent
 import const
 
 app = Flask(__name__)
@@ -98,18 +99,20 @@ def sse_stream():
 
 
 def get_event():
+    '''Yields an Event object according to the situation'''
+
     try:
         pubsub = r.pubsub()
         pubsub.subscribe('webchat')
     except redis.RedisError as e:
         logging.critical(e)
-        yield 'event: error\ndata: {0}\n\n'.format(const.UnexpectedBackendError)
+        yield ErrorEvent(const.UnexpectedBackendError)
     except Exception as e:
         logging.critical(e)
-        yield 'event: error\ndata: {0}\n\n'.format(const.UnexpectedError)
+        yield ErrorEvent(const.UnexpectedError)
     else:
         for event in pubsub.listen():
-            yield 'data: {0}\n\n'.format(event['data'])
+            yield MessageEvent(event['data'])
 
 
 if __name__ == '__main__':
@@ -122,7 +125,7 @@ if __name__ == '__main__':
 
     #TODO: handle the user logout, via PING-PONG maybe?
     #TODO: show a user list
-    #TODO: add class for the yielded events
     #TODO: usage limiter (per user)!
     #TODO: timezones?
     #TODO: on IE the page reloads, not good
+    #TODO: try to run the app using mod_wsgi in apache

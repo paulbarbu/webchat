@@ -16,9 +16,9 @@ function publish_message(e){
 }
 
 function handle_event_error(e){
-    this.close(); //`this` refers to `stream` in this context
+    this.close(); //here, `this` refers to `stream`
     console.log('err:', e);
-    //TODO: display some error to the user here (some kind fo pop up) with
+    //TODO: display some error to the user here (some kind of pop up) with
     //e.data as the err msg, also show a reconnect btn with a timer for
     //auto-reconnect
 }
@@ -49,16 +49,20 @@ function handle_message_event(e){
     lineDiv.appendChild(msgSpan);
 
     $('#chat').append(lineDiv);
+
+    //TODO: scroll the div to the bottom of the page when the content is larger
+    //than the div
 }
 
 function load_chat(){
     var stream = new EventSource('/_sse_stream');
 
     stream.onmessage = handle_message_event;
+    //stream.addEventListener('message', handle_message_event);
     stream.onerror = handle_event_error;
 }
 
 load_chat();
 $('[name="send"]').click(publish_message);
 
-//TODO: add class for handle_event_*
+//TODO: add class for handle_event_* as a Strategy pattern?
