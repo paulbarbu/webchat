@@ -57,7 +57,7 @@ def chat():
     sess_ext.cleanup_sessions()
     form = ChatForm()
 
-    if 'nick' not in session: #user has no nickname (he's not logged in)
+    if 'nick' not in session: # user has no nickname (he's not logged in)
         return redirect(url_for('index'))
 
     if form.quit.data:
