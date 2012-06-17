@@ -7,8 +7,15 @@
 </form>
 
 {% if form.errors %}
-    <ul>
+    <ul id="form-errors">
     {% for error in form.nick.errors %}
+        <li>{{ error }}</li>
+    {% endfor %}
+    </ul>
+{% endif %}
+{% if errors %}
+    <ul id="errors">
+    {% for error in errors %}
         <li>{{ error }}</li>
     {% endfor %}
     </ul>

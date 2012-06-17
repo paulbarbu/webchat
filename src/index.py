@@ -31,25 +31,29 @@ def index():
 
     form = ConnectForm()
 
+    errors = []
+
     if form.validate_on_submit():
-        # TODO: think using try, except for catching the Redis errs
-        if r.sismember('users', form.nick.data):
-            form.nick.errors.append(const.UsedNickError)
-        else:
-            r.sadd('users', form.nick.data)
-            session['nick'] = form.nick.data
-            session.regenerate() # anti session-fixation attack
+        try:
+            if r.sismember('users', form.nick.data):
+                form.nick.errors.append(const.UsedNickError)
+            else:
+                r.sadd('users', form.nick.data)
+                session['nick'] = form.nick.data
+                session.regenerate() # anti session-fixation attack
 
-            try:
-                users = r.sort('users', alpha=True)
-                r.publish('webchat.users', json.dumps(users))
-            except Exception as e:
-                #TODO: think!
-                logging.critical(e)
+                try:
+                    publish_users()
+                except redis.RedisError as e:
+                    logging.critical(e)
+                    errors.append(const.UnexpectedBackendError)
+                else:
+                    return redirect(url_for('chat'))
+        except redis.RedisError as e:
+            logging.critical(e)
+            errors.append(const.UnexpectedBackendError)
 
-            return redirect(url_for('chat'))
-
-    return render_template('index.html', form=form)
+    return render_template('index.html', form=form, errors=errors)
 
 
 @app.route('/chat', methods=['GET', 'POST'])
@@ -61,20 +65,27 @@ def chat():
         return redirect(url_for('index'))
 
     if form.quit.data:
+        try:
+            r.srem('users', session['nick'])
+            publish_users()
+        except redis.RedisError as e:
+            logging.critical(e)
+
         session.destroy()
         sess_ext.cleanup_sessions()
-        #TODO: update the user list on exit, check if the browser closes
-        #without the quit btn being pressed
 
         return redirect(url_for('index'))
 
+    users = None
+    errors = []
     try:
         users = r.sort('users', alpha=True)
-    except Exception as e:
-        #TODO: think!
+    except redis.RedisError as e:
         logging.critical(e)
+        errors.append(const.GetUsersError)
 
-    return render_template('chat.html', nick=session['nick'], form=form, users=users)
+    return render_template('chat.html', nick=session['nick'], form=form,
+        users=users, errors=errors)
 
 
 @app.route('/_publish_message', methods=['POST'])
@@ -111,6 +122,12 @@ def sse_stream():
     if 'nick' not in session:
         return Response(const.NotAuthentifiedError, 403)
 
+    try:
+        if 0 == r.scard('users'):
+            return Response(const.NoUsers, 404)
+    except redis.RedisError as e:
+        logging.critical(e)
+
     return Response(get_event(), mimetype='text/event-stream',
         headers={'Cache-Control': 'no-cache'})
 
@@ -136,6 +153,10 @@ def get_event():
                     yield UsersEvent(event['data'])
 
 
+def publish_users():
+    users = r.sort('users', alpha=True)
+    r.publish('webchat.users', json.dumps(users))
+
 if __name__ == '__main__':
     logging.basicConfig(filename='logs.log', level=logging.DEBUG,
             format='%(levelname)s: %(asctime)s - %(message)s',
@@ -144,7 +165,7 @@ if __name__ == '__main__':
     sess_ext.cleanup_sessions()
     app.run(debug=True, threaded=True, port=5001)
 
-    #TODO: handle the user logout(browser exit, button, computer restart,
+    #TODO: handle the user logout(browser exit, computer restart,
     # network down), via PING-PONG maybe?
     #TODO: show a user list (update on logout)
     #TODO: usage limiter (per user)!
