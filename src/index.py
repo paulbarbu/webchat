@@ -7,11 +7,13 @@ from forms import ConnectForm, ChatForm
 from simplekv.fs import FilesystemStore
 from flaskext.kvsession import KVSessionExtension
 from jinja2 import utils
+from threading import Thread
 import redis
 import logging
 import time
+import Queue
 
-from event import MessageEvent, ErrorEvent, UsersEvent
+from event import MessageEvent, ErrorEvent, UsersEvent, PingEvent
 import const
 
 app = Flask(__name__)
@@ -21,6 +23,11 @@ store = FilesystemStore('data')
 sess_ext = KVSessionExtension(store, app)
 
 r = redis.Redis()
+logging.basicConfig(filename='logs.log', level=logging.DEBUG,
+                    format='%(levelname)s: %(asctime)s - %(message)s',
+                    datefmt='%d-%m-%Y %H:%M:%S')
+
+q = Queue.Queue()
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -134,40 +141,60 @@ def sse_stream():
 
 def get_event():
     '''Yields an Event object according to the situation'''
-
-    try:
-        pubsub = r.pubsub()
-        pubsub.subscribe(['webchat', 'webchat.users'])
-    except redis.RedisError as e:
-        logging.critical(e)
-        yield ErrorEvent(const.UnexpectedBackendError)
-    except Exception as e:
-        logging.critical(e)
-        yield ErrorEvent(const.UnexpectedError)
-    else:
-        for event in pubsub.listen():
-            if 'message' == event['type']:
-                if 'webchat' == event['channel']:
-                    yield MessageEvent(event['data'])
-                elif 'webchat.users' == event['channel']:
-                    yield UsersEvent(event['data'])
+    while True:
+        event = q.get()
+        yield event
 
 
 def publish_users():
     users = r.sort('users', alpha=True)
     r.publish('webchat.users', json.dumps(users))
 
+def check_ping():
+    while True:
+        try:
+            last_ping = float(r.get('ping.time'))
+            if not last_ping or last_ping + 30 < time.time():
+                r.set('ping.time', time.time())
+                q.put(PingEvent())
+        except redis.RedisError as e:
+            logging.critical(e)
+
+
+def check_redis_event():
+    try:
+        pubsub = r.pubsub()
+        pubsub.subscribe(['webchat', 'webchat.users'])
+    except redis.RedisError as e:
+        logging.critical(e)
+        q.put(ErrorEvent(const.UnexpectedBackendError))
+    except Exception as e:
+        logging.critical(e)
+        q.put(ErrorEvent(const.UnexpectedError))
+    else:
+        for event in pubsub.listen():
+            if 'message' == event['type']:
+                if 'webchat' == event['channel']:
+                    q.put(MessageEvent(event['data']))
+                elif 'webchat.users' == event['channel']:
+                    q.put(UsersEvent(event['data']))
+
+
 if __name__ == '__main__':
-    logging.basicConfig(filename='logs.log', level=logging.DEBUG,
-            format='%(levelname)s: %(asctime)s - %(message)s',
-            datefmt='%d-%m-%Y %H:%M:%S')
-
     sess_ext.cleanup_sessions()
-    app.run(debug=True, threaded=True, port=5001)
 
+    ping_thread = Thread(target=check_ping)
+    redis_event_thread = Thread(target=check_redis_event)
+
+    ping_thread.start()
+    redis_event_thread.start()
+
+    app.run(debug=True, threaded=True, port=5005)
+    #app.run(debug=False, threaded=True, port=5003, host='0.0.0.0')
+
+    #TODO try to replace Queue with Event
     #TODO: handle the user logout(browser exit, computer restart,
     # network down), via PING-PONG maybe?
-    #TODO: show a user list (update on logout)
     #TODO: usage limiter (per user)!
     #TODO: timezones?
     #TODO: on IE the page reloads, not good

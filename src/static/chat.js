@@ -42,6 +42,10 @@ Handler = {
         usersDiv.innerHTML += users[users.length-1];
     },
 
+    event_ping: function handle_event_ping(e){
+        console.log(e);
+    },
+
     publish_error: function handle_publish_error(){
         var lineDiv = document.createElement('div');
 
@@ -74,6 +78,7 @@ function load_chat(){
     stream.onerror = Handler.event_error;
 
     stream.addEventListener('users', Handler.event_users);
+    stream.addEventListener('ping', Handler.event_ping);
 }
 
 load_chat();
