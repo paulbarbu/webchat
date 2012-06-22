@@ -192,7 +192,11 @@ if __name__ == '__main__':
     app.run(debug=True, threaded=True, port=5005)
     #app.run(debug=False, threaded=True, port=5003, host='0.0.0.0')
 
-    #TODO try to replace Queue with Event
+    #TODO implement the PING-PONG protocol via cronjob, a cron job is started
+    #when the app is started and it periodically checks for ping.time and it
+    #publishes ping events when needed altering the users set, then I alter it
+    #again when actually receiving the PONGs, It doesn't have to be a cronjob
+    #but a simple blocking app that checks for those intervals between the PINGS
     #TODO: handle the user logout(browser exit, computer restart,
     # network down), via PING-PONG maybe?
     #TODO: usage limiter (per user)!
