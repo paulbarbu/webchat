@@ -7,11 +7,9 @@ from forms import ConnectForm, ChatForm
 from simplekv.fs import FilesystemStore
 from flaskext.kvsession import KVSessionExtension
 from jinja2 import utils
-from threading import Thread
 import redis
 import logging
 import time
-import Queue
 
 from event import MessageEvent, ErrorEvent, UsersEvent, PingEvent
 import const
@@ -27,7 +25,6 @@ logging.basicConfig(filename='logs.log', level=logging.DEBUG,
                     format='%(levelname)s: %(asctime)s - %(message)s',
                     datefmt='%d-%m-%Y %H:%M:%S')
 
-q = Queue.Queue()
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -141,64 +138,54 @@ def sse_stream():
 
 def get_event():
     '''Yields an Event object according to the situation'''
-    while True:
-        event = q.get()
-        yield event
+    try:
+        pubsub = r.pubsub()
+        pubsub.subscribe(['webchat', 'webchat.users', 'webchat.ping'])
+    except redis.RedisError as e:
+        logging.critical(e)
+        yield ErrorEvent(const.UnexpectedBackendError)
+    except Exception as e:
+        logging.critical(e)
+        yield ErrorEvent(const.UnexpectedError)
+    else:
+        for event in pubsub.listen():
+            if 'message' == event['type']:
+                if 'webchat' == event['channel']:
+                    yield MessageEvent(event['data'])
+                elif 'webchat.users' == event['channel']:
+                    yield UsersEvent(event['data'])
+                elif 'webchat.ping' == event['channel']:
+                    r.delete('users') # clean the user list and re-update it with
+                    # the users that send back the PONG!
+                    yield PingEvent()
 
 
 def publish_users():
     users = r.sort('users', alpha=True)
     r.publish('webchat.users', json.dumps(users))
 
-def check_ping():
-    while True:
-        try:
-            last_ping = float(r.get('ping.time'))
-            if not last_ping or last_ping + 30 < time.time():
-                r.set('ping.time', time.time())
-                q.put(PingEvent())
-        except redis.RedisError as e:
-            logging.critical(e)
+@app.route('/_pong', methods=['POST'])
+def pong():
+    if 'nick' not in session:
+        return Response(const.NotAuthentifiedError, 403)
 
-
-def check_redis_event():
     try:
-        pubsub = r.pubsub()
-        pubsub.subscribe(['webchat', 'webchat.users'])
+        r.sadd('users', session['nick'])
+        publish_users()
     except redis.RedisError as e:
         logging.critical(e)
-        q.put(ErrorEvent(const.UnexpectedBackendError))
-    except Exception as e:
-        logging.critical(e)
-        q.put(ErrorEvent(const.UnexpectedError))
+        return Response(const.UnexpectedBackendError, 500)
     else:
-        for event in pubsub.listen():
-            if 'message' == event['type']:
-                if 'webchat' == event['channel']:
-                    q.put(MessageEvent(event['data']))
-                elif 'webchat.users' == event['channel']:
-                    q.put(UsersEvent(event['data']))
+        return const.Received
 
 
 if __name__ == '__main__':
     sess_ext.cleanup_sessions()
 
-    ping_thread = Thread(target=check_ping)
-    redis_event_thread = Thread(target=check_redis_event)
-
-    ping_thread.start()
-    redis_event_thread.start()
-
     app.run(debug=True, threaded=True, port=5005)
     #app.run(debug=False, threaded=True, port=5003, host='0.0.0.0')
 
-    #TODO implement the PING-PONG protocol via cronjob, a cron job is started
-    #when the app is started and it periodically checks for ping.time and it
-    #publishes ping events when needed altering the users set, then I alter it
-    #again when actually receiving the PONGs, It doesn't have to be a cronjob
-    #but a simple blocking app that checks for those intervals between the PINGS
-    #TODO: handle the user logout(browser exit, computer restart,
-    # network down), via PING-PONG maybe?
+    #TODO: announce in the chat the joins and the quits
     #TODO: usage limiter (per user)!
     #TODO: timezones?
     #TODO: on IE the page reloads, not good

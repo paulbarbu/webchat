@@ -44,6 +44,7 @@ Handler = {
 
     event_ping: function handle_event_ping(e){
         console.log(e);
+        $.post('/_pong', 'PONG!');
     },
 
     publish_error: function handle_publish_error(){
