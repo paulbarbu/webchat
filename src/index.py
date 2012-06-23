@@ -62,6 +62,10 @@ def index():
 
 @app.route('/chat', methods=['GET', 'POST'])
 def chat():
+    '''The chat (as well as the quit) action is handled here
+    When a user connects a user list is fetched from redis and displayed
+    Also a connection to our server sent events stream is established, too
+    '''
     sess_ext.cleanup_sessions()
     form = ChatForm()
 
@@ -94,6 +98,10 @@ def chat():
 
 @app.route('/_publish_message', methods=['POST'])
 def publish_message():
+    '''When a user submits the chat form this route is called via AJAX
+    The user's message is then published to redis and sent to every connected
+    client via server sent events
+    '''
     if 'nick' not in session:
         return Response(const.NotAuthentifiedError, 403)
 
@@ -123,6 +131,7 @@ def publish_message():
 
 @app.route('/_sse_stream')
 def sse_stream():
+    '''The server sent events are sent from here'''
     if 'nick' not in session:
         return Response(const.NotAuthentifiedError, 403)
 
@@ -137,7 +146,9 @@ def sse_stream():
 
 
 def get_event():
-    '''Yields an Event object according to the situation'''
+    '''Yields an Event object according to what is received via redis on the
+    subscribed channels
+    '''
     try:
         pubsub = r.pubsub()
         pubsub.subscribe(['webchat', 'webchat.users', 'webchat.ping'])
@@ -159,11 +170,15 @@ def get_event():
 
 
 def publish_users():
+    '''Gets the user list and  publishes it on redis'''
     users = r.sort('users', alpha=True)
     r.publish('webchat.users', json.dumps(users))
 
 @app.route('/_pong', methods=['POST'])
 def pong():
+    '''Handle the PONG sent as a response to PING, this way the application is
+    aware of the users still connected (those who respond to PING)
+    '''
     if 'nick' not in session:
         return Response(const.NotAuthentifiedError, 403)
 
@@ -184,7 +199,7 @@ if __name__ == '__main__':
     #app.run(debug=False, threaded=True, port=5003, host='0.0.0.0')
 
     #TODO: announce in the chat the joins and the quits
-    #TODO: usage limiter (per user)!
+    #TODO: side bar for the user list
     #TODO: timezones?
     #TODO: on IE the page reloads, not good
     #TODO: try to run the app using mod_wsgi in apache
