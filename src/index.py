@@ -155,8 +155,6 @@ def get_event():
                 elif 'webchat.users' == event['channel']:
                     yield UsersEvent(event['data'])
                 elif 'webchat.ping' == event['channel']:
-                    r.delete('users') # clean the user list and re-update it with
-                    # the users that send back the PONG!
                     yield PingEvent()
 
 

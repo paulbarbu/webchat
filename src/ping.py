@@ -17,11 +17,11 @@ def ping(r, interval=30):
         if len(users) and (not last_ping or last_ping + interval < time.time()):
             r.set('ping.time', time.time())
             r.publish('webchat.ping', 'ping')
+            r.delete('users') # clean the user list and re-update it with
+            # the users that send back the PONG!
     except redis.RedisError as e:
         logging.critical(e)
     else:
-        import pdb
-        pdb.set_trace()
         time.sleep(20)
 
 if __name__ == '__main__':
