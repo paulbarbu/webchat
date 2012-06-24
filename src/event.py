@@ -27,3 +27,11 @@ class PingEvent(Event):
 
     def __str__(self):
         return self.format_string.format(type='ping', data=self.data)
+
+class JoinEvent(Event):
+    def __str__(self):
+        return self.format_string.format(type='join', data=self.data)
+
+class QuitEvent(Event):
+    def __str__(self):
+        return self.format_string.format(type='quit', data=self.data)

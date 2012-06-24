@@ -11,7 +11,7 @@ import redis
 import logging
 import time
 
-from event import MessageEvent, ErrorEvent, UsersEvent, PingEvent
+from event import MessageEvent, ErrorEvent, UsersEvent, PingEvent, JoinEvent, QuitEvent
 import const
 
 app = Flask(__name__)
@@ -48,6 +48,10 @@ def index():
 
                 try:
                     publish_users()
+                    r.publish('webchat.join', json.dumps({
+                        'nick': session['nick'],
+                        'time': time.strftime('%H:%M'),
+                    }))
                 except redis.RedisError as e:
                     logging.critical(e)
                     errors.append(const.UnexpectedBackendError)
@@ -76,6 +80,10 @@ def chat():
         try:
             r.srem('users', session['nick'])
             publish_users()
+            r.publish('webchat.quit', json.dumps({
+                'nick': session['nick'],
+                'time': time.strftime('%H:%M'),
+            }))
         except redis.RedisError as e:
             logging.critical(e)
 
@@ -151,7 +159,8 @@ def get_event():
     '''
     try:
         pubsub = r.pubsub()
-        pubsub.subscribe(['webchat', 'webchat.users', 'webchat.ping'])
+        pubsub.subscribe(['webchat', 'webchat.users', 'webchat.ping',
+            'webchat.join', 'webchat.quit'])
     except redis.RedisError as e:
         logging.critical(e)
         yield ErrorEvent(const.UnexpectedBackendError)
@@ -167,6 +176,10 @@ def get_event():
                     yield UsersEvent(event['data'])
                 elif 'webchat.ping' == event['channel']:
                     yield PingEvent()
+                elif 'webchat.join' == event['channel']:
+                    yield JoinEvent(event['data'])
+                elif 'webchat.quit' == event['channel']:
+                    yield QuitEvent(event['data'])
 
 
 def publish_users():
@@ -198,7 +211,8 @@ if __name__ == '__main__':
     app.run(debug=True, threaded=True, port=5005)
     #app.run(debug=False, threaded=True, port=5003, host='0.0.0.0')
 
-    #TODO: announce in the chat the joins and the quits
+    #TODO: create a checkbox: "Filter join and quit messages." -- AJAX! and a
+    # setting stored in the cookie
     #TODO: side bar for the user list
     #TODO: timezones?
     #TODO: on IE the page reloads, not good
