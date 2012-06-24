@@ -18,67 +18,7 @@ Handler = {
         msgSpan.className = 'msg';
 
 
-        lineDiv.className = 'line message';
-        lineDiv.appendChild(timeSpan);
-        lineDiv.appendChild(nickSpan);
-        lineDiv.appendChild(msgSpan);
-
-        $('#chat').append(lineDiv);
-
-        //TODO: scroll the div to the bottom of the page when the content is larger
-        //than the div
-    },
-
-    event_join: function handle_event_join(e){
-        var lineDiv = document.createElement('div');
-
-        var timeSpan = document.createElement('span');
-        var nickSpan = document.createElement('span');
-        var msgSpan = document.createElement('span');
-
-        var data = JSON.parse(e.data);
-
-        timeSpan.innerHTML = data['time'] + ' ';
-        timeSpan.className = 'time';
-
-        nickSpan.innerHTML = data['nick'];
-        nickSpan.className = 'nick';
-
-        msgSpan.innerHTML = ' joined!';
-        msgSpan.className = 'msg';
-
-
-        lineDiv.className = 'line join';
-        lineDiv.appendChild(timeSpan);
-        lineDiv.appendChild(nickSpan);
-        lineDiv.appendChild(msgSpan);
-
-        $('#chat').append(lineDiv);
-
-        //TODO: scroll the div to the bottom of the page when the content is larger
-        //than the div
-    },
-
-    event_quit: function handle_event_quit(e){
-        var lineDiv = document.createElement('div');
-
-        var timeSpan = document.createElement('span');
-        var nickSpan = document.createElement('span');
-        var msgSpan = document.createElement('span');
-
-        var data = JSON.parse(e.data);
-
-        timeSpan.innerHTML = data['time'] + ' ';
-        timeSpan.className = 'time';
-
-        nickSpan.innerHTML = data['nick'];
-        nickSpan.className = 'nick';
-
-        msgSpan.innerHTML = ' left!';
-        msgSpan.className = 'msg';
-
-
-        lineDiv.className = 'line quit';
+        lineDiv.className = 'line';
         lineDiv.appendChild(timeSpan);
         lineDiv.appendChild(nickSpan);
         lineDiv.appendChild(msgSpan);
@@ -139,8 +79,6 @@ function load_chat(){
 
     stream.addEventListener('users', Handler.event_users);
     stream.addEventListener('ping', Handler.event_ping);
-    stream.addEventListener('join', Handler.event_join);
-    stream.addEventListener('quit', Handler.event_quit);
 }
 
 load_chat();

@@ -11,7 +11,7 @@ import redis
 import logging
 import time
 
-from event import MessageEvent, ErrorEvent, UsersEvent, PingEvent, JoinEvent, QuitEvent
+from event import MessageEvent, ErrorEvent, UsersEvent, PingEvent
 import const
 
 app = Flask(__name__)
@@ -48,10 +48,6 @@ def index():
 
                 try:
                     publish_users()
-                    r.publish('webchat.join', json.dumps({
-                        'nick': session['nick'],
-                        'time': time.strftime('%H:%M'),
-                    }))
                 except redis.RedisError as e:
                     logging.critical(e)
                     errors.append(const.UnexpectedBackendError)
@@ -80,10 +76,6 @@ def chat():
         try:
             r.srem('users', session['nick'])
             publish_users()
-            r.publish('webchat.quit', json.dumps({
-                'nick': session['nick'],
-                'time': time.strftime('%H:%M'),
-            }))
         except redis.RedisError as e:
             logging.critical(e)
 
@@ -159,8 +151,7 @@ def get_event():
     '''
     try:
         pubsub = r.pubsub()
-        pubsub.subscribe(['webchat', 'webchat.users', 'webchat.ping',
-            'webchat.join', 'webchat.quit'])
+        pubsub.subscribe(['webchat', 'webchat.users', 'webchat.ping'])
     except redis.RedisError as e:
         logging.critical(e)
         yield ErrorEvent(const.UnexpectedBackendError)
@@ -176,10 +167,6 @@ def get_event():
                     yield UsersEvent(event['data'])
                 elif 'webchat.ping' == event['channel']:
                     yield PingEvent()
-                elif 'webchat.join' == event['channel']:
-                    yield JoinEvent(event['data'])
-                elif 'webchat.quit' == event['channel']:
-                    yield QuitEvent(event['data'])
 
 
 def publish_users():
