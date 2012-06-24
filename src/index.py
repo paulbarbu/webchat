@@ -211,8 +211,7 @@ if __name__ == '__main__':
     app.run(debug=True, threaded=True, port=5005)
     #app.run(debug=False, threaded=True, port=5003, host='0.0.0.0')
 
-    #TODO: create a checkbox: "Filter join and quit messages." -- AJAX! and a
-    # setting stored in the cookie
+    #TODO: tab completition for user's nick
     #TODO: side bar for the user list
     #TODO: timezones?
     #TODO: on IE the page reloads, not good

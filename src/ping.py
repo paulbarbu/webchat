@@ -1,5 +1,5 @@
 #! /usr/bin/env python2.7
-import redis, logging, time
+import redis, logging, time, sys
 
 def ping(r, interval=30):
     '''Publish a ping message to redis (r) every `interval` seconds'''
@@ -19,6 +19,12 @@ def ping(r, interval=30):
             r.publish('webchat.ping', 'ping')
             r.delete('users') # clean the user list and re-update it with
             # the users that send back the PONG!
+
+
+    except redis.ConnectionError as e:
+        logging.critical(e)
+        print 'Please start the redis server'
+        sys.exit(-1)
     except redis.RedisError as e:
         logging.critical(e)
     else:
