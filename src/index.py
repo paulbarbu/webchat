@@ -9,7 +9,6 @@ from flaskext.kvsession import KVSessionExtension
 from jinja2 import utils
 import redis
 import logging
-import time
 
 from event import MessageEvent, ErrorEvent, UsersEvent, PingEvent
 import const
@@ -112,7 +111,6 @@ def publish_message():
             r.publish('webchat', json.dumps({
                 'message': str(utils.escape(message)),
                 'nick': session['nick'],
-                'time': time.strftime('%H:%M'),
             }))
         else:
             return Response(const.EmptyMessage, 204)
@@ -200,6 +198,5 @@ if __name__ == '__main__':
 
     #TODO: tab completition for user's nick
     #TODO: side bar for the user list
-    #TODO: timezones?
     #TODO: on IE the page reloads, not good
     #TODO: try to run the app using mod_wsgi in apache

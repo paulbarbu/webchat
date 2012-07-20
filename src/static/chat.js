@@ -8,7 +8,7 @@ Handler = {
 
         var data = JSON.parse(e.data);
 
-        timeSpan.innerHTML = data['time'] + ' ';
+        timeSpan.innerHTML = get_current_time() + ' ';
         timeSpan.className = 'time';
 
         nickSpan.innerHTML = data['nick'] + ': ';
@@ -79,6 +79,23 @@ function load_chat(){
 
     stream.addEventListener('users', Handler.event_users);
     stream.addEventListener('ping', Handler.event_ping);
+}
+
+function get_current_time(){
+    var currentTime = new Date();
+
+    var h = currentTime.getHours();
+    var m = currentTime.getMinutes();
+
+    if(h < 10){
+        h = '0' + h;
+    }
+
+    if(m < 10){
+        m = '0' + m;
+    }
+
+    return h + ':' + m;
 }
 
 load_chat();
