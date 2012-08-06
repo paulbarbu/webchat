@@ -43,6 +43,15 @@ def index():
             else:
                 r.sadd('users', form.nick.data)
                 session['nick'] = form.nick.data
+                session['rooms'] = []
+                rooms = form.rooms.data.split()
+
+                if not rooms:
+                    session['rooms'] = 'webchat.room.global'
+                else:
+                    for room in rooms:
+                        session['rooms'].append(room)
+
                 session.regenerate() # anti session-fixation attack
 
                 try:
@@ -92,7 +101,7 @@ def chat():
         errors.append(const.GetUsersError)
 
     return render_template('chat.html', nick=session['nick'], form=form,
-        users=users, errors=errors)
+        users=users, errors=errors, rooms=session['rooms'])
 
 
 @app.route('/_publish_message', methods=['POST'])
@@ -106,14 +115,19 @@ def publish_message():
 
     try:
         message = request.form['message'].strip()
+        room = request.form['room'].strip()
 
         if message and len(message) >= 1:
-            r.publish('webchat', json.dumps({
-                'message': str(utils.escape(message)),
-                'nick': session['nick'],
-            }))
+            if room in session['rooms']:
+                r.publish('webchat.room.' + room, json.dumps({
+                    'message': str(utils.escape(message)),
+                    'nick': session['nick'],
+                    'room': room,
+                }))
+            else:
+                return Response(const.WrongRoom, 403)
         else:
-            return Response(const.EmptyMessage, 204)
+            return Response(const.EmptyMessage, 403)
     except redis.ConnectionError as e:
         logging.critical(e)
         return Response(const.ConnectionError, 500)
@@ -149,7 +163,7 @@ def get_event():
     '''
     try:
         pubsub = r.pubsub()
-        pubsub.subscribe(['webchat', 'webchat.users', 'webchat.ping'])
+        pubsub.psubscribe('webchat.*')
     except redis.RedisError as e:
         logging.critical(e)
         yield ErrorEvent(const.UnexpectedBackendError)
@@ -158,8 +172,8 @@ def get_event():
         yield ErrorEvent(const.UnexpectedError)
     else:
         for event in pubsub.listen():
-            if 'message' == event['type']:
-                if 'webchat' == event['channel']:
+            if 'pmessage' == event['type']:
+                if 'webchat.room.' in event['channel']:
                     yield MessageEvent(event['data'])
                 elif 'webchat.users' == event['channel']:
                     yield UsersEvent(event['data'])

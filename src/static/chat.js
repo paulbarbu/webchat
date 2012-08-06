@@ -3,6 +3,7 @@ Handler = {
         var lineDiv = document.createElement('div');
 
         var timeSpan = document.createElement('span');
+        var roomSpan = document.createElement('span');
         var nickSpan = document.createElement('span');
         var msgSpan = document.createElement('span');
 
@@ -11,17 +12,22 @@ Handler = {
         timeSpan.innerHTML = get_current_time() + ' ';
         timeSpan.className = 'time';
 
+        roomSpan.innerHTML = '[' + data['room'] + '] ';
+        roomSpan.className = 'room';
+
         nickSpan.innerHTML = data['nick'] + ': ';
         nickSpan.className = 'nick';
 
         msgSpan.innerHTML = data['message'] + ' ';
         msgSpan.className = 'msg';
 
-
         lineDiv.className = 'line';
         lineDiv.appendChild(timeSpan);
+        lineDiv.appendChild(roomSpan);
         lineDiv.appendChild(nickSpan);
         lineDiv.appendChild(msgSpan);
+
+        console.log(data);
 
         $('#chat').append(lineDiv);
 
@@ -46,11 +52,11 @@ Handler = {
         $.post('/_pong', 'PONG!');
     },
 
-    publish_error: function handle_publish_error(){
+    publish_error: function handle_publish_error(e){
         var lineDiv = document.createElement('div');
 
         lineDiv.className = 'line error';
-        lineDiv.innerHTML = 'Error sending your message!';
+        lineDiv.innerHTML = e.responseText;
 
         $('#chat').append(lineDiv);
     },
@@ -66,7 +72,7 @@ Handler = {
 
 function publish_message(e){
     e.preventDefault();
-    $.post('/_publish_message', {'message': $('input:text').val()})
+    $.post('/_publish_message', {'message': $('input:text').val(), 'room': $('#room').val()})
         .fail(Handler.publish_error);
     $('input:text').val('');
 }

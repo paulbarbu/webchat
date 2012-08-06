@@ -8,4 +8,5 @@ GetUsersError = 'Could not retrieve users due to backend error!'
 Received = 'Received'
 
 EmptyMessage = 'Empty message was supplied, no action taken!'
+WrongRoom = "You cannot chat on this room because you haven't joined it!"
 NoUsers = 'No users online!'

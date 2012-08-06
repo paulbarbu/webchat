@@ -3,6 +3,7 @@
 <form method="POST">
     {{ form.hidden_tag() }}
     {{ form.nick.label }}{{ form.nick(tabindex=1) }}
+    {{ form.rooms.label }}{{ form.rooms(tabindex=2) }}
     {{ form.submit }}
 </form>
 
