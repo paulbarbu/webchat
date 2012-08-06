@@ -71,14 +71,60 @@ Handler = {
         //TODO: display some error to the user here (some kind of pop up) with
         //e.data as the err msg, also show a reconnect btn with a timer for
         //auto-reconnect
-    }
+    },
+
+    join_error: function handle_join_error(e){
+        var lineDiv = document.createElement('div');
+
+        lineDiv.className = 'join error';
+        lineDiv.innerHTML = e.responseText;
+
+        $('#chat').append(lineDiv);
+        console.log(e);
+    },
 }
 
 function publish_message(e){
     e.preventDefault();
     $.post('/_publish_message', {'message': $('#text').val(), 'room': $('#room').val()})
         .fail(Handler.publish_error);
-    $('input:text').val('');
+    $('#text').val('');
+}
+
+function update_rooms(e){
+    $('#rooms').val(e);
+    load_rooms();
+}
+
+function load_rooms(){
+    var rooms = JSON.parse($('#rooms').val());
+    var room_selector = document.getElementById('room');
+
+    if(room_selector){
+        room_selector.options.length = 0;
+    }
+    else{
+        room_selector = document.createElement('select');
+
+        room_selector.id = 'room';
+
+
+        $('form').append(room_selector);
+    }
+
+    for(i=0; i < rooms.length; i++){
+        var option = document.createElement('option');
+        option.value = option.innerHTML = rooms[i];
+
+        room_selector.appendChild(option);
+    }
+}
+
+function join_rooms(e){
+    e.preventDefault();
+    $.post('/_join_rooms', {'join_rooms': $('#join_rooms').val()})
+        .fail(Handler.join_error).success(update_rooms);
+    $('#join_rooms').val('');
 }
 
 function load_chat(){
@@ -90,20 +136,7 @@ function load_chat(){
     stream.addEventListener('users', Handler.event_users);
     stream.addEventListener('ping', Handler.event_ping);
 
-    var rooms = JSON.parse($('#rooms').val());
-    var room_selector = document.createElement('select');
-
-    room_selector.id = 'room';
-
-    for(i=0; i < rooms.length; i++){
-        var option = document.createElement('option');
-        option.value = option.innerHTML = rooms[i];
-
-        room_selector.appendChild(option);
-    }
-
-    $('form').append(room_selector);
-
+    load_rooms();
 }
 
 function get_current_time(){
@@ -125,3 +158,4 @@ function get_current_time(){
 
 load_chat();
 $('[name="send"]').click(publish_message);
+$('[name="join"]').click(join_rooms);

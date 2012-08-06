@@ -47,7 +47,7 @@ def index():
                 rooms = form.rooms.data.split()
 
                 if not rooms:
-                    session['rooms'] = 'webchat.room.global'
+                    session['rooms'] = ['global']
                 else:
                     for room in rooms:
                         session['rooms'].append(room)
@@ -157,6 +157,28 @@ def sse_stream():
 
     return Response(get_event(), mimetype='text/event-stream',
         headers={'Cache-Control': 'no-cache'})
+
+
+@app.route('/_join_rooms', methods=['POST'])
+def join_rooms():
+    '''Join some rooms while the user is logged in'''
+    if 'nick' not in session:
+        return Response(const.NotAuthentifiedError, 403)
+
+    import pdb
+    pdb.set_trace()
+
+    form = ChatForm()
+
+    form.join_rooms.data = request.form['join_rooms']
+
+    if form.join_rooms.validate(form):
+        rooms = form.join_rooms.data.split()
+        session['rooms'].extend(rooms)
+
+        return Response(json.dumps(session['rooms']), 200)
+    else:
+        return Response(const.UnexpectedError, 400)
 
 
 def get_event():
