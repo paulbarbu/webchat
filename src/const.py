@@ -5,7 +5,7 @@ NotAuthentifiedError = 'You have to authentify in order to use the chat!'
 UsedNickError = 'This nick is already in use!'
 GetUsersError = 'Could not retrieve users due to backend error!'
 
-Received = 'Received'
+OK = 'OK'
 
 EmptyMessage = 'Empty message was supplied, no action taken!'
 WrongRoom = "You cannot chat on this room because you haven't joined it!"

@@ -140,7 +140,7 @@ def publish_message():
         logging.critical(e)
         return Response(const.UnexpectedError, 500)
 
-    return const.Received
+    return const.OK
 
 
 @app.route('/_sse_stream')
@@ -203,7 +203,7 @@ def pong():
         logging.critical(e)
         return Response(const.UnexpectedBackendError, 500)
     else:
-        return const.Received
+        return const.OK
 
 
 if __name__ == '__main__':
