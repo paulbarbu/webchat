@@ -1,5 +1,12 @@
 Handler = {
     event_message: function handle_event_message(e){
+        var rooms = JSON.parse($('#rooms').val());
+        var data = JSON.parse(e.data);
+
+        if(-1 == rooms.indexOf(data['room'])){
+            return;
+        }
+
         var lineDiv = document.createElement('div');
 
         var timeSpan = document.createElement('span');
@@ -7,7 +14,6 @@ Handler = {
         var nickSpan = document.createElement('span');
         var msgSpan = document.createElement('span');
 
-        var data = JSON.parse(e.data);
 
         timeSpan.innerHTML = get_current_time() + ' ';
         timeSpan.className = 'time';
@@ -26,8 +32,6 @@ Handler = {
         lineDiv.appendChild(roomSpan);
         lineDiv.appendChild(nickSpan);
         lineDiv.appendChild(msgSpan);
-
-        console.log(data);
 
         $('#chat').append(lineDiv);
 
@@ -72,7 +76,7 @@ Handler = {
 
 function publish_message(e){
     e.preventDefault();
-    $.post('/_publish_message', {'message': $('input:text').val(), 'room': $('#room').val()})
+    $.post('/_publish_message', {'message': $('#text').val(), 'room': $('#room').val()})
         .fail(Handler.publish_error);
     $('input:text').val('');
 }
@@ -85,6 +89,21 @@ function load_chat(){
 
     stream.addEventListener('users', Handler.event_users);
     stream.addEventListener('ping', Handler.event_ping);
+
+    var rooms = JSON.parse($('#rooms').val());
+    var room_selector = document.createElement('select');
+
+    room_selector.id = 'room';
+
+    for(i=0; i < rooms.length; i++){
+        var option = document.createElement('option');
+        option.value = option.innerHTML = rooms[i];
+
+        room_selector.appendChild(option);
+    }
+
+    $('form').append(room_selector);
+
 }
 
 function get_current_time(){

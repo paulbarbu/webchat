@@ -100,8 +100,10 @@ def chat():
         logging.critical(e)
         errors.append(const.GetUsersError)
 
+    form.rooms.data = json.dumps(session['rooms'])
+
     return render_template('chat.html', nick=session['nick'], form=form,
-        users=users, errors=errors, rooms=session['rooms'])
+        users=users, errors=errors)
 
 
 @app.route('/_publish_message', methods=['POST'])

@@ -1,4 +1,4 @@
-from flaskext.wtf import Form, TextField, validators, SubmitField
+from flaskext.wtf import Form, TextField, validators, SubmitField, HiddenField
 
 #TODO: add reCaptcha field
 class ConnectForm(Form):
@@ -11,6 +11,6 @@ class ConnectForm(Form):
 
 class ChatForm(Form):
     text = TextField()
-    room = TextField('room')
-    send =  SubmitField('Send!')
+    rooms = HiddenField('rooms')
+    send = SubmitField('Send!')
     quit = SubmitField('Quit!')

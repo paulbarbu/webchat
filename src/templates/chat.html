@@ -2,9 +2,9 @@
 {% block content %}
 <form method="POST">
     <label for="text">{{ nick }}:</label> {{ form.text }}
-    {{ form.room }}
     {{ form.send }}
     {{ form.quit }}
+    {{ form.rooms }}
 </form>
 <div class="chat-window" id="chat">
 </div>
@@ -27,7 +27,7 @@ Currently logged in users:
 </div>
 {% endif %}
 
-Current rooms: {{ rooms }}
+
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"
     type="text/javascript"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='EventSource.js') }}">
