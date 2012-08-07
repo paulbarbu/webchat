@@ -2,11 +2,14 @@
 <html>
     <head>
     <title>Webchat</title>
+    <link rel="shortcut icon" href="{{ url_for('static',
+    filename='favicon.ico') }}">
     <link type="text/css" href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" />
     <link type="text/css" href="{{ url_for('static',
     filename='bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" />
     </head>
     <body>
         {% block content %}{% endblock %}
+        <p>Icons from <a href="http://glyphicons.com">Glyphicons Free</a>, licensed under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
     </body>
 </html>
