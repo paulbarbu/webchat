@@ -239,7 +239,8 @@ function display_rooms(){
 
     for(i=pos; i < rooms.length; i++){
         if(left){
-            $('a[href="#' + rooms[i] + '"]').parent().remove()
+            $('a[href="#' + rooms[i] + '"]').parent().remove();
+            $('#' + rooms[i]).remove();
         }
         else{
             $('.nav.nav-tabs').append(
