@@ -117,66 +117,57 @@ function update_rooms(e){
 
 function display_rooms(){
     var rooms = JSON.parse($('#rooms').val());
-    var chat = $('#chat');
-    var pos = 1;
+    var pos = 1; //starting from one when joining rooms at login, because the 
+                 //first room is displayed outside the for loop since I need 
+                 //to set some classes to "active"
 
-    var room_selector = $('.nav.nav-tabs');
-    var tab_content = $('.tab-content');
+    if($('.nav.nav-tabs').length == 0){ //the user joins the rooms at login
+        $('#chat').append(
+            $('<ul>').attr({class: 'nav nav-tabs'}).append(
+                $('<li>').attr({class: 'active'}).append(
+                    $('<a>').attr({
+                        href: '#' + rooms[0],
+                        'data-toggle': 'tab',
+                    }).html(rooms[0])
+                )
+            )
+        );
 
-    if(room_selector.length == 0){ //the user join the rooms at login
-        room_selector = document.createElement('ul');
-        var tab = document.createElement('li');
-        var a = document.createElement('a');
-        tab_content = document.createElement('div');
-        var tab_pane = document.createElement('div');
-
-        room_selector.setAttribute('class', 'nav nav-tabs');
-        tab.setAttribute('class', 'active');
-        tab_content.setAttribute('class', 'tab-content');
-
-        a.href = '#' + rooms[0];
-        a.setAttribute('data-toggle', 'tab');
-        a.innerHTML  = rooms[0];
-
-        tab_pane.setAttribute('class', 'tab-pane active');
-        tab_pane.id = rooms[0];
-        tab_pane.innerHTML = rooms[0];
-
-        $('#chat').append(room_selector);
-        room_selector.appendChild(tab);
-        tab.appendChild(a);
-
-        chat.append(tab_content);
-        tab_content.appendChild(tab_pane);
+        $('#chat').append(
+            $('<div>').attr({class: 'tab-content'}).append(
+                $('<div>').attr({
+                    class: 'tab-pane active',
+                    id: rooms[0],
+                }).html(rooms[0])
+            )
+        );
     }
-    else{ //the user joins the rooms after he logged in
+    else{ //the user joins the rooms after he logged in, so we display only the 
+          //new rooms since the rest are already displayed
         var current_rooms = get_current_rooms();
         var rooms = rooms.filter(function(i){
             return current_rooms.indexOf(i) < 0;
         });
 
-        room_selector = room_selector[0];
-        tab_content = tab_content[0];
         pos = 0;
-
     }
 
     for(i=pos; i < rooms.length; i++){
-        tab = document.createElement('li');
-        a = document.createElement('a');
-        tab_pane = document.createElement('div');
+        $('.nav.nav-tabs').append(
+            $('<li>').append(
+                $('<a>').attr({
+                    href: '#' + rooms[i],
+                    'data-toggle': 'tab',
+                }).html(rooms[i])
+            )
+        );
 
-        a.href = '#' + rooms[i];
-        a.setAttribute('data-toggle', 'tab');
-        a.innerHTML  = rooms[i];
-
-        tab_pane.setAttribute('class', 'tab-pane');
-        tab_pane.id = rooms[i];
-        tab_pane.innerHTML = rooms[i];
-
-        room_selector.appendChild(tab);
-        tab.appendChild(a);
-        tab_content.appendChild(tab_pane);
+        $('.tab-content').append(
+            $('<div>').attr({
+                class: 'tab-pane',
+                id: rooms[i],
+            }).html(rooms[i])
+        );
     }
 }
 
