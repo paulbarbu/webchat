@@ -16,7 +16,6 @@ Handler = {
         var nickSpan = document.createElement('span');
         var msgSpan = document.createElement('span');
 
-
         timeSpan.innerHTML = get_current_time() + ' ';
         timeSpan.className = 'time';
 
