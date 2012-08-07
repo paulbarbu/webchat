@@ -115,6 +115,12 @@ function update_rooms(e){
     display_rooms();
 }
 
+/**
+ * Displays the rooms as tabs
+ *
+ * Thsi function is able to decied whether it needs to create all the tabs or
+ * just some of the tabs by array difference
+ */
 function display_rooms(){
     var rooms = JSON.parse($('#rooms').val());
     var pos = 1; //starting from one when joining rooms at login, because the 
@@ -171,6 +177,11 @@ function display_rooms(){
     }
 }
 
+/**
+ * Get the currently joined rooms
+ *
+ * @return array of room names
+ */
 function get_current_rooms(){
     var current_rooms = [];
     $('.tab-pane').each(function(){
@@ -179,6 +190,7 @@ function get_current_rooms(){
 
     return current_rooms;
 }
+
 /**
  * Create an AJAX request to join more rooms after logging in
  */
