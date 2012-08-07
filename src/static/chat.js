@@ -137,18 +137,30 @@ function update_rooms(e){
  * Leave a room
  *
  * An AJAX request is made to the server which will respond with the new room
- * list
+ * list, also the tabs will be updated
  *
- * @param string room room's name, this parameter is taken from the parent of 
+ * @param string room_name room's name, this parameter is taken from the parent of 
  * the button (the anchor) from th href attribute
  *
  * @param string active_room the room currently active
  */
-function leave_room(room, active_room){
-    //if room == active_room, move right
-    //if room == active_room && active_room == last_room, move left
-    //if toom != active_room, move to active_room
-    $.post('/_leave_room', {'room': room}).fail(Handler.leave_room_error)
+function leave_room(room_name, active_room){
+    var active_room_name = active_room.children().attr("href").slice(1);
+
+    if(active_room_name == room_name){
+        var next_room = active_room.next();
+        if(next_room.length != 0){ //the current tab is not the last, go right
+            active_room.next().attr('class', 'active');
+        }
+        else{ //current tab is the last, move to left
+            active_room.prev().attr('class', 'active');
+        }
+    }
+    else{
+        active_room.attr('class', 'active');
+    }
+
+    $.post('/_leave_room', {'room': room_name}).fail(Handler.leave_room_error)
         .success(update_rooms);
 }
 
@@ -165,7 +177,7 @@ function display_rooms(){
 
     var close_btn = $('<button>').attr({
         class: 'close',
-        onclick: 'leave_room($(this).parent().attr("href").slice(1), $("li.active").children().attr("href"))' //TODO maybe it;s better to send an object because I can use it to traverse the DOM
+        onclick: 'leave_room($(this).parent().attr("href").slice(1), $("li.active"))'
     }).html('&times;');
 
     /**
