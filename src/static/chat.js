@@ -141,8 +141,13 @@ function update_rooms(e){
  *
  * @param string room room's name, this parameter is taken from the parent of 
  * the button (the anchor) from th href attribute
+ *
+ * @param string active_room the room currently active
  */
-function leave_room(room){
+function leave_room(room, active_room){
+    //if room == active_room, move right
+    //if room == active_room && active_room == last_room, move left
+    //if toom != active_room, move to active_room
     $.post('/_leave_room', {'room': room}).fail(Handler.leave_room_error)
         .success(update_rooms);
 }
@@ -160,7 +165,7 @@ function display_rooms(){
 
     var close_btn = $('<button>').attr({
         class: 'close',
-        onclick: 'leave_room($(this).parent().attr("href").slice(1))'
+        onclick: 'leave_room($(this).parent().attr("href").slice(1), $("li.active").children().attr("href"))' //TODO maybe it;s better to send an object because I can use it to traverse the DOM
     }).html('&times;');
 
     /**
