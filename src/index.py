@@ -179,6 +179,24 @@ def join_rooms():
     else:
         return Response(const.InvalidRoomError, 400)
 
+@app.route('/_leave_room', methods=['POST'])
+def leave_room():
+    '''Removes a room from the user's session, thus not allowing him to chat
+    there anymore
+
+    Note: this is done on request, the users asks to leave, he's not kicked
+    '''
+    if 'nick' not in session:
+        return Response(const.NotAuthentifiedError, 403)
+
+    room = request.form['room']
+
+    if room and len(room) >= 1 and room in session['rooms']:
+        session['rooms'].remove(room)
+        return Response(json.dumps(session['rooms']), 200)
+    else:
+        return Response(const.InvalidRoomError, 400)
+
 
 def get_event():
     '''Yields an Event object according to what is received via redis on the

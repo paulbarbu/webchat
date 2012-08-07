@@ -94,6 +94,18 @@ Handler = {
 
         $('.tab-pane.active').append(lineDiv);
     },
+
+    /**
+     * Callback for handling the leave error (these occur when leaving rooms)
+     */
+    leave_room_error: function handle_leave_room_error(e){
+        var lineDiv = document.createElement('div');
+
+        lineDiv.className = 'leave error';
+        lineDiv.innerHTML = e.responseText;
+
+        $('.tab-pane.active').append(lineDiv);
+    },
 }
 
 /**
@@ -116,16 +128,41 @@ function update_rooms(e){
 }
 
 /**
- * Displays the rooms as tabs
+ * Leave a room
  *
- * Thsi function is able to decied whether it needs to create all the tabs or
- * just some of the tabs by array difference
+ * An AJAX request is made to the server which will respond with the new room
+ * list
+ *
+ * @param string room room's name, this parameter is taken from the parent of 
+ * the button (the anchor) from th href attribute
+ */
+function leave_room(room){
+    $.post('/_leave_room', {'room': room}).fail(Handler.leave_room_error)
+        .success(update_rooms);
+}
+
+/**
+ * Display the rooms as tabs
+ *
+ * This function is able to decide whether it needs to create all the tabs or
+ * just some of the tabs by array difference and if the user left or joined
+ * rooms
  */
 function display_rooms(){
+    var left = false; //assume that the user joined some rooms
     var rooms = JSON.parse($('#rooms').val());
-    var pos = 1; //starting from one when joining rooms at login, because the 
-                 //first room is displayed outside the for loop since I need 
-                 //to set some classes to "active"
+
+    var close_btn = $('<button>').attr({
+        class: 'close',
+        onclick: 'leave_room($(this).parent().attr("href").slice(1))'
+    }).html('&times;');
+
+    /**
+     * starting from one when joining rooms at login,
+     * because the first room is displayed outside the for loop 
+     * since I need to set some classes to "active"
+     */
+    var pos = 1;
 
     if($('.nav.nav-tabs').length == 0){ //the user joins the rooms at login
         $('#chat').append(
@@ -134,7 +171,7 @@ function display_rooms(){
                     $('<a>').attr({
                         href: '#' + rooms[0],
                         'data-toggle': 'tab',
-                    }).html(rooms[0])
+                    }).html(rooms[0] + close_btn.prop('outerHTML'))
                 )
             )
         );
@@ -151,29 +188,53 @@ function display_rooms(){
     else{ //the user joins the rooms after he logged in, so we display only the 
           //new rooms since the rest are already displayed
         var current_rooms = get_current_rooms();
-        var rooms = rooms.filter(function(i){
+
+        var initial_rooms = rooms; //in case the user left rooms
+
+        rooms = rooms.filter(function(i){
             return current_rooms.indexOf(i) < 0;
         });
 
+        /**
+         * the user left rooms, didn't join, so the list is smaller 
+         * and tabs should be removed, not added
+         */
+        if(rooms.length == 0){
+            rooms = current_rooms.filter(function(i){
+                return initial_rooms.indexOf(i) < 0;
+            });
+
+            left = true;
+        }
+
+        /**
+         * every room should be processed because if we join or leave we don;t
+         * have to change the active room
+         */
         pos = 0;
     }
 
     for(i=pos; i < rooms.length; i++){
-        $('.nav.nav-tabs').append(
-            $('<li>').append(
-                $('<a>').attr({
-                    href: '#' + rooms[i],
-                    'data-toggle': 'tab',
-                }).html(rooms[i])
-            )
-        );
+        if(left){
+            $('a[href="#' + rooms[i] + '"]').parent().remove()
+        }
+        else{
+            $('.nav.nav-tabs').append(
+                $('<li>').append(
+                    $('<a>').attr({
+                        href: '#' + rooms[i],
+                        'data-toggle': 'tab',
+                    }).html(rooms[i] + close_btn.prop('outerHTML'))
+                )
+            );
 
-        $('.tab-content').append(
-            $('<div>').attr({
-                class: 'tab-pane',
-                id: rooms[i],
-            })
-        );
+            $('.tab-content').append(
+                $('<div>').attr({
+                    class: 'tab-pane',
+                    id: rooms[i],
+                })
+            );
+        }
     }
 }
 
