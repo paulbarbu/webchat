@@ -115,66 +115,53 @@ function update_rooms(e){
     display_rooms();
 }
 
-/**
- * Initialize the select tag that specifies the rooms on which the message will
- * be published
- */
 function display_rooms(){
     var rooms = JSON.parse($('#rooms').val());
-    var room_selector = document.getElementById('room');
-
-    if(room_selector){
-        //if the select tag exists, reset it
-        room_selector.options.length = 0;
-    }
-    else{
-        //if the select tag doesn't exist, create it
-        room_selector = document.createElement('select');
-
-        room_selector.id = 'room';
-
-
-        $('form').append(room_selector);
-    }
-
-    //populate the select tag with options
-    for(i=0; i < rooms.length; i++){
-        var option = document.createElement('option');
-        option.value = option.innerHTML = rooms[i];
-
-        room_selector.appendChild(option);
-    }
-}
-
-function display_rooms2(){
-    var rooms = JSON.parse($('#rooms').val());
     var chat = $('#chat');
-    var room_selector = document.createElement('ul');
-    var tab = document.createElement('li');
-    var a = document.createElement('a');
-    var tab_content = document.createElement('div');
-    var tab_pane = document.createElement('div');
+    var pos = 1;
 
-    room_selector.setAttribute('class', 'nav nav-tabs');
-    tab.setAttribute('class', 'active');
-    tab_content.setAttribute('class', 'tab-content');
+    var room_selector = $('.nav.nav-tabs');
+    var tab_content = $('.tab-content');
 
-    a.href = '#' + rooms[0];
-    a.setAttribute('data-toggle', 'tab');
-    a.innerHTML  = rooms[0];
+    if(room_selector.length == 0){ //the user join the rooms at login
+        room_selector = document.createElement('ul');
+        var tab = document.createElement('li');
+        var a = document.createElement('a');
+        tab_content = document.createElement('div');
+        var tab_pane = document.createElement('div');
 
-    tab_pane.setAttribute('class', 'tab-pane active');
-    tab_pane.id = rooms[0];
-    tab_pane.innerHTML = rooms[0];
+        room_selector.setAttribute('class', 'nav nav-tabs');
+        tab.setAttribute('class', 'active');
+        tab_content.setAttribute('class', 'tab-content');
 
-    $('#chat').append(room_selector);
-    room_selector.appendChild(tab);
-    tab.appendChild(a);
+        a.href = '#' + rooms[0];
+        a.setAttribute('data-toggle', 'tab');
+        a.innerHTML  = rooms[0];
 
-    chat.append(tab_content);
-    tab_content.appendChild(tab_pane);
+        tab_pane.setAttribute('class', 'tab-pane active');
+        tab_pane.id = rooms[0];
+        tab_pane.innerHTML = rooms[0];
 
-    for(i=1; i < rooms.length; i++){
+        $('#chat').append(room_selector);
+        room_selector.appendChild(tab);
+        tab.appendChild(a);
+
+        chat.append(tab_content);
+        tab_content.appendChild(tab_pane);
+    }
+    else{ //the user joins the rooms after he logged in
+        var current_rooms = get_current_rooms();
+        var rooms = rooms.filter(function(i){
+            return current_rooms.indexOf(i) < 0;
+        });
+
+        room_selector = room_selector[0];
+        tab_content = tab_content[0];
+        pos = 0;
+
+    }
+
+    for(i=pos; i < rooms.length; i++){
         tab = document.createElement('li');
         a = document.createElement('a');
         tab_pane = document.createElement('div');
@@ -193,6 +180,14 @@ function display_rooms2(){
     }
 }
 
+function get_current_rooms(){
+    var current_rooms = [];
+    $('.tab-pane').each(function(){
+        current_rooms.push($(this).attr('id'))
+    });
+
+    return current_rooms;
+}
 /**
  * Create an AJAX request to join more rooms after logging in
  */
@@ -216,7 +211,7 @@ function load_chat(){
     stream.addEventListener('users', Handler.event_users);
     stream.addEventListener('ping', Handler.event_ping);
 
-    display_rooms2();
+    display_rooms();
 }
 
 /**
