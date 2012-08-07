@@ -144,7 +144,7 @@ function display_rooms(){
                 $('<div>').attr({
                     class: 'tab-pane active',
                     id: rooms[0],
-                }).html(rooms[0])
+                })
             )
         );
     }
@@ -172,7 +172,7 @@ function display_rooms(){
             $('<div>').attr({
                 class: 'tab-pane',
                 id: rooms[i],
-            }).html(rooms[i])
+            })
         );
     }
 }
