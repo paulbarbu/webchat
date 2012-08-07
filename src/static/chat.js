@@ -1,4 +1,7 @@
 Handler = {
+    /**
+     * Display a user's message
+     */
     event_message: function handle_event_message(e){
         var rooms = JSON.parse($('#rooms').val());
         var data = JSON.parse(e.data);
@@ -39,6 +42,9 @@ Handler = {
         //than the div
     },
 
+    /**
+     * Update the user list when someone joins the chat
+     */
     event_users: function handle_event_users(e){
         var users = $.parseJSON(e.data);
         var usersDiv = $('#user-list')[0];
@@ -52,10 +58,16 @@ Handler = {
         usersDiv.innerHTML += users[users.length-1];
     },
 
+    /**
+     * Callback to respond to ping events via AJAX
+     */
     event_ping: function handle_event_ping(e){
         $.post('/_pong', 'PONG!');
     },
 
+    /**
+     * Callback that handles message sending errors
+     */
     publish_error: function handle_publish_error(e){
         var lineDiv = document.createElement('div');
 
@@ -65,6 +77,9 @@ Handler = {
         $('#chat').append(lineDiv);
     },
 
+    /**
+     * Callback for handling SSE errors
+     */
     event_error: function handle_event_error(e){
         this.close(); //here, `this` refers to `stream`
         console.log('err:', e);
@@ -73,6 +88,9 @@ Handler = {
         //auto-reconnect
     },
 
+    /**
+     * Callback that handles the join errors
+     */
     join_error: function handle_join_error(e){
         var lineDiv = document.createElement('div');
 
@@ -83,26 +101,39 @@ Handler = {
     },
 }
 
+/**
+ * Create an AJAX request that will publish the message the user wants to
+ * transmit
+ */
 function publish_message(e){
     e.preventDefault();
-    $.post('/_publish_message', {'message': $('#text').val(), 'room': $('#room').val()})
-        .fail(Handler.publish_error);
+    $.post('/_publish_message', {'message': $('#text').val(), 
+        'room': $('#room').val()}).fail(Handler.publish_error);
     $('#text').val('');
 }
 
+/**
+ * Callback for successfully joining rooms after login
+ */
 function update_rooms(e){
     $('#rooms').val(e);
-    load_rooms();
+    display_rooms();
 }
 
-function load_rooms(){
+/**
+ * Initialize the select tag that specifies the rooms on which the message will
+ * be published
+ */
+function display_rooms(){
     var rooms = JSON.parse($('#rooms').val());
     var room_selector = document.getElementById('room');
 
     if(room_selector){
+        //if the select tag exists, reset it
         room_selector.options.length = 0;
     }
     else{
+        //if the select tag doesn't exist, create it
         room_selector = document.createElement('select');
 
         room_selector.id = 'room';
@@ -111,6 +142,7 @@ function load_rooms(){
         $('form').append(room_selector);
     }
 
+    //populate the select tag with options
     for(i=0; i < rooms.length; i++){
         var option = document.createElement('option');
         option.value = option.innerHTML = rooms[i];
@@ -119,6 +151,9 @@ function load_rooms(){
     }
 }
 
+/**
+ * Create an AJAX request to join more rooms after logging in
+ */
 function join_rooms(e){
     e.preventDefault();
     $.post('/_join_rooms', {'join_rooms': $('#join_rooms').val()})
@@ -126,6 +161,10 @@ function join_rooms(e){
     $('#join_rooms').val('');
 }
 
+/**
+ * Initialize the elements that compose the chat, the EventSource (for the Server Sent
+ * Events) and display the rooms the user joined
+ */
 function load_chat(){
     var stream = new EventSource('/_sse_stream');
 
@@ -135,9 +174,14 @@ function load_chat(){
     stream.addEventListener('users', Handler.event_users);
     stream.addEventListener('ping', Handler.event_ping);
 
-    load_rooms();
+    display_rooms();
 }
 
+/**
+ * Get the current time
+ *
+ * @return string the current time in HH:MM format
+ */
 function get_current_time(){
     var currentTime = new Date();
 
@@ -155,6 +199,7 @@ function get_current_time(){
     return h + ':' + m;
 }
 
+//Global initializations
 load_chat();
 $('[name="send"]').click(publish_message);
 $('[name="join"]').click(join_rooms);

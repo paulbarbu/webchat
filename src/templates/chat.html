@@ -9,9 +9,11 @@
     {{ form.join_rooms }}
     {{ form.join }}
 </form>
+
 <div class="chat-window" id="chat">
 </div>
 {% if users %}
+
 Currently logged in users:
 <div id="user-list">
     {% for user in users[:-1] %}
@@ -20,8 +22,8 @@ Currently logged in users:
     {{ users[-1] }}
 </div>
 {% endif %}
-
 {% if errors %}
+
 <div id="errors">
     {% for err in errors[:-1] %}
     {{ err }}<br />
@@ -29,7 +31,6 @@ Currently logged in users:
     {{ errors[-1] }}
 </div>
 {% endif %}
-
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"
     type="text/javascript"></script>
