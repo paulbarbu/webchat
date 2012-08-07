@@ -49,6 +49,7 @@ def index():
                 if not rooms:
                     session['rooms'] = ['global']
                 else:
+                    rooms = list(set(rooms))
                     for room in rooms:
                         session['rooms'].append(room)
 
@@ -165,20 +166,17 @@ def join_rooms():
     if 'nick' not in session:
         return Response(const.NotAuthentifiedError, 403)
 
-    import pdb
-    pdb.set_trace()
-
     form = ChatForm()
 
     form.join_rooms.data = request.form['join_rooms']
 
     if form.join_rooms.validate(form):
-        rooms = form.join_rooms.data.split()
+        rooms = list(set(form.join_rooms.data.split()))
         session['rooms'].extend(rooms)
 
         return Response(json.dumps(session['rooms']), 200)
     else:
-        return Response(const.UnexpectedError, 400)
+        return Response(const.InvalidRoomError, 400)
 
 
 def get_event():

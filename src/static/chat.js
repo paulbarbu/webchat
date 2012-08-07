@@ -80,7 +80,6 @@ Handler = {
         lineDiv.innerHTML = e.responseText;
 
         $('#chat').append(lineDiv);
-        console.log(e);
     },
 }
 
