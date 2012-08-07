@@ -82,16 +82,7 @@ def chat():
         return redirect(url_for('index'))
 
     if form.quit.data:
-        try:
-            r.srem('users', session['nick'])
-            publish_users()
-        except redis.RedisError as e:
-            logging.critical(e)
-
-        session.destroy()
-        sess_ext.cleanup_sessions()
-
-        return redirect(url_for('index'))
+        return quit()
 
     users = None
     errors = []
@@ -193,6 +184,11 @@ def leave_room():
 
     if room and len(room) >= 1 and room in session['rooms']:
         session['rooms'].remove(room)
+
+        if not session['rooms']:
+            quit()
+            return Response(status=404)
+
         return Response(json.dumps(session['rooms']), 200)
     else:
         return Response(const.InvalidRoomError, 400)
@@ -245,6 +241,18 @@ def pong():
     else:
         return const.OK
 
+def quit():
+    '''Logout'''
+    try:
+        r.srem('users', session['nick'])
+        publish_users()
+    except redis.RedisError as e:
+        logging.critical(e)
+
+    session.destroy()
+    sess_ext.cleanup_sessions()
+
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     sess_ext.cleanup_sessions()

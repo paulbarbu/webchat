@@ -99,6 +99,12 @@ Handler = {
      * Callback for handling the leave error (these occur when leaving rooms)
      */
     leave_room_error: function handle_leave_room_error(e){
+        //if the status is 404 then the user closed his last room, so we logged
+        //him out
+        if(404 === e.status){
+            window.location.replace('/');
+        }
+
         var lineDiv = document.createElement('div');
 
         lineDiv.className = 'leave error';
@@ -120,7 +126,7 @@ function publish_message(e){
 }
 
 /**
- * Callback for successfully joining rooms after login
+ * Callback for successfully joining or leaving rooms after login
  */
 function update_rooms(e){
     $('#rooms').val(e);
