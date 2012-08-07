@@ -12,6 +12,7 @@
 
 <div class="chat-window" id="chat">
 </div>
+<hr />
 {% if users %}
 
 Currently logged in users:
@@ -37,5 +38,8 @@ Currently logged in users:
 <script type="text/javascript" src="{{ url_for('static', filename='EventSource.js') }}">
 </script>
 <script type="text/javascript" src="{{ url_for('static', filename='chat.js') }}">
+</script>
+<script type="text/javascript" src="{{ url_for('static',
+    filename='bootstrap/js/bootstrap.min.js') }}">
 </script>
 {% endblock %}

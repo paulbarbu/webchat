@@ -13,16 +13,12 @@ Handler = {
         var lineDiv = document.createElement('div');
 
         var timeSpan = document.createElement('span');
-        var roomSpan = document.createElement('span');
         var nickSpan = document.createElement('span');
         var msgSpan = document.createElement('span');
 
 
         timeSpan.innerHTML = get_current_time() + ' ';
         timeSpan.className = 'time';
-
-        roomSpan.innerHTML = '[' + data['room'] + '] ';
-        roomSpan.className = 'room';
 
         nickSpan.innerHTML = data['nick'] + ': ';
         nickSpan.className = 'nick';
@@ -32,11 +28,10 @@ Handler = {
 
         lineDiv.className = 'line';
         lineDiv.appendChild(timeSpan);
-        lineDiv.appendChild(roomSpan);
         lineDiv.appendChild(nickSpan);
         lineDiv.appendChild(msgSpan);
 
-        $('#chat').append(lineDiv);
+        $('#' + data['room']).append(lineDiv);
 
         //TODO: scroll the div to the bottom of the page when the content is larger
         //than the div
@@ -74,7 +69,7 @@ Handler = {
         lineDiv.className = 'line error';
         lineDiv.innerHTML = e.responseText;
 
-        $('#chat').append(lineDiv);
+        $('.tab-pane.active').append(lineDiv);
     },
 
     /**
@@ -97,7 +92,7 @@ Handler = {
         lineDiv.className = 'join error';
         lineDiv.innerHTML = e.responseText;
 
-        $('#chat').append(lineDiv);
+        $('.tab-pane.active').append(lineDiv);
     },
 }
 
@@ -107,8 +102,8 @@ Handler = {
  */
 function publish_message(e){
     e.preventDefault();
-    $.post('/_publish_message', {'message': $('#text').val(), 
-        'room': $('#room').val()}).fail(Handler.publish_error);
+    $.post('/_publish_message', {'message': $('#text').val(),
+        'room': $('.tab-pane.active').attr('id')}).fail(Handler.publish_error);
     $('#text').val('');
 }
 
@@ -151,6 +146,53 @@ function display_rooms(){
     }
 }
 
+function display_rooms2(){
+    var rooms = JSON.parse($('#rooms').val());
+    var chat = $('#chat');
+    var room_selector = document.createElement('ul');
+    var tab = document.createElement('li');
+    var a = document.createElement('a');
+    var tab_content = document.createElement('div');
+    var tab_pane = document.createElement('div');
+
+    room_selector.setAttribute('class', 'nav nav-tabs');
+    tab.setAttribute('class', 'active');
+    tab_content.setAttribute('class', 'tab-content');
+
+    a.href = '#' + rooms[0];
+    a.setAttribute('data-toggle', 'tab');
+    a.innerHTML  = rooms[0];
+
+    tab_pane.setAttribute('class', 'tab-pane active');
+    tab_pane.id = rooms[0];
+    tab_pane.innerHTML = rooms[0];
+
+    $('#chat').append(room_selector);
+    room_selector.appendChild(tab);
+    tab.appendChild(a);
+
+    chat.append(tab_content);
+    tab_content.appendChild(tab_pane);
+
+    for(i=1; i < rooms.length; i++){
+        tab = document.createElement('li');
+        a = document.createElement('a');
+        tab_pane = document.createElement('div');
+
+        a.href = '#' + rooms[i];
+        a.setAttribute('data-toggle', 'tab');
+        a.innerHTML  = rooms[i];
+
+        tab_pane.setAttribute('class', 'tab-pane');
+        tab_pane.id = rooms[i];
+        tab_pane.innerHTML = rooms[i];
+
+        room_selector.appendChild(tab);
+        tab.appendChild(a);
+        tab_content.appendChild(tab_pane);
+    }
+}
+
 /**
  * Create an AJAX request to join more rooms after logging in
  */
@@ -174,7 +216,7 @@ function load_chat(){
     stream.addEventListener('users', Handler.event_users);
     stream.addEventListener('ping', Handler.event_ping);
 
-    display_rooms();
+    display_rooms2();
 }
 
 /**
