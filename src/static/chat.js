@@ -32,6 +32,26 @@ Handler = {
 
         $('#' + data['room']).append(lineDiv);
 
+        //create an activity notice if the tab is not focused
+        var a = $('a[href="#' + data['room'] + '"]');
+        if('active' !== a.parent().attr('class')){
+            if(0 === $('#icon-' + data['room']).length){ //prepend just one icon
+                a.prepend($('<i>').attr({
+                    class: 'icon-comment',
+                    id: 'icon-' + data['room'],
+                }));
+            }
+        }
+
+        if(away){
+            Notificon("!", {
+                font: '10px arial',
+                color: '#ffffff',
+                stroke: 'rgba(240, 61, 37, 1)',
+                width: 7,
+            });
+        }
+
         //TODO: scroll the div to the bottom of the page when the content is larger
         //than the div
     },
@@ -327,3 +347,21 @@ function get_current_time(){
 load_chat();
 $('[name="send"]').click(publish_message);
 $('[name="join"]').click(join_rooms);
+
+//clear the activity notice upon clicking on the tab
+$('a[data-toggle="tab"]').on('show', function (e) {
+    $('#icon-' + $(e.target).attr('href').slice(1)).remove();
+});
+
+
+//if the borowser or the browser's tab is not focused display a Notificon
+var away = false;
+
+$(window).focus(function() {
+    away = false;
+    Notificon('');
+});
+
+$(window).blur(function() {
+    away = true;
+});
