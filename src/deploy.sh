@@ -14,7 +14,7 @@ WSGI_PATH=$SRC_PATH"/webchat.wsgi"
 user_path="$1"
 DEPLOY_PATH=${user_path%/}
 
-tmpl=`source vhost_tmpl`
+tmpl=`source ./vhost_tmpl`
 echo $tmpl > webchat-vhost.conf
 
 echo "Don't forget to add"
