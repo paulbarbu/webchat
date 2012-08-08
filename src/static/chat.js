@@ -6,7 +6,11 @@ Handler = {
         var rooms = JSON.parse($('#rooms').val());
         var data = JSON.parse(e.data);
 
-        if(-1 == rooms.indexOf(data['room'])){
+        /**
+         * don't display the message if the user is not on the room 
+         * where the message comes from
+         */
+        if(-1 === rooms.indexOf(data['room'])){
             return;
         }
 
@@ -25,32 +29,20 @@ Handler = {
         msgSpan.innerHTML = data['message'] + ' ';
         msgSpan.className = 'msg';
 
-        lineDiv.className = 'line';
+        if(is_mention(data['message'])){
+            lineDiv.className = 'line mention';
+        }
+        else{
+            lineDiv.className = 'line';
+        }
+
         lineDiv.appendChild(timeSpan);
         lineDiv.appendChild(nickSpan);
         lineDiv.appendChild(msgSpan);
 
         $('#' + data['room']).append(lineDiv);
 
-        //create an activity notice if the tab is not focused
-        var a = $('a[href="#' + data['room'] + '"]');
-        if('active' !== a.parent().attr('class')){
-            if(0 === $('#icon-' + data['room']).length){ //prepend just one icon
-                a.prepend($('<i>').attr({
-                    class: 'icon-comment',
-                    id: 'icon-' + data['room'],
-                }));
-            }
-        }
-
-        if(away){
-            Notificon("!", {
-                font: '10px arial',
-                color: '#ffffff',
-                stroke: 'rgba(240, 61, 37, 1)',
-                width: 7,
-            });
-        }
+        notify_activity(data['room']);
 
         //TODO: scroll the div to the bottom of the page when the content is larger
         //than the div
@@ -343,6 +335,86 @@ function get_current_time(){
     return h + ':' + m;
 }
 
+/**
+ * Check if the user is mentioned in the message
+ *
+ * A user is mentioned when his nick appears as a word in a message:
+ * "hello @nick"
+ * "nick, hello"
+ * "nick: hi"
+ * "how are you nick?"
+ *
+ * The nick may be surrounded by punctuation, symbols or spaces, but not other
+ * letters, so for the following message this function will return false:
+ * "hello foonick"
+ *
+ * @param message the message that is checked for mentions
+ *
+ * @return bool true if the user is mentioned, else false
+ */
+function is_mention(message){
+    var nick = $('label[for="text"]').html().slice(0, -1);
+    var pos = message.indexOf(nick);
+
+    while(-1 !== pos){
+        if((pos === 0 || (pos - 1 >= 0 && !is_letter(message[pos-1]))) &&
+           (pos+nick.length == message.length || 
+                (pos+nick.length < message.length &&
+                !is_letter(message[pos+nick.length])
+                )
+           )){
+            return true;
+        }
+
+        message = message.slice(pos+nick.length);
+        pos = message.indexOf(nick);
+    }
+
+    return false;
+}
+
+/**
+ * Check if a character is a letter
+ *
+ * @param l string this should be a single character to be checked
+ *
+ * @return bool true if l is a letter, else false
+ */
+function is_letter(l){
+    if((l >= 'a' && l <= 'z') || (l >= 'A' && l <= 'Z')){
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Notify the user that there is activity on the chat
+ *
+ * @param string room_name room's name where is activity
+ */
+function notify_activity(room_name){
+    //create an activity notice if the tab is not focused
+    var a = $('a[href="#' + room_name + '"]');
+    if('active' !== a.parent().attr('class')){
+        if(0 === $('#icon-' + room_name).length){ //prepend just one icon
+            a.prepend($('<i>').attr({
+                class: 'icon-comment',
+                id: 'icon-' + room_name,
+            }));
+        }
+    }
+
+    if(away){
+        Notificon("!", {
+            font: '10px arial',
+            color: '#ffffff',
+            stroke: 'rgba(240, 61, 37, 1)',
+            width: 7,
+        });
+    }
+}
+
 //Global initializations
 load_chat();
 $('[name="send"]').click(publish_message);
@@ -354,7 +426,7 @@ $('a[data-toggle="tab"]').on('show', function (e) {
 });
 
 
-//if the borowser or the browser's tab is not focused display a Notificon
+//if the browser or the browser's tab is not focused display a Notificon
 var away = false;
 
 $(window).focus(function() {
