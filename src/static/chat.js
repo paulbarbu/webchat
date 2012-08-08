@@ -171,7 +171,8 @@ function leave_room(room_name, active_room){
         active_room.attr('class', 'active');
     }
 
-    $.post($SCRIPT_ROOT + '/_leave_room', {'room': room_name}).fail(Handler.leave_room_error)
+    $.post($SCRIPT_ROOT + '/_leave_room', {'room': room_name})
+        .fail(Handler.leave_room_error)
         .success(update_rooms);
 }
 
@@ -242,13 +243,13 @@ function display_rooms(){
         }
 
         /**
-         * every room should be processed because if we join or leave we don;t
+         * every room should be processed because if we join or leave we don't
          * have to change the active room
          */
         pos = 0;
     }
 
-    for(i=pos; i < rooms.length; i++){
+    for(i=pos; i<rooms.length; i++){
         if(left){
             $('a[href="#' + rooms[i] + '"]').parent().remove();
             $('#' + rooms[i]).remove();
