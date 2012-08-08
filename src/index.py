@@ -9,18 +9,28 @@ from flaskext.kvsession import KVSessionExtension
 from jinja2 import utils
 import redis
 import logging
+import os
 
 from event import MessageEvent, ErrorEvent, UsersEvent, PingEvent
 import const
 
+path = os.path.abspath(__file__)
+dirname = os.path.dirname(path)
+log_path = os.path.join(dirname, 'logs.log')
+data_path = os.path.join(dirname, 'data')
+
+if not os.path.isdir(data_path):
+    os.mkdir(data_path)
+
 app = Flask(__name__)
 app.secret_key = 'populate this string yourself!'
 
-store = FilesystemStore('data')
+store = FilesystemStore(data_path)
 sess_ext = KVSessionExtension(store, app)
 
 r = redis.Redis()
-logging.basicConfig(filename='logs.log', level=logging.DEBUG,
+
+logging.basicConfig(filename=log_path, level=logging.DEBUG,
                     format='%(levelname)s: %(asctime)s - %(message)s',
                     datefmt='%d-%m-%Y %H:%M:%S')
 
@@ -59,6 +69,7 @@ def index():
                     publish_users()
                 except redis.RedisError as e:
                     logging.critical(e)
+                    session.destroy()
                     errors.append(const.UnexpectedBackendError)
                 else:
                     return redirect(url_for('chat'))

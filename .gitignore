@@ -1,2 +1,4 @@
 src/data/*
 *.pyc
+webchat-vhost.conf
+logs.log
