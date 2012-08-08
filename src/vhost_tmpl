@@ -1,0 +1,16 @@
+#! /bin/bash
+
+echo "
+<VirtualHost *>
+    WSGIDaemonProcess webchat user=http group=http threads=5
+    WSGIScriptAlias /webchat $DEPLOY_PATH$WSGI_PATH
+    WSGIScriptReloading On
+
+    <Directory $DEPLOY_PATH$SRC_PATH>
+        WSGIProcessGroup webchat
+        WSGIApplicationGroup %{GLOBAL}
+        Order deny,allow
+        Allow from all
+    </Directory>
+</VirtualHost>
+"
