@@ -9,6 +9,7 @@ from flaskext.kvsession import KVSessionExtension
 from jinja2 import utils
 import redis
 import logging
+import os
 
 from event import MessageEvent, ErrorEvent, UsersEvent, PingEvent
 import const
@@ -20,7 +21,11 @@ store = FilesystemStore('data')
 sess_ext = KVSessionExtension(store, app)
 
 r = redis.Redis()
-logging.basicConfig(filename='logs.log', level=logging.DEBUG,
+
+path = os.path.abspath(__file__)
+dirname = os.path.dirname(path)
+log_path = os.path.join(dirname, 'logs.log')
+logging.basicConfig(filename=log_path, level=logging.DEBUG,
                     format='%(levelname)s: %(asctime)s - %(message)s',
                     datefmt='%d-%m-%Y %H:%M:%S')
 
