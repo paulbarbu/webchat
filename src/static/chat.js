@@ -68,7 +68,7 @@ Handler = {
      * Callback to respond to ping events via AJAX
      */
     event_ping: function handle_event_ping(e){
-        $.post('/_pong', 'PONG!');
+        $.post($SCRIPT_ROOT + '/_pong', 'PONG!');
     },
 
     /**
@@ -113,7 +113,7 @@ Handler = {
         //if the status is 404 then the user closed his last room, so we logged
         //him out
         if(404 === e.status){
-            window.location.replace('/');
+            window.location.replace($SCRIPT_ROOT);
         }
 
         var lineDiv = document.createElement('div');
@@ -131,7 +131,7 @@ Handler = {
  */
 function publish_message(e){
     e.preventDefault();
-    $.post('/_publish_message', {'message': $('#text').val(),
+    $.post($SCRIPT_ROOT + '/_publish_message', {'message': $('#text').val(),
         'room': $('.tab-pane.active').attr('id')}).fail(Handler.publish_error);
     $('#text').val('');
 }
@@ -171,7 +171,7 @@ function leave_room(room_name, active_room){
         active_room.attr('class', 'active');
     }
 
-    $.post('/_leave_room', {'room': room_name}).fail(Handler.leave_room_error)
+    $.post($SCRIPT_ROOT + '/_leave_room', {'room': room_name}).fail(Handler.leave_room_error)
         .success(update_rooms);
 }
 
@@ -292,7 +292,7 @@ function get_current_rooms(){
  */
 function join_rooms(e){
     e.preventDefault();
-    $.post('/_join_rooms', {'join_rooms': $('#join_rooms').val()})
+    $.post($SCRIPT_ROOT + '/_join_rooms', {'join_rooms': $('#join_rooms').val()})
         .fail(Handler.join_error).success(update_rooms);
     $('#join_rooms').val('');
 }
@@ -302,7 +302,7 @@ function join_rooms(e){
  * Events) and display the rooms the user joined
  */
 function load_chat(){
-    var stream = new EventSource('/_sse_stream');
+    var stream = new EventSource($SCRIPT_ROOT + '/_sse_stream');
 
     stream.onmessage = Handler.event_message;
     stream.onerror = Handler.event_error;
