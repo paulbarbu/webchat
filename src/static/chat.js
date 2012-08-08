@@ -415,6 +415,19 @@ function notify_activity(room_name){
     }
 }
 
+/**
+ * Add horizontal rules to each object in an array
+ *
+ * If there are existing <hr> elements they are removed and a new one is added
+ *
+ * @param array obj array of objects to add a horizontal rule to
+ */
+function add_hr(obj){
+    for(i=0; i<obj.length; i++){
+        obj[i].innerHTML = obj[i].innerHTML.split('<hr>').join('') + '<hr>';
+    }
+}
+
 //Global initializations
 load_chat();
 $('[name="send"]').click(publish_message);
@@ -423,6 +436,12 @@ $('[name="join"]').click(join_rooms);
 //clear the activity notice upon clicking on the tab
 $('a[data-toggle="tab"]').on('show', function (e) {
     $('#icon-' + $(e.target).attr('href').slice(1)).remove();
+
+    //add a <hr> to the last tab in order to mark the activity on that room
+    //since the user moved away
+    if(typeof e.relatedTarget !== 'undefined'){
+        add_hr($('div' + $(e.relatedTarget).attr('href')));
+    }
 });
 
 
@@ -436,4 +455,6 @@ $(window).focus(function() {
 
 $(window).blur(function() {
     away = true;
+
+    add_hr($('div.tab-pane'));
 });
