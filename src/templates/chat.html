@@ -35,14 +35,16 @@ Currently logged in users:
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"
     type="text/javascript"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='EventSource.js') }}">
-</script>
-<script type="text/javascript" src="{{ url_for('static', filename='chat.js') }}">
-</script>
+
+<script type="text/javascript" src="{{ url_for('static', 
+    filename='EventSource.js') }}"></script>
+
+<script type="text/javascript" src="{{ url_for('static', 
+    filename='chat.js') }}"></script>
+
 <script type="text/javascript" src="{{ url_for('static',
-    filename='notificon.min.js') }}">
-</script>
+    filename='notificon.min.js') }}"></script>
+
 <script type="text/javascript" src="{{ url_for('static',
-    filename='bootstrap/js/bootstrap.min.js') }}">
-</script>
+    filename='bootstrap/js/bootstrap.min.js') }}"></script>
 {% endblock %}

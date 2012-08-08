@@ -6,8 +6,8 @@
     {{ form.rooms.label }}{{ form.rooms(tabindex=2) }}
     {{ form.submit }}
 </form>
-
 {% if form.errors %}
+
     <ul id="form-errors">
     {% for error in form.nick.errors %}
         <li>{{ error }}</li>
@@ -15,6 +15,7 @@
     </ul>
 {% endif %}
 {% if errors %}
+
     <ul id="errors">
     {% for error in errors %}
         <li>{{ error }}</li>
