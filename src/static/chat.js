@@ -425,7 +425,9 @@ function notify_activity(room_name){
  */
 function add_hr(obj){
     for(i=0; i<obj.length; i++){
-        obj[i].innerHTML = obj[i].innerHTML.split('<hr>').join('') + '<hr>';
+        if($(obj[i]).has('div.line').length){
+            obj[i].innerHTML = obj[i].innerHTML.split('<hr>').join('') + '<hr>';
+        }
     }
 }
 
