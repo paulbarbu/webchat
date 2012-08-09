@@ -15,7 +15,7 @@ class ConnectForm(Form):
 class ChatForm(Form):
     text = TextField()
     rooms = HiddenField('rooms')
-    join_rooms = TextField('join rooms (separated by spaces)', [validators.regexp('\w',
+    join_rooms = TextField('Join rooms (separated by spaces)', [validators.regexp('\w',
         message=room_allowed_chars),
         validators.Required('Empty room list not allowed!')])
     join = SubmitField('Join!')
