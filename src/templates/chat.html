@@ -27,9 +27,9 @@ Currently logged in users:
 
 <div id="errors">
     {% for err in errors[:-1] %}
-    {{ err }}<br />
+    <div class="alert alert-error">{{ err }}</div>
     {% endfor %}
-    {{ errors[-1] }}
+    <div class="alert alert-error">{{ errors[-1] }}</div>
 </div>
 {% endif %}
 

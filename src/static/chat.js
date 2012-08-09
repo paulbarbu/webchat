@@ -77,7 +77,7 @@ Handler = {
     publish_error: function handle_publish_error(e){
         var lineDiv = document.createElement('div');
 
-        lineDiv.className = 'line error';
+        lineDiv.className = 'line alert alert-error';
         lineDiv.innerHTML = e.responseText;
 
         $('.tab-pane.active').append(lineDiv);
@@ -100,7 +100,7 @@ Handler = {
     join_error: function handle_join_error(e){
         var lineDiv = document.createElement('div');
 
-        lineDiv.className = 'join error';
+        lineDiv.className = 'line alert alert-error';
         lineDiv.innerHTML = e.responseText;
 
         $('.tab-pane.active').append(lineDiv);
@@ -118,7 +118,7 @@ Handler = {
         else{
             var lineDiv = document.createElement('div');
 
-            lineDiv.className = 'leave error';
+            lineDiv.className = 'line alert alert-error';
             lineDiv.innerHTML = e.responseText;
 
             $('.tab-pane.active').append(lineDiv);

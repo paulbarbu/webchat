@@ -8,18 +8,21 @@
 </form>
 {% if form.errors %}
 
-    <ul id="form-errors">
+    <div id="form-errors">
     {% for error in form.nick.errors %}
-        <li>{{ error }}</li>
+        <div class="alert alert-error">{{ error }}</div>
     {% endfor %}
-    </ul>
+    {% for error in form.rooms.errors %}
+        <div class="alert alert-error">{{ error }}</div>
+    {% endfor %}
+    </div>
 {% endif %}
 {% if errors %}
 
-    <ul id="errors">
+    <div id="errors">
     {% for error in errors %}
-        <li>{{ error }}</li>
+        <div class="alert alert-error">{{ error }}</div>
     {% endfor %}
-    </ul>
+    </div>
 {% endif %}
 {% endblock %}
