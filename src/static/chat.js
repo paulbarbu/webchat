@@ -115,13 +115,14 @@ Handler = {
         if(404 === e.status){
             window.location.replace($SCRIPT_ROOT);
         }
+        else{
+            var lineDiv = document.createElement('div');
 
-        var lineDiv = document.createElement('div');
+            lineDiv.className = 'leave error';
+            lineDiv.innerHTML = e.responseText;
 
-        lineDiv.className = 'leave error';
-        lineDiv.innerHTML = e.responseText;
-
-        $('.tab-pane.active').append(lineDiv);
+            $('.tab-pane.active').append(lineDiv);
+        }
     },
 }
 
