@@ -8,17 +8,17 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-SRC_PATH="/src"
+SRC_PATH="/webchat/src"
 WSGI_PATH=$SRC_PATH"/webchat.wsgi"
+VHOST_NAME="webchat-vhost.conf"
 
 user_path="$1"
 DEPLOY_PATH=${user_path%/}
 
-tmpl=`source ./vhost_tmpl`
-echo $tmpl > webchat-vhost.conf
+source ./vhost_tmpl > $VHOST_NAME
 
 echo "Don't forget to add"
-echo "Include `pwd`/webchat-vhost.conf"
+echo "Include $DEPLOY_PATH$SRC_PATH/webchat-vhost.conf"
 echo "to httpd-vhosts.conf in apache."
 
 cd ../..
