@@ -135,6 +135,7 @@ function publish_message(e){
     $.post($SCRIPT_ROOT + '/_publish_message', {'message': $('#text').val(),
         'room': $('.tab-pane.active').attr('id')}).fail(Handler.publish_error);
     $('#text').val('');
+    $('#text').focus();
 }
 
 /**

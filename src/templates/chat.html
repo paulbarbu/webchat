@@ -1,5 +1,8 @@
 {% extends 'layout.html' %}
 {% block content %}
+<div class="chat-window" id="chat">
+</div>
+
 <form method="POST">
     <label for="text">{{ nick }}:</label> {{ form.text }}
     {{ form.send }}
@@ -9,9 +12,6 @@
     {{ form.join_rooms.label }}{{ form.join_rooms }}
     {{ form.join }}
 </form>
-
-<div class="chat-window" id="chat">
-</div>
 <hr />
 {% if users %}
 
