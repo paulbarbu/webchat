@@ -230,7 +230,7 @@ def get_event():
 
 
 def publish_users():
-    '''Gets the user list and  publishes it on redis'''
+    '''Gets the user list and publishes it on redis'''
     users = r.sort('users', alpha=True)
     r.publish('webchat.users', json.dumps(users))
 
