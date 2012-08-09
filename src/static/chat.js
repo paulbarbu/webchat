@@ -137,59 +137,55 @@ function publish_message(e){
 }
 
 /**
- * Callback for successfully joining or leaving rooms after login
- */
-function update_rooms(e){
-    $('#rooms').val(e);
-    display_rooms();
-}
-
-/**
  * Leave a room
  *
  * An AJAX request is made to the server which will respond with the new room
  * list, also the tabs will be updated
  *
- * @param string room_name room's name, this parameter is taken from the parent of 
- * the button (the anchor) from th href attribute
- *
+ * @param string room the clicked room (the one the user wants to leave)
  * @param string active_room the room currently active
  */
-function leave_room(room_name, active_room){
-    var active_room_name = active_room.children().attr("href").slice(1);
-
-    if(active_room_name == room_name){
-        var next_room = active_room.next();
-        if(next_room.length){ //the current tab is not the last, go right
-            active_room.next().attr('class', 'active');
-        }
-        else{ //current tab is the last, move to left
-            active_room.prev().attr('class', 'active');
-        }
-    }
-    else{
-        active_room.attr('class', 'active');
-    }
+function leave_room(room, active_room){
+    var room_name = room.children().attr("href").slice(1);
 
     $.post($SCRIPT_ROOT + '/_leave_room', {'room': room_name})
         .fail(Handler.leave_room_error)
-        .success(update_rooms);
+        .success(function(e){
+            var active_room_name = active_room.children().attr("href").slice(1);
+
+            if(active_room_name == room_name){
+
+                var next_room = active_room.next();
+                if(next_room.length){ //the current tab is not the last, go right
+                    active_room.next().attr('class', 'active');
+                }
+                else{ //current tab is the last, move to left
+                    active_room.prev().attr('class', 'active');
+                }
+            }
+            else{
+                active_room.attr('class', 'active');
+            }
+
+            $(room).remove();
+            $('#' + room_name).remove();
+
+            $('#rooms').val(e);
+        });
 }
 
 /**
  * Display the rooms as tabs
  *
  * This function is able to decide whether it needs to create all the tabs or
- * just some of the tabs by array difference and if the user left or joined
- * rooms
+ * just some of the tabs by array difference
  */
 function display_rooms(){
-    var left = false; //assume that the user joined some rooms
     var rooms = JSON.parse($('#rooms').val());
 
     var close_btn = $('<button>').attr({
         class: 'close',
-        onclick: 'leave_room($(this).parent().attr("href").slice(1), $("li.active"))'
+        onclick: 'leave_room($(this).parent().parent(), $("li.active"))'
     }).html('&times;');
 
     /**
@@ -224,53 +220,33 @@ function display_rooms(){
           //new rooms since the rest are already displayed
         var current_rooms = get_current_rooms();
 
-        var initial_rooms = rooms; //in case the user left rooms
-
         rooms = rooms.filter(function(i){
             return current_rooms.indexOf(i) < 0;
         });
 
         /**
-         * the user left rooms, didn't join, so the list is smaller 
-         * and tabs should be removed, not added
-         */
-        if(rooms.length == 0){
-            rooms = current_rooms.filter(function(i){
-                return initial_rooms.indexOf(i) < 0;
-            });
-
-            left = true;
-        }
-
-        /**
-         * every room should be processed because if we join or leave we don't
+         * every room should be processed because if we join we don't
          * have to change the active room
          */
         pos = 0;
     }
 
     for(i=pos; i<rooms.length; i++){
-        if(left){
-            $('a[href="#' + rooms[i] + '"]').parent().remove();
-            $('#' + rooms[i]).remove();
-        }
-        else{
-            $('.nav.nav-tabs').append(
-                $('<li>').append(
-                    $('<a>').attr({
-                        href: '#' + rooms[i],
-                        'data-toggle': 'tab',
-                    }).html(rooms[i] + close_btn.prop('outerHTML'))
-                )
-            );
+        $('.nav.nav-tabs').append(
+            $('<li>').append(
+                $('<a>').attr({
+                    href: '#' + rooms[i],
+                    'data-toggle': 'tab',
+                }).html(rooms[i] + close_btn.prop('outerHTML'))
+            )
+        );
 
-            $('.tab-content').append(
-                $('<div>').attr({
-                    class: 'tab-pane',
-                    id: rooms[i],
-                })
-            );
-        }
+        $('.tab-content').append(
+            $('<div>').attr({
+                class: 'tab-pane',
+                id: rooms[i],
+            })
+        );
     }
 }
 
@@ -294,7 +270,11 @@ function get_current_rooms(){
 function join_rooms(e){
     e.preventDefault();
     $.post($SCRIPT_ROOT + '/_join_rooms', {'join_rooms': $('#join_rooms').val()})
-        .fail(Handler.join_error).success(update_rooms);
+        .fail(Handler.join_error)
+        .success(function(e){
+            $('#rooms').val(e);
+            display_rooms();
+        });
     $('#join_rooms').val('');
 }
 
