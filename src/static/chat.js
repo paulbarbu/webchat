@@ -160,7 +160,7 @@ function leave_room(room_name, active_room){
 
     if(active_room_name == room_name){
         var next_room = active_room.next();
-        if(next_room.length != 0){ //the current tab is not the last, go right
+        if(next_room.length){ //the current tab is not the last, go right
             active_room.next().attr('class', 'active');
         }
         else{ //current tab is the last, move to left
@@ -437,7 +437,7 @@ $('[name="send"]').click(publish_message);
 $('[name="join"]').click(join_rooms);
 
 //clear the activity notice upon clicking on the tab
-$('a[data-toggle="tab"]').on('show', function (e) {
+$('a[data-toggle="tab"]').on('show', function(e){
     $('#icon-' + $(e.target).attr('href').slice(1)).remove();
 
     //add a <hr> to the last tab in order to mark the activity on that room
@@ -447,16 +447,15 @@ $('a[data-toggle="tab"]').on('show', function (e) {
     }
 });
 
-
 //if the browser or the browser's tab is not focused display a Notificon
 var away = false;
 
-$(window).focus(function() {
+$(window).focus(function(){
     away = false;
     Notificon('');
 });
 
-$(window).blur(function() {
+$(window).blur(function(){
     away = true;
 
     add_hr($('div.tab-pane'));
