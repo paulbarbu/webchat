@@ -30,7 +30,7 @@ Handler = {
         msgSpan.className = 'msg';
 
         if(is_mention(data['message'])){
-            lineDiv.className = 'line mention';
+            lineDiv.className = 'line alert alert-info';
         }
         else{
             lineDiv.className = 'line';
