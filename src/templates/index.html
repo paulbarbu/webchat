@@ -2,9 +2,11 @@
 {% block content %}
 <form method="POST">
     {{ form.hidden_tag() }}
-    {{ form.nick.label }}{{ form.nick(tabindex=1) }}
-    {{ form.rooms.label }}{{ form.rooms(tabindex=2) }}
-    {{ form.submit }}
+    {{ form.nick(tabindex=1, placeholder="Type your nickname here") }}
+    <br />
+    {{ form.rooms(tabindex=2, placeholder="Join rooms") }}
+    <span class="help-block">Room names must be separated by spaces.</span>
+    {{ form.submit(class="btn btn-primary") }}
 </form>
 {% if form.errors %}
 
