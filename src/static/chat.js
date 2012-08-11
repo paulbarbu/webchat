@@ -294,6 +294,7 @@ function load_chat(){
     stream.addEventListener('ping', Handler.event_ping);
 
     display_rooms();
+    $('#text').focus();
 }
 
 /**
