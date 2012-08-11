@@ -10,6 +10,7 @@ from jinja2 import utils
 import redis
 import logging
 import os
+import string
 
 from event import MessageEvent, ErrorEvent, UsersEvent, PingEvent
 import const
@@ -124,8 +125,10 @@ def publish_message():
 
         if message and len(message) >= 1:
             if room in session['rooms']:
+                message= str(utils.escape(message))
+                message = string.replace(message, '\n', '<br />')
                 r.publish('webchat.room.' + room, json.dumps({
-                    'message': str(utils.escape(message)),
+                    'message': message,
                     'nick': session['nick'],
                     'room': room,
                 }))
