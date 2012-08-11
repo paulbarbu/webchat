@@ -25,3 +25,7 @@ body{
     margin: 20px;
 }
 
+.ui-effects-transfer{
+    border: 2px;
+    border-style: dashed;
+}

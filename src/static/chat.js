@@ -249,6 +249,14 @@ function display_rooms(){
                 id: rooms[i],
             })
         );
+
+        if(0 == pos){
+            options = {
+                to: $('a[href="' + '#' + rooms[i] + '"]'),
+                className: 'ui-effects-transfer'
+            };
+            $('[name="join"]').effect("transfer", options, 700);
+        }
     }
 }
 
