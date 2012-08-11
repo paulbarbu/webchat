@@ -427,6 +427,31 @@ load_chat();
 $('[name="send"]').click(publish_message);
 $('[name="join"]').click(join_rooms);
 
+/**
+ * If the user presses Enter while he's on the message textfield (#text) the
+ * message is sent, if he presses Ctrl + Enter a newline is added to the message
+ *
+ * If the user presses Enter while on the rooms textfield (#join_rooms) he will
+ * join them
+ */
+$(document).keypress(function(e){
+    console.log(e);
+    console.log($(e));
+    if('join_rooms' == e.target.id && 13 == e.which){
+        join_rooms(e);
+    }
+    else if('text' == e.target.id && (10 == e.which
+            //this part is needed in order to solve browser incompatibilities
+            || 13 == e.which && e.ctrlKey)){
+        $('#text').val($('#text').val() + '\n');
+        return false;
+    }
+    else if('text' == e.target.id && 13 == e.which){
+        publish_message(e);
+    }
+
+});
+
 //clear the activity notice upon clicking on the tab
 $('a[data-toggle="tab"]').on('show', function(e){
     $('#icon-' + $(e.target).attr('href').slice(1)).remove();
