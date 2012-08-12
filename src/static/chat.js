@@ -44,8 +44,7 @@ Handler = {
 
         notify_activity(data['room']);
 
-        //TODO: scroll the div to the bottom of the page when the content is larger
-        //than the div
+        $('div#content').trigger('update_scrollbar');
     },
 
     /**
@@ -81,6 +80,7 @@ Handler = {
         lineDiv.innerHTML = e.responseText;
 
         $('.tab-pane.active').append(lineDiv);
+        $('div#content').trigger('update_scrollbar');
     },
 
     /**
@@ -92,6 +92,7 @@ Handler = {
         //TODO: display some error to the user here (some kind of pop up) with
         //e.data as the err msg, also show a reconnect btn with a timer for
         //auto-reconnect
+        $('div#content').trigger('update_scrollbar');
     },
 
     /**
@@ -104,6 +105,7 @@ Handler = {
         lineDiv.innerHTML = e.responseText;
 
         $('.tab-pane.active').append(lineDiv);
+        $('div#content').trigger('update_scrollbar');
     },
 
     /**
@@ -122,8 +124,15 @@ Handler = {
             lineDiv.innerHTML = e.responseText;
 
             $('.tab-pane.active').append(lineDiv);
+            $('div#content').trigger('update_scrollbar');
         }
     },
+    /**
+     * Move the scrollbar at the bottom in order to see the latest message
+     */
+    update_scrollbar: function handle_updatescrollbar(e){
+        $('#content').scrollTop($('#content')[0].scrollHeight + 42);
+    }
 }
 
 /**
@@ -210,7 +219,7 @@ function display_rooms(){
         );
 
         $('#chat').append(
-            $('<div>').attr({class: 'tab-content'}).append(
+            $('<div>').attr({class: 'tab-content', id: 'content'}).append(
                 $('<div>').attr({
                     class: 'tab-pane active',
                     id: rooms[0],
@@ -420,12 +429,9 @@ function add_hr(obj){
             obj[i].innerHTML = obj[i].innerHTML.split('<hr>').join('') + '<hr>';
         }
     }
-}
 
-//Global initializations
-load_chat();
-$('[name="send"]').click(publish_message);
-$('[name="join"]').click(join_rooms);
+    $('div#content').trigger('update_scrollbar');
+}
 
 /**
  * If the user presses Enter while he's on the message textfield (#text) the
@@ -435,8 +441,6 @@ $('[name="join"]').click(join_rooms);
  * join them
  */
 $(document).keypress(function(e){
-    console.log(e);
-    console.log($(e));
     if('join_rooms' == e.target.id && 13 == e.which){
         join_rooms(e);
     }
@@ -461,6 +465,12 @@ $('a[data-toggle="tab"]').on('show', function(e){
     if(typeof e.relatedTarget !== 'undefined'){
         add_hr($('div' + $(e.relatedTarget).attr('href')));
     }
+    Handler.update_scrollbar();
+});
+
+//after the tab is shown scroll down
+$('a[data-toggle="tab"]').on('shown', function(e){
+    Handler.update_scrollbar();
 });
 
 //if the browser or the browser's tab is not focused display a Notificon
@@ -476,3 +486,31 @@ $(window).blur(function(){
 
     add_hr($('div.tab-pane'));
 });
+
+/**
+ * Adjust the height of the content where the messages appear in order to keep
+ * the whole app on the screen.
+ */
+function adjust_blocks() {
+    var win_h = $(window).height();
+    var footer_h = $('p.footer').outerHeight(true);
+    var box_h = $('div.well').outerHeight(true);
+    var tabs_h = $('.nav.nav-tabs').outerHeight(true);
+    var body_margins_h = 2*parseInt($('body').css('margin'));
+
+    $('#content').css('height', win_h-box_h-footer_h-tabs_h-body_margins_h);
+}
+
+//Global initializations
+load_chat();
+
+$('[name="send"]').click(publish_message);
+$('[name="join"]').click(join_rooms);
+
+$('div#content').bind('update_scrollbar', Handler.update_scrollbar);
+
+//TODO update scrolbar on tab movement
+//TODO move other handlers here
+
+$(document).ready(adjust_blocks);
+$(window).resize(adjust_blocks);
