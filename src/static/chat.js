@@ -434,6 +434,20 @@ function add_hr(obj){
 }
 
 /**
+ * Adjust the height of the content where the messages appear in order to keep
+ * the whole app on the screen.
+ */
+function adjust_blocks() {
+    var win_h = $(window).height();
+    var footer_h = $('p.footer').outerHeight(true);
+    var box_h = $('div.well').outerHeight(true);
+    var tabs_h = $('.nav.nav-tabs').outerHeight(true);
+    var body_margins_h = 2*parseInt($('body').css('margin'));
+
+    $('#content').css('height', win_h-box_h-footer_h-tabs_h-body_margins_h);
+}
+
+/**
  * If the user presses Enter while he's on the message textfield (#text) the
  * message is sent, if he presses Ctrl + Enter a newline is added to the message
  *
@@ -453,7 +467,6 @@ $(document).keypress(function(e){
     else if('text' == e.target.id && 13 == e.which){
         publish_message(e);
     }
-
 });
 
 //clear the activity notice upon clicking on the tab
@@ -465,17 +478,15 @@ $('a[data-toggle="tab"]').on('show', function(e){
     if(typeof e.relatedTarget !== 'undefined'){
         add_hr($('div' + $(e.relatedTarget).attr('href')));
     }
-    Handler.update_scrollbar();
+    //Handler.update_scrollbar();
 });
 
 //after the tab is shown scroll down
 $('a[data-toggle="tab"]').on('shown', function(e){
-    Handler.update_scrollbar();
+    //Handler.update_scrollbar();
 });
 
 //if the browser or the browser's tab is not focused display a Notificon
-var away = false;
-
 $(window).focus(function(){
     away = false;
     Notificon('');
@@ -487,21 +498,8 @@ $(window).blur(function(){
     add_hr($('div.tab-pane'));
 });
 
-/**
- * Adjust the height of the content where the messages appear in order to keep
- * the whole app on the screen.
- */
-function adjust_blocks() {
-    var win_h = $(window).height();
-    var footer_h = $('p.footer').outerHeight(true);
-    var box_h = $('div.well').outerHeight(true);
-    var tabs_h = $('.nav.nav-tabs').outerHeight(true);
-    var body_margins_h = 2*parseInt($('body').css('margin'));
-
-    $('#content').css('height', win_h-box_h-footer_h-tabs_h-body_margins_h);
-}
-
 //Global initializations
+var away = false;
 load_chat();
 
 $('[name="send"]').click(publish_message);
