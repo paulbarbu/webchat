@@ -284,8 +284,8 @@ function join_rooms(e){
         .success(function(e){
             $('#rooms').val(e);
             display_rooms();
+            $('#join_rooms').val('');
         });
-    $('#join_rooms').val('');
 }
 
 /**
