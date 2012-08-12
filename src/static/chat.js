@@ -250,7 +250,7 @@ function display_rooms(){
             })
         );
 
-        if(0 == pos){
+        if(0 == pos && i == rooms.length - 1){
             options = {
                 to: $('a[href="' + '#' + rooms[i] + '"]'),
                 className: 'ui-effects-transfer'
