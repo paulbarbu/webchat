@@ -442,7 +442,8 @@ function adjust_blocks() {
     var footer_h = $('p.footer').outerHeight(true);
     var box_h = $('div.well').outerHeight(true);
     var tabs_h = $('.nav.nav-tabs').outerHeight(true);
-    var body_margins_h = 2*parseInt($('body').css('margin'));
+    var body_margins_h = parseInt($('body').css('margin-top')) +
+        parseInt($('body').css('margin-bottom'));
 
     $('#content').css('height', win_h-box_h-footer_h-tabs_h-body_margins_h);
 }
