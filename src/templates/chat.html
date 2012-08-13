@@ -1,5 +1,9 @@
 {% extends 'layout.html' %}
 {% block content %}
+<div id="error-dialog" title="Connection error!" hidden="hidden">
+<p style="color:#000000">A connection error occured, please reconnect!</p>
+</div>
+
 <div class="chat-window" id="chat">
 </div>
 {% if errors %}
@@ -40,6 +44,9 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"
     type="text/javascript"></script>
 
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js"
+    type="text/javascript"></script>
+
 <script type="text/javascript" src="{{ url_for('static', 
     filename='EventSource.js') }}"></script>
 
@@ -55,6 +62,4 @@
 
 <script type="text/javascript" src="{{ url_for('static',
     filename='bootstrap/js/bootstrap.min.js') }}"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js"
-    type="text/javascript"></script>
 {% endblock %}

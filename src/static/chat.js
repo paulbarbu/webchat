@@ -74,19 +74,18 @@ Handler = {
      * Callback that handles message sending errors
      */
     publish_error: function handle_publish_error(e){
-        var lineDiv = document.createElement('div');
-
-        lineDiv.className = 'line alert alert-error';
-
         if("" != e.responseText){
+            var lineDiv = document.createElement('div');
+
+            lineDiv.className = 'line alert alert-error';
             lineDiv.innerHTML = e.responseText;
+
+            $('.tab-pane.active').append(lineDiv);
+            $('div#content').trigger('update_scrollbar');
         }
         else{
-            lineDiv.innerHTML = "Your message cannot be published, please reconnect!";
+            show_error_dialog();
         }
-
-        $('.tab-pane.active').append(lineDiv);
-        $('div#content').trigger('update_scrollbar');
     },
 
     /**
@@ -94,11 +93,7 @@ Handler = {
      */
     event_error: function handle_event_error(e){
         this.close(); //here, `this` refers to `stream`
-        console.log('err:', e);
-        //TODO: display some error to the user here (some kind of pop up) with
-        //e.data as the err msg, also show a reconnect btn with a timer for
-        //auto-reconnect
-        $('div#content').trigger('update_scrollbar');
+        show_error_dialog();
     },
 
     /**
@@ -475,6 +470,31 @@ $(document).keypress(function(e){
         publish_message(e);
     }
 });
+
+/**
+ * Display an error dialog
+ *
+ * When this dialog is shown then the user is advied to reconnect because some
+ * connection error occurred
+ */
+function show_error_dialog(){
+    $('#error-dialog').dialog({
+        resizable: false,
+        modal: true,
+        draggable: false,
+        closeOnEscape: false,
+        buttons: {
+            'OK': function(){
+                window.location.replace($SCRIPT_ROOT + '/quit');
+            }
+        },
+        open: function(event, ui){
+            $('.ui-dialog-buttonpane button').each(function(){
+                $(this).attr('class', 'btn btn-danger');
+            });
+        },
+    });
+}
 
 //Global initializations
 load_chat();

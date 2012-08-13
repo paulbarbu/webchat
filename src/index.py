@@ -255,6 +255,7 @@ def pong():
     else:
         return const.OK
 
+@app.route('/quit', methods=['GET'])
 def quit():
     '''Logout'''
     try:
