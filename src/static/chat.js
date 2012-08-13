@@ -469,6 +469,9 @@ $(document).keypress(function(e){
     }
 });
 
+//Global initializations
+load_chat();
+
 //clear the activity notice upon clicking on the tab
 $('a[data-toggle="tab"]').on('show', function(e){
     $('#icon-' + $(e.target).attr('href').slice(1)).remove();
@@ -498,9 +501,7 @@ $(window).blur(function(){
     add_hr($('div.tab-pane'));
 });
 
-//Global initializations
 var away = false;
-load_chat();
 
 $('[name="send"]').click(publish_message);
 $('[name="join"]').click(join_rooms);
