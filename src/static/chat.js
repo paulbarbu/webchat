@@ -482,12 +482,11 @@ $('a[data-toggle="tab"]').on('show', function(e){
     if(typeof e.relatedTarget !== 'undefined'){
         add_hr($('div' + $(e.relatedTarget).attr('href')));
     }
-    //Handler.update_scrollbar();
 });
 
 //after the tab is shown scroll down
 $('a[data-toggle="tab"]').on('shown', function(e){
-    //Handler.update_scrollbar();
+    Handler.update_scrollbar();
 });
 
 //if the browser or the browser's tab is not focused display a Notificon
@@ -509,8 +508,7 @@ $('[name="join"]').click(join_rooms);
 
 $('div#content').bind('update_scrollbar', Handler.update_scrollbar);
 
-//TODO update scrolbar on tab movement
-//TODO move other handlers here
+//TODO move other handlers into Handler
 
 $(document).ready(adjust_blocks);
 $(window).resize(adjust_blocks);
