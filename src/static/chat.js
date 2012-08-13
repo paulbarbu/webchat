@@ -77,7 +77,13 @@ Handler = {
         var lineDiv = document.createElement('div');
 
         lineDiv.className = 'line alert alert-error';
-        lineDiv.innerHTML = e.responseText;
+
+        if("" != e.responseText){
+            lineDiv.innerHTML = e.responseText;
+        }
+        else{
+            lineDiv.innerHTML = "Your message cannot be published, please reconnect!";
+        }
 
         $('.tab-pane.active').append(lineDiv);
         $('div#content').trigger('update_scrollbar');
