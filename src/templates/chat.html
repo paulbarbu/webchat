@@ -18,10 +18,12 @@
 
 <div class="well">
 <form method="POST">
-    <label for="text">{{ nick }}:</label> {{ form.text(tabindex=1) }}
+    <label for="text">{{ nick }}:</label> {{ form.text(tabindex=1,
+        style="width:100%") }}
     {{ form.send(class="btn btn-primary", tabindex=2) }}
 
-    {{ form.join_rooms.label }}{{ form.join_rooms(tabindex=3) }}
+    {{ form.join_rooms.label }}{{ form.join_rooms(tabindex=3,
+        style="width:100%") }}
     {{ form.join(tabindex=4) }}
     {{ form.rooms }}
 
