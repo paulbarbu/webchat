@@ -1,4 +1,7 @@
-from flaskext.wtf import Form, TextField, validators, SubmitField, HiddenField, TextAreaField
+from flaskext.wtf import (
+    Form, TextField, validators, SubmitField, HiddenField, TextAreaField,
+    RecaptchaField
+)
 
 room_allowed_chars = 'Room names may be composed only of alphanumeric characters and underscores!'
 
@@ -10,6 +13,7 @@ class ConnectForm(Form):
     rooms = TextField('Rooms (separated by spaces)', [validators.regexp('\w',
         message=room_allowed_chars),
         validators.Optional()])
+    recaptcha = RecaptchaField()
     submit = SubmitField('Connect!')
 
 class ChatForm(Form):

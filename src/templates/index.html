@@ -2,10 +2,13 @@
 {% block content %}
 <form method="POST">
     {{ form.hidden_tag() }}
-    {{ form.nick(tabindex=1, placeholder="Type your nickname here") }}
+    {{ form.nick(tabindex=1, placeholder="Type your nickname here",
+        style="width:434px") }}
     <br />
-    {{ form.rooms(tabindex=2, placeholder="Join rooms") }}
+    {{ form.rooms(tabindex=2, placeholder="Join rooms",
+        style="width:434px") }}
     <span class="help-block">Room names must be separated by spaces.</span>
+    {{ form.recaptcha }}
     {{ form.submit(class="btn btn-primary") }}
 </form>
 {% if form.errors %}
@@ -15,6 +18,9 @@
         <div class="alert alert-error">{{ error }}</div>
     {% endfor %}
     {% for error in form.rooms.errors %}
+        <div class="alert alert-error">{{ error }}</div>
+    {% endfor %}
+    {% for error in form.recaptcha.errors %}
         <div class="alert alert-error">{{ error }}</div>
     {% endfor %}
     </div>
