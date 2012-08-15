@@ -17,7 +17,7 @@
 {% endif %}
 
 <div class="well">
-<form method="POST">
+<form method="POST" style="margin: 0px">
     <label for="text">{{ nick }}:</label> {{ form.text(tabindex=1,
         style="width:100%") }}
     {{ form.send(class="btn btn-primary", tabindex=2) }}
@@ -27,6 +27,7 @@
     {{ form.join(tabindex=4) }}
     {{ form.rooms }}
 
+    <br />
     <br />
     {{ form.quit(class="btn btn-danger", tabindex=5) }}
 </form>
