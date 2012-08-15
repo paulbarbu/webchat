@@ -19,15 +19,15 @@ path = os.path.abspath(__file__)
 dirname = os.path.dirname(path)
 log_path = os.path.join(dirname, 'logs.log')
 data_path = os.path.join(dirname, 'data')
-recaptcha_keys_path = os.path.join(dirname, 'recaptcha.keys')
+keys_path = os.path.join(dirname, 'keys')
 
 if not os.path.isdir(data_path):
     os.mkdir(data_path)
 
 app = Flask(__name__)
-app.secret_key = 'populate this string yourself!'
 
-with open(recaptcha_keys_path, 'r') as f:
+with open(keys_path, 'r') as f:
+    app.secret_key = f.readline()
     app.config['RECAPTCHA_PUBLIC_KEY'] = f.readline()
     app.config['RECAPTCHA_PRIVATE_KEY'] = f.readline()
 
