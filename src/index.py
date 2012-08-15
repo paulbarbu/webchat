@@ -284,4 +284,3 @@ if __name__ == '__main__':
     #TODO: tab completition for user's nick
     #TODO: side bar for the user list
     #TODO: on IE the page reloads, not good
-    #TODO: try to run the app using mod_wsgi in apache

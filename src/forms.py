@@ -5,7 +5,6 @@ from flaskext.wtf import (
 
 room_allowed_chars = 'Room names may be composed only of alphanumeric characters and underscores!'
 
-#TODO: add reCaptcha field
 class ConnectForm(Form):
     nick = TextField('Nick', [validators.Length(min=3,
         message='Your nickname must be at least 3 characters long!'), validators.Regexp('\w',
