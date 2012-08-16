@@ -513,6 +513,7 @@ $('a[data-toggle="tab"]').on('show', function(e){
 //after the tab is shown scroll down
 $('a[data-toggle="tab"]').on('shown', function(e){
     Handler.update_scrollbar();
+    $('#text').focus();
 });
 
 //if the browser or the browser's tab is not focused display a Notificon
