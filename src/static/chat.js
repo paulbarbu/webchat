@@ -198,7 +198,7 @@ function display_rooms(){
     var close_btn = $('<button>').attr({
         class: 'close',
         onclick: 'leave_room($(this).parent().parent(), $("li.active"))'
-    }).html('&times;');
+    }).html('&nbsp;&times;');
 
     /**
      * starting from one when joining rooms at login,
