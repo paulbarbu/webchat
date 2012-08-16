@@ -21,6 +21,10 @@ NoSQL database the chat is based on.
 * Flask is the webframework that powers this chat, it handles everything
   described above.
 
+Idea
+====
+The original idea came from [Dani J](https://github.com/danij).
+
 License
 =======
 
