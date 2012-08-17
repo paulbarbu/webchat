@@ -131,7 +131,7 @@ def publish_message():
 
         if message and len(message) >= 1:
             if room in session['rooms']:
-                message= str(utils.escape(message))
+                message= str(utils.escape(message).encode('utf-8'))
                 message = string.replace(message, '\n', '<br />')
                 r.publish('webchat.room.' + room, json.dumps({
                     'message': message,
