@@ -133,6 +133,7 @@ def publish_message():
             if room in session['rooms']:
                 message= str(utils.escape(message).encode('utf-8'))
                 message = string.replace(message, '\n', '<br />')
+                logging.info("{0} ({1}): {2}".format(session['nick'], room, message))
                 r.publish('webchat.room.' + room, json.dumps({
                     'message': message,
                     'nick': session['nick'],
