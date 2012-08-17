@@ -140,8 +140,7 @@ def publish_message():
                 }))
             else:
                 return Response(const.WrongRoom, 403)
-        else:
-            return Response(const.EmptyMessage, 403)
+
     except redis.ConnectionError as e:
         logging.critical(e)
         return Response(const.ConnectionError, 500)
