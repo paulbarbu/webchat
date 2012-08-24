@@ -75,8 +75,8 @@ def index():
 
                 session.regenerate() # anti session-fixation attack
 
-                try:
-                    publish_users()
+                try: #TODO cleanup
+                    r.publish('webchat.users', json.dumps(create_user_dict()))
                 except redis.RedisError as e:
                     logging.critical(e)
                     session.destroy()
@@ -108,7 +108,7 @@ def chat():
     users = None
     errors = []
     try:
-        users = r.sort('user_list', alpha=True)
+        users = json.dumps(create_user_dict())
     except redis.RedisError as e:
         logging.critical(e)
         errors.append(const.GetUsersError)
@@ -189,10 +189,13 @@ def join_rooms():
         session['rooms'].extend(rooms)
         session['rooms'] = list(set(session['rooms']))
 
-        for room in session['rooms']:
-            add_user(session['nick'], room)
+        try:
+            for room in session['rooms']:
+                add_user(session['nick'], room)
 
-        publish_users()
+            r.publish('webchat.users', json.dumps(create_user_dict()))
+        except redis.Error as e:
+            logging.critical(e)
 
         return Response(json.dumps(session['rooms']), 200)
     else:
@@ -217,8 +220,11 @@ def leave_room():
             quit()
             return Response(status=404)
 
-        del_user(session['nick'], [room])
-        publish_users()
+        try:
+            del_user(session['nick'], [room])
+            r.publish('webchat.users', json.dumps(create_user_dict()))
+        except redis.RedisError as e:
+            logging.critical(e)
 
         return Response(json.dumps(session['rooms']), 200)
     else:
@@ -249,18 +255,6 @@ def get_event():
                     yield PingEvent()
 
 
-def publish_users():
-    '''Gets the user list and publishes it on redis'''
-
-    #import pdb
-    #pdb.set_trace()
-    users = r.hgetall('users')
-    l = {}
-
-    for room, user_list in users.iteritems():
-        l[room] = json.loads(user_list)
-
-    r.publish('webchat.users', json.dumps(l))
 
 
 @app.route('/_pong', methods=['POST'])
@@ -272,8 +266,8 @@ def pong():
         return Response(const.NotAuthentifiedError, 403)
 
     try:
-        r.sadd('users', session['nick'])
-        publish_users()
+        r.sadd('user_list', session['nick'])
+        r.publish('webchat.users', json.dumps(create_user_dict()))
     except redis.RedisError as e:
         logging.critical(e)
         return Response(const.UnexpectedBackendError, 500)
@@ -286,7 +280,7 @@ def quit():
     try:
         r.srem('user_list', session['nick'])
         del_user(session['nick'], r.hkeys('users'))
-        publish_users()
+        r.publish('webchat.users', json.dumps(create_user_dict()))
     except redis.RedisError as e:
         logging.critical(e)
 
@@ -295,44 +289,52 @@ def quit():
 
     return redirect(url_for('index'))
 
+
 def add_user(nick, room):
     '''Add a user the the room's user list'''
 
-    try:
-        current_users = r.hget('users', room)
+    current_users = r.hget('users', room)
 
-        if current_users:
-            current_users = json.loads(current_users)
-            current_users.append(nick)
+    if current_users:
+        current_users = json.loads(current_users)
+        current_users.append(nick)
 
-            current_users = list(set(current_users))
-        else:
-            current_users = [nick]
+        current_users = list(set(current_users))
+    else:
+        current_users = [nick]
 
-        r.hset('users', room, json.dumps(current_users))
-    except redis.RedisError as e:
-        logging.critical(e)
+    r.hset('users', room, json.dumps(current_users))
+
 
 def del_user(nick, rooms):
     '''Remove a user from the user list of every room in the `rooms` list'''
-    try:
-        users = r.hgetall('users')
+    users = r.hgetall('users')
 
-        for room in rooms:
-            current_users = json.loads(users[room])
+    for room in rooms:
+        current_users = json.loads(users[room])
 
-            try:
-                current_users.remove(nick)
-            except ValueError:
-                pass
+        try:
+            current_users.remove(nick)
+        except ValueError:
+            pass
 
-            if not current_users:
-                r.hdel('users', room)
-            else:
-                r.hset('users', room, json.dumps(current_users))
+        if not current_users:
+            r.hdel('users', room)
+        else:
+            r.hset('users', room, json.dumps(current_users))
 
-    except redis.RedisError as e:
-        logging.critical(e)
+
+def create_user_dict():
+    '''Return a dictionary of lists
+    The keys are the rooms and the values are user lists
+    '''
+    users = r.hgetall('users')
+    users_dict = {}
+
+    for room, user_list in users.iteritems():
+        users_dict[room] = json.loads(user_list)
+
+    return users_dict
 
 
 if __name__ == '__main__':
@@ -342,4 +344,4 @@ if __name__ == '__main__':
     #app.run(debug=False, threaded=True, port=5003, host='0.0.0.0')
 
 #TODO handle ping-pongs
-#TODO update everything that is related to users (do a grep)
+#TODO upon reload (even on chromium) mozilla is showing connection error
