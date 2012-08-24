@@ -31,17 +31,6 @@
     <br />
     {{ form.quit(class="btn btn-danger", tabindex=5) }}
 </form>
-<!--<hr />-->
-<!--{% if users %}-->
-
-<!--Currently logged in users:-->
-<!--<div id="user-list">-->
-    <!--{% for user in users[:-1] %}-->
-    <!--{{ user }},-->
-    <!--{% endfor %}-->
-    <!--{{ users[-1] }}-->
-<!--</div>-->
-<!--{% endif %}-->
 </div>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"
@@ -55,6 +44,7 @@
 
 <script type=text/javascript>
   $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+  users = JSON.parse('{{ users|safe }}');
 </script>
 
 <script type="text/javascript" src="{{ url_for('static', 

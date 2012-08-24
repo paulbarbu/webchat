@@ -51,16 +51,10 @@ Handler = {
      * Update the user list when someone joins the chat
      */
     event_users: function handle_event_users(e){
-        var users = $.parseJSON(e.data);
-        var usersDiv = $('#user-list')[0];
+        users = $.parseJSON(e.data);
 
-        usersDiv.innerHTML = '';
-
-        for(i=0; i<users.length-1; i++){
-            usersDiv.innerHTML += users[i] + ', ';
-        }
-
-        usersDiv.innerHTML += users[users.length-1];
+        current_room = $('.tab-pane.active').attr('id');
+        display_users(current_room);
     },
 
     /**
@@ -128,11 +122,34 @@ Handler = {
             $('div#content').trigger('update_scrollbar');
         }
     },
+
     /**
      * Move the scrollbar at the bottom in order to see the latest message
      */
     update_scrollbar: function handle_updatescrollbar(e){
         $('#content').scrollTop($('#content')[0].scrollHeight + 42);
+    },
+
+    /**
+     * Update scrollbars and focus the textbox when moving through tabs
+     */
+    tab_shown: function handle_tab_shown(e){
+        Handler.update_scrollbar();
+        $('#text').focus();
+    },
+
+    /**
+     * This is fired when a tab is clicked on
+     */
+    tab_show: function handle_tab_show(e){
+        display_users($(e.target).attr('href').slice(1));
+        $('#icon-' + $(e.target).attr('href').slice(1)).remove();
+
+        //add a <hr> to the last tab in order to mark the activity on that room
+        //since the user moved away
+        if(typeof e.relatedTarget !== 'undefined'){
+            add_hr($('div' + $(e.relatedTarget).attr('href')));
+        }
     }
 }
 
@@ -183,6 +200,8 @@ function leave_room(room, active_room){
             $('#' + room_name).remove();
 
             $('#rooms').val(e);
+
+            display_users($('.active').children().attr('href').slice(1));
         });
 }
 
@@ -215,16 +234,22 @@ function display_rooms(){
                         href: '#' + rooms[0],
                         'data-toggle': 'tab',
                     }).html(rooms[0] + close_btn.prop('outerHTML'))
+                    .on('show', Handler.tab_show)
+                    .on('shown', Handler.tab_shown)
                 )
             )
         );
 
         $('#chat').append(
-            $('<div>').attr({class: 'tab-content', id: 'content'}).append(
-                $('<div>').attr({
-                    class: 'tab-pane active',
-                    id: rooms[0],
-                })
+            $('<div>').attr({class: 'row-fluid'}).append(
+                $('<div>').attr({class: 'tab-content span11', id: 'content'}).append(
+                    $('<div>').attr({
+                        class: 'tab-pane active',
+                        id: rooms[0],
+                    })
+                )
+            ).append(
+                $('<div>').attr({class: 'span2', id: 'user-list'})
             )
         );
     }
@@ -250,6 +275,8 @@ function display_rooms(){
                     href: '#' + rooms[i],
                     'data-toggle': 'tab',
                 }).html(rooms[i] + close_btn.prop('outerHTML'))
+                .on('show', Handler.tab_show)
+                .on('shown', Handler.tab_shown)
             )
         );
 
@@ -268,6 +295,24 @@ function display_rooms(){
             $('[name="join"]').effect("transfer", options, 700);
         }
     }
+}
+
+/**
+ * Display the users on the current room
+ */
+function display_users(current_room){
+    if('undefined' === users[current_room]){
+        return false;
+    }
+
+    var usersDiv = $('#user-list')[0];
+    usersDiv.innerHTML = '';
+
+    for(i=0; i<users[current_room].length-1; i++){
+        usersDiv.innerHTML += users[current_room][i] + '<br />';
+    }
+
+    usersDiv.innerHTML += users[current_room][users[current_room].length-1];
 }
 
 /**
@@ -312,6 +357,7 @@ function load_chat(){
     stream.addEventListener('ping', Handler.event_ping);
 
     display_rooms();
+    display_users($('.tab-pane.active').attr('id'));
     $('#text').focus();
 }
 
@@ -446,7 +492,10 @@ function adjust_blocks() {
     var body_margins_h = parseInt($('body').css('margin-top')) +
         parseInt($('body').css('margin-bottom'));
 
-    $('#content').css('height', win_h-box_h-footer_h-tabs_h-body_margins_h);
+    var block_height = win_h-box_h-footer_h-tabs_h-body_margins_h;
+
+    $('#content').css('height', block_height);
+    $('#user-list').css('height', block_height);
 }
 
 /**
@@ -498,23 +547,6 @@ function show_error_dialog(){
 
 //Global initializations
 load_chat();
-
-//clear the activity notice upon clicking on the tab
-$('a[data-toggle="tab"]').on('show', function(e){
-    $('#icon-' + $(e.target).attr('href').slice(1)).remove();
-
-    //add a <hr> to the last tab in order to mark the activity on that room
-    //since the user moved away
-    if(typeof e.relatedTarget !== 'undefined'){
-        add_hr($('div' + $(e.relatedTarget).attr('href')));
-    }
-});
-
-//after the tab is shown scroll down
-$('a[data-toggle="tab"]').on('shown', function(e){
-    Handler.update_scrollbar();
-    $('#text').focus();
-});
 
 //if the browser or the browser's tab is not focused display a Notificon
 $(window).focus(function(){

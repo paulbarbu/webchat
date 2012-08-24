@@ -55,10 +55,10 @@ def index():
 
     if form.validate_on_submit():
         try:
-            if r.sismember('users', form.nick.data):
+            if r.sismember('user_list', form.nick.data):
                 form.nick.errors.append(const.UsedNickError)
             else:
-                r.sadd('users', form.nick.data)
+                r.sadd('user_list', form.nick.data)
                 session['nick'] = form.nick.data
                 session['rooms'] = []
                 rooms = form.rooms.data.split()
@@ -70,10 +70,13 @@ def index():
                     for room in rooms:
                         session['rooms'].append(room)
 
+                for room in session['rooms']:
+                    add_user(form.nick.data, room)
+
                 session.regenerate() # anti session-fixation attack
 
-                try:
-                    publish_users()
+                try: #TODO cleanup
+                    r.publish('webchat.users', json.dumps(create_user_dict()))
                 except redis.RedisError as e:
                     logging.critical(e)
                     session.destroy()
@@ -105,7 +108,7 @@ def chat():
     users = None
     errors = []
     try:
-        users = r.sort('users', alpha=True)
+        users = json.dumps(create_user_dict())
     except redis.RedisError as e:
         logging.critical(e)
         errors.append(const.GetUsersError)
@@ -162,7 +165,7 @@ def sse_stream():
         return Response(const.NotAuthentifiedError, 403)
 
     try:
-        if 0 == r.scard('users'):
+        if 0 == r.scard('user_list'):
             return Response(const.NoUsers, 404)
     except redis.RedisError as e:
         logging.critical(e)
@@ -186,9 +189,18 @@ def join_rooms():
         session['rooms'].extend(rooms)
         session['rooms'] = list(set(session['rooms']))
 
+        try:
+            for room in session['rooms']:
+                add_user(session['nick'], room)
+
+            r.publish('webchat.users', json.dumps(create_user_dict()))
+        except redis.Error as e:
+            logging.critical(e)
+
         return Response(json.dumps(session['rooms']), 200)
     else:
         return Response(const.InvalidRoomError, 400)
+
 
 @app.route('/_leave_room', methods=['POST'])
 def leave_room():
@@ -208,6 +220,12 @@ def leave_room():
         if not session['rooms']:
             quit()
             return Response(status=404)
+
+        try:
+            del_user(session['nick'], [room])
+            r.publish('webchat.users', json.dumps(create_user_dict()))
+        except redis.RedisError as e:
+            logging.critical(e)
 
         return Response(json.dumps(session['rooms']), 200)
     else:
@@ -238,11 +256,6 @@ def get_event():
                     yield PingEvent()
 
 
-def publish_users():
-    '''Gets the user list and publishes it on redis'''
-    users = r.sort('users', alpha=True)
-    r.publish('webchat.users', json.dumps(users))
-
 
 @app.route('/_pong', methods=['POST'])
 def pong():
@@ -253,20 +266,22 @@ def pong():
         return Response(const.NotAuthentifiedError, 403)
 
     try:
-        r.sadd('users', session['nick'])
-        publish_users()
+        r.sadd('user_list', session['nick'])
+        r.publish('webchat.users', json.dumps(create_user_dict()))
     except redis.RedisError as e:
         logging.critical(e)
         return Response(const.UnexpectedBackendError, 500)
     else:
         return const.OK
 
+
 @app.route('/quit', methods=['GET'])
 def quit():
     '''Logout'''
     try:
-        r.srem('users', session['nick'])
-        publish_users()
+        r.srem('user_list', session['nick'])
+        del_user(session['nick'], r.hkeys('users'))
+        r.publish('webchat.users', json.dumps(create_user_dict()))
     except redis.RedisError as e:
         logging.critical(e)
 
@@ -275,12 +290,56 @@ def quit():
 
     return redirect(url_for('index'))
 
+
+def add_user(nick, room):
+    '''Add a user the the room's user list'''
+
+    current_users = r.hget('users', room)
+
+    if current_users:
+        current_users = json.loads(current_users)
+        current_users.append(nick)
+
+        current_users = list(set(current_users))
+    else:
+        current_users = [nick]
+
+    r.hset('users', room, json.dumps(current_users))
+
+
+def del_user(nick, rooms):
+    '''Remove a user from the user list of every room in the `rooms` list'''
+    users = r.hgetall('users')
+
+    for room in rooms:
+        current_users = json.loads(users[room])
+
+        try:
+            current_users.remove(nick)
+        except ValueError:
+            pass
+
+        if not current_users:
+            r.hdel('users', room)
+        else:
+            r.hset('users', room, json.dumps(current_users))
+
+
+def create_user_dict():
+    '''Return a dictionary of lists
+    The keys are the rooms and the values are user lists
+    '''
+    users = r.hgetall('users')
+    users_dict = {}
+
+    for room, user_list in users.iteritems():
+        users_dict[room] = json.loads(user_list)
+
+    return users_dict
+
+
 if __name__ == '__main__':
     sess_ext.cleanup_sessions()
 
     app.run(debug=True, threaded=True, port=5005)
     #app.run(debug=False, threaded=True, port=5003, host='0.0.0.0')
-
-    #TODO: tab completition for user's nick
-    #TODO: side bar for the user list
-    #TODO: on IE the page reloads, not good
