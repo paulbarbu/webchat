@@ -12,7 +12,6 @@ class ConnectForm(Form):
     rooms = TextField('Rooms (separated by spaces)', [validators.regexp('^[\w]+$',
         message=room_allowed_chars),
         validators.Optional()])
-    recaptcha = RecaptchaField()
     submit = SubmitField('Connect!')
 
 class ChatForm(Form):

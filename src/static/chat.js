@@ -51,7 +51,7 @@ Handler = {
      * Update the user list when someone joins the chat
      */
     event_users: function handle_event_users(e){
-        var users = $.parseJSON(e.data);
+        users = $.parseJSON(e.data);/*
         var usersDiv = $('#user-list')[0];
 
         usersDiv.innerHTML = '';
@@ -60,7 +60,7 @@ Handler = {
             usersDiv.innerHTML += users[i] + ', ';
         }
 
-        usersDiv.innerHTML += users[users.length-1];
+        usersDiv.innerHTML += users[users.length-1];*/
     },
 
     /**
@@ -498,6 +498,8 @@ function show_error_dialog(){
 
 //Global initializations
 load_chat();
+
+var users;
 
 //clear the activity notice upon clicking on the tab
 $('a[data-toggle="tab"]').on('show', function(e){
