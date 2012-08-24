@@ -267,6 +267,10 @@ def pong():
 
     try:
         r.sadd('user_list', session['nick'])
+
+        for room in session['rooms']:
+            add_user(session['nick'], room)
+
         r.publish('webchat.users', json.dumps(create_user_dict()))
     except redis.RedisError as e:
         logging.critical(e)

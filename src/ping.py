@@ -1,5 +1,6 @@
 #! /usr/bin/env python2.7
 import redis, logging, time, sys
+from index import del_user
 
 def ping(r, interval=30):
     '''Publish a ping message to redis (r) every `interval` seconds'''
@@ -9,7 +10,7 @@ def ping(r, interval=30):
         except TypeError:
             last_ping = None
 
-        users = list(r.smembers('users'))
+        users = list(r.smembers('user_list'))
 
         # if there are users connected and interval seconds passed since the
         # last ping then update the ping time and send a ping event
@@ -17,7 +18,12 @@ def ping(r, interval=30):
         if len(users) and (not last_ping or last_ping + interval < time.time()):
             r.set('ping.time', time.time())
             r.publish('webchat.ping', 'ping')
-            r.delete('users') # clean the user list and re-update it with
+
+            for nick in users:
+                del_user(nick, r.hkeys('users'))
+
+
+            r.delete('user_list') # clean the user list and re-update it with
             # the users that send back the PONG!
 
 
