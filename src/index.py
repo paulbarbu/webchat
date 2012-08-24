@@ -201,6 +201,7 @@ def join_rooms():
     else:
         return Response(const.InvalidRoomError, 400)
 
+
 @app.route('/_leave_room', methods=['POST'])
 def leave_room():
     '''Removes a room from the user's session, thus not allowing him to chat
@@ -256,7 +257,6 @@ def get_event():
 
 
 
-
 @app.route('/_pong', methods=['POST'])
 def pong():
     '''Handle the PONG sent as a response to PING, this way the application is
@@ -273,6 +273,7 @@ def pong():
         return Response(const.UnexpectedBackendError, 500)
     else:
         return const.OK
+
 
 @app.route('/quit', methods=['GET'])
 def quit():
@@ -344,4 +345,3 @@ if __name__ == '__main__':
     #app.run(debug=False, threaded=True, port=5003, host='0.0.0.0')
 
 #TODO handle ping-pongs
-#TODO upon reload (even on chromium) mozilla is showing connection error
