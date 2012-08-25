@@ -87,7 +87,7 @@ Handler = {
      */
     event_error: function handle_event_error(e){
         this.close(); //here, `this` refers to `stream`
-        show_error_dialog();
+        //show_error_dialog();
     },
 
     /**
