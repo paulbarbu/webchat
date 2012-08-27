@@ -203,6 +203,7 @@ function leave_room(room, active_room){
 
             $('#rooms').val(e);
             display_users($('.active').children().attr('href').slice(1));
+            $('#text').focus();
         });
 }
 
