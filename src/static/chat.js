@@ -199,8 +199,9 @@ function leave_room(room, active_room){
             $(room).remove();
             $('#' + room_name).remove();
 
-            $('#rooms').val(e);
+            $($('.active').children().attr('href')).addClass('active');
 
+            $('#rooms').val(e);
             display_users($('.active').children().attr('href').slice(1));
         });
 }
@@ -301,8 +302,8 @@ function display_rooms(){
  * Display the users on the current room
  */
 function display_users(current_room){
-    if('undefined' === users[current_room]){
-        return false;
+    if(!(current_room in users)){
+        return;
     }
 
     var usersDiv = $('#user-list')[0];
