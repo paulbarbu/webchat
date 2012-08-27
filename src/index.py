@@ -184,6 +184,9 @@ def join_rooms():
 
     form.join_rooms.data = request.form['join_rooms']
 
+    if not form.join_rooms.data:
+        return Response('', 400)
+
     if form.join_rooms.validate(form):
         rooms = form.join_rooms.data.split()
         session['rooms'].extend(rooms)

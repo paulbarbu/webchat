@@ -68,7 +68,7 @@ Handler = {
      * Callback that handles message sending errors
      */
     publish_error: function handle_publish_error(e){
-        if("" != e.responseText){
+        if('' != e.responseText){
             var lineDiv = document.createElement('div');
 
             lineDiv.className = 'line alert alert-error';
@@ -94,6 +94,10 @@ Handler = {
      * Callback that handles the join errors
      */
     join_error: function handle_join_error(e){
+        if('' == e.responseText){
+            return;
+        }
+
         var lineDiv = document.createElement('div');
 
         lineDiv.className = 'line alert alert-error';
