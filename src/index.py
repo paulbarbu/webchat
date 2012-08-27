@@ -256,7 +256,6 @@ def get_event():
                     yield PingEvent()
 
 
-
 @app.route('/_pong', methods=['POST'])
 def pong():
     '''Handle the PONG sent as a response to PING, this way the application is

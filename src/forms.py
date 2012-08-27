@@ -1,4 +1,4 @@
-from flaskext.wtf import (
+from flask.ext.wtf import (
     Form, TextField, validators, SubmitField, HiddenField, TextAreaField,
     RecaptchaField
 )
