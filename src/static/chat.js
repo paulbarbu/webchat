@@ -140,6 +140,7 @@ Handler = {
     tab_shown: function handle_tab_shown(e){
         Handler.update_scrollbar();
         $('#text').focus();
+        update_typeahead();
     },
 
     /**
@@ -208,6 +209,7 @@ function leave_room(room, active_room){
             $('#rooms').val(e);
             display_users($('.active').children().attr('href').slice(1));
             $('#text').focus();
+            update_typeahead();
         });
 }
 
@@ -364,7 +366,9 @@ function load_chat(){
 
     display_rooms();
     display_users($('.tab-pane.active').attr('id'));
+    $('#text').attr('data-provide', 'typeahead');
     $('#text').focus();
+    update_typeahead();
 }
 
 /**
@@ -549,6 +553,17 @@ function show_error_dialog(){
             });
         },
     });
+}
+
+/**
+ * Update the data-source for typeahead with the users on the current room
+ *
+ * This should be called if the user chages rooms
+ */
+function update_typeahead(){
+    var autocomplete = $('#text').typeahead();
+
+    autocomplete.data('typeahead').source = users[$('.tab-pane.active').attr('id')];
 }
 
 //Global initializations
