@@ -27,3 +27,12 @@ body{
     padding-left: 5px;
     margin-left: 5px;
 }
+
+.actionbox-toolbar{
+    cursor: pointer;
+    text-align: right;
+}
+
+.spaced{
+    margin-top: 20px;
+}

@@ -494,16 +494,30 @@ function add_hr(obj){
 /**
  * Adjust the height of the content where the messages appear in order to keep
  * the whole app on the screen.
+ *
+ * @param include_box bool include or not the actionbox in the calculation
+ * (default: true)
  */
-function adjust_blocks() {
+function adjust_blocks(e, include_box) {
+    if('undefined' == include_box){
+        include_box = true;
+    }
+
     var win_h = $(window).height();
     var footer_h = $('p.footer').outerHeight(true);
-    var box_h = $('div.well').outerHeight(true);
+    var ab_toolbar = $('.actionbox-toolbar').outerHeight(true);
+
+    var box_h = 0;
+
+    if(include_box || !toolbar_hidden){
+        box_h = $('#actionbox').outerHeight(true);
+    }
+
     var tabs_h = $('.nav.nav-tabs').outerHeight(true);
     var body_margins_h = parseInt($('body').css('margin-top')) +
         parseInt($('body').css('margin-bottom'));
 
-    var block_height = win_h-box_h-footer_h-tabs_h-body_margins_h;
+    var block_height = win_h-box_h-footer_h-tabs_h-body_margins_h-ab_toolbar;
 
     $('#content').css('height', block_height);
     $('#user-list').css('height', block_height);
@@ -605,6 +619,22 @@ function reverse_str(s){
     return s.split('').reverse().join('');
 }
 
+/**
+ * Toggle the actionbox
+ */
+function toggle_actionbox(){
+    toolbar_hidden = !toolbar_hidden;
+
+    $('#actionbox').slideToggle('fast', function(){
+        adjust_blocks(!toolbar_hidden);
+    });
+
+    $('#toggler').toggleClass('icon-resize-small')
+        .toggleClass('icon-resize-full');
+
+    $('.footer').toggleClass('spaced');
+}
+
 //Global initializations
 load_chat();
 
@@ -613,7 +643,6 @@ load_chat();
  * the last word written even if it's not at the beginning of the message
  */
 $('#text').typeahead().data('typeahead').matcher = function(item){
-    console.log(this);
     var last_word = get_last_word(this.query.toLowerCase());
     if('' == last_word){
         return false;
@@ -651,9 +680,11 @@ $(window).blur(function(){
 });
 
 var away = false;
+var toolbar_hidden = false;
 
 $('[name="send"]').click(publish_message);
 $('[name="join"]').click(join_rooms);
+$('.actionbox-toolbar').click(toggle_actionbox);
 
 $('div#content').bind('update_scrollbar', Handler.update_scrollbar);
 
