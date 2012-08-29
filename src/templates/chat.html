@@ -17,16 +17,22 @@
 {% endif %}
 
     <div class="actionbox-toolbar">
-        <span class="pull-right"><i id='toggler' class="icon-resize-small"></i>&nbsp;</span>
+        <span class="pull-right">
+            <i id='toggler' class="icon-resize-small"></i>&nbsp;
+        </span>
     </div>
+
 <div class="well well-small" id="actionbox">
 <form method="POST" style="margin: 0px">
     <label for="text">{{ nick }}:</label> {{ form.text(tabindex=1,
-        style="width:99%") }}
+        style="width:99%") }} <!-- ugly fix so that the textbox stays contained
+        in the well-->
     {{ form.send(class="btn btn-primary", tabindex=2) }}
 
     {{ form.join_rooms.label }}{{ form.join_rooms(tabindex=3,
-        style="width:99%") }}
+        style="width:99%") }} <!-- ugly fix so that the textbox stays contained
+        in the well-->
+
     {{ form.join(tabindex=4) }}
     {{ form.rooms }}
 

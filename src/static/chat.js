@@ -494,22 +494,15 @@ function add_hr(obj){
 /**
  * Adjust the height of the content where the messages appear in order to keep
  * the whole app on the screen.
- *
- * @param include_box bool include or not the actionbox in the calculation
- * (default: true)
  */
-function adjust_blocks(e, include_box) {
-    if('undefined' == include_box){
-        include_box = true;
-    }
-
+function adjust_blocks(e) {
     var win_h = $(window).height();
     var footer_h = $('p.footer').outerHeight(true);
     var ab_toolbar = $('.actionbox-toolbar').outerHeight(true);
 
     var box_h = 0;
 
-    if(include_box || !toolbar_hidden){
+    if(!toolbar_hidden){ //if the toolbar is hidden then don't include it
         box_h = $('#actionbox').outerHeight(true);
     }
 
@@ -621,6 +614,9 @@ function reverse_str(s){
 
 /**
  * Toggle the actionbox
+ *
+ * This also footer's "spaced" class and causes the toggler icon to change 
+ * according to the state of the actionbox.
  */
 function toggle_actionbox(){
     toolbar_hidden = !toolbar_hidden;
