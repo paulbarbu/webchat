@@ -509,16 +509,15 @@ function add_hr(obj){
  * the whole app on the screen.
  */
 function adjust_blocks(e) {
-    var win_h = $(window).height();
-    var footer_h = $('p.footer').outerHeight(true);
-    var ab_toolbar = $('.actionbox-toolbar').outerHeight(true);
-
     var box_h = 0;
 
     if(!toolbar_hidden){ //if the toolbar is hidden then don't include it
         box_h = $('#actionbox').outerHeight(true);
     }
 
+    var win_h = $(window).height();
+    var footer_h = $('p.footer').outerHeight(true);
+    var ab_toolbar = $('.actionbox-toolbar').outerHeight(true);
     var tabs_h = $('.nav.nav-tabs').outerHeight(true);
     var body_margins_h = parseInt($('body').css('margin-top')) +
         parseInt($('body').css('margin-bottom'));
@@ -593,7 +592,6 @@ $(document).keydown(function(e){
             case 40: //down
                 if(current_msg == message_list.length){
                     unsent_message = message;
-
                     current_msg++;
                 }
 
@@ -621,12 +619,14 @@ $(document).keydown(function(e){
                 if(!unsent_message && current_msg == message_list.length){
                     current_msg--;
                 }
+
                 if(current_msg == message_list.length){
                     $('#text').val(unsent_message);
                 }
                 else{
                     $('#text').val(get_message(current_msg));
                 }
+
                 break;
         }
     }
@@ -734,6 +734,7 @@ load_chat();
  */
 $('#text').typeahead().data('typeahead').matcher = function(item){
     var last_word = get_last_word(this.query.toLowerCase());
+
     if('' == last_word){
         return false;
     }
@@ -778,10 +779,7 @@ var unsent_message = '';
 $('[name="send"]').click(publish_message);
 $('[name="join"]').click(join_rooms);
 $('.actionbox-toolbar').click(toggle_actionbox);
-
 $('div#content').bind('update_scrollbar', Handler.update_scrollbar);
-
-//TODO move other handlers into Handler
 
 $(document).ready(adjust_blocks);
 $(window).resize(adjust_blocks);
