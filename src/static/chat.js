@@ -165,9 +165,20 @@ Handler = {
  */
 function publish_message(e){
     e.preventDefault();
-    $.post($SCRIPT_ROOT + '/_publish_message', {'message': $('#text').val(),
-        'room': $('.tab-pane.active').attr('id')}).fail(Handler.publish_error);
-    $('#text').val('');
+    var message = $('#text').val();
+
+    $.post($SCRIPT_ROOT + '/_publish_message',
+        {
+            'message': message,
+            'room': $('.tab-pane.active').attr('id')
+        })
+        .fail(Handler.publish_error)
+        .success(function(){
+            $('#text').val('');
+            unsent_message = '';
+            add_message(message);
+        });
+
     $('#text').focus();
 }
 
@@ -517,6 +528,28 @@ function adjust_blocks(e) {
 }
 
 /**
+ * Adds a message to the back of the list
+ *
+ * @param string msg the message you want to add to the list
+ */
+function add_message(msg){
+    message_list.push(msg);
+    current_msg = message_list.length;
+}
+
+/**
+ * Get the n'th message from the message list
+ *
+ * @param int n the message you want to retrieve
+ *
+ * @return the message as a string or an empty string which means the requested
+ * message doesn't exist
+ */
+function get_message(n){
+    return message_list[n] || '';
+}
+
+/**
  * If the user presses Enter while he's on the message textfield (#text) the
  * message is sent, if he presses Ctrl + Enter a newline is added to the message
  *
@@ -535,6 +568,55 @@ $(document).keypress(function(e){
     }
     else if('text' == e.target.id && 13 == e.which){
         publish_message(e);
+    }
+});
+
+/**
+ * Display a previous message in the textarea where messages are submitted
+ *
+ * This is managed through a random access list, the user will get a random
+ * element from the message list according to the number of up/down arrw key
+ * presses
+ */
+$(document).keydown(function(e){
+    var start_pos = $('#text').caret().start;
+    var end_pos = $('#text').caret().end;
+    var len = $('#text').val().length;
+    var message = $('#text').val();
+
+    if('text' == e.target.id &&
+       (0 == start_pos && 0 == end_pos || len == start_pos && len == end_pos)){
+        
+        switch(e.keyCode){
+            case 40: //down
+                if(current_msg == message_list.length){
+                    unsent_message = message;
+                }
+
+                if(current_msg < message_list.length){
+                    current_msg++;
+                }
+                
+                if(current_msg == message_list.length){
+                    $('#text').val(unsent_message);
+                }
+                else{
+                    $('#text').val(get_message(current_msg));
+                }
+
+                break;
+            case 38: //up
+                if(current_msg == message_list.length){
+                    unsent_message = message;
+                }
+
+                if(current_msg > 0){
+                    current_msg--;
+                }
+
+                $('#text').val(get_message(current_msg));
+                break;
+        }
     }
 });
 
@@ -677,6 +759,9 @@ $(window).blur(function(){
 
 var away = false;
 var toolbar_hidden = false;
+var message_list = [];
+var current_msg = 0;
+var unsent_message = '';
 
 $('[name="send"]').click(publish_message);
 $('[name="join"]').click(join_rooms);
