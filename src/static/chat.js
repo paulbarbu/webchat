@@ -176,7 +176,9 @@ function publish_message(e){
         .success(function(){
             $('#text').val('');
             unsent_message = '';
-            add_message(message);
+            
+            // only store the message if it's not empty
+            message && add_message(message);
         });
 
     $('#text').focus();
@@ -591,6 +593,8 @@ $(document).keydown(function(e){
             case 40: //down
                 if(current_msg == message_list.length){
                     unsent_message = message;
+
+                    current_msg++;
                 }
 
                 if(current_msg < message_list.length){
@@ -614,7 +618,15 @@ $(document).keydown(function(e){
                     current_msg--;
                 }
 
-                $('#text').val(get_message(current_msg));
+                if(!unsent_message && current_msg == message_list.length){
+                    current_msg--;
+                }
+                if(current_msg == message_list.length){
+                    $('#text').val(unsent_message);
+                }
+                else{
+                    $('#text').val(get_message(current_msg));
+                }
                 break;
         }
     }
