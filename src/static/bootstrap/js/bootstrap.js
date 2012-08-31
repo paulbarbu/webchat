@@ -1735,7 +1735,6 @@
           break
 
         case 9: // tab
-        case 13: // enter
           if (!this.shown) return
           this.select()
           break
@@ -1758,7 +1757,6 @@
 
       switch(e.keyCode) {
         case 9: // tab
-        case 13: // enter
         case 27: // escape
           e.preventDefault()
           break
@@ -1776,7 +1774,9 @@
           break
       }
 
-      e.stopPropagation()
+      if(e.keyCode != 13){
+        e.stopPropagation()
+      }
     }
 
   , blur: function (e) {
