@@ -1,4 +1,8 @@
 #! /usr/bin/env python2.7
+'''
+The main file for the webchat, this is the backend that glues all the components
+toghether
+'''
 
 from flask import (
     Flask, render_template, redirect, url_for, session, Response, request, json
@@ -10,7 +14,6 @@ from jinja2 import utils
 import redis
 import logging
 import os
-import string
 
 from event import MessageEvent, ErrorEvent, UsersEvent, PingEvent
 import const
@@ -44,6 +47,9 @@ logging.basicConfig(filename=log_path, level=logging.DEBUG,
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    '''
+    Handle the login
+    '''
     sess_ext.cleanup_sessions()
 
     if 'nick' in session:
@@ -75,7 +81,7 @@ def index():
 
                 session.regenerate() # anti session-fixation attack
 
-                try: #TODO cleanup
+                try:
                     r.publish('webchat.users', json.dumps(create_user_dict()))
                 except redis.RedisError as e:
                     logging.critical(e)
@@ -103,7 +109,7 @@ def chat():
         return redirect(url_for('index'))
 
     if form.quit.data:
-        return quit()
+        return disconnect()
 
     users = None
     errors = []
@@ -135,8 +141,11 @@ def publish_message():
         if message and len(message) >= 1:
             if room in session['rooms']:
                 message= str(utils.escape(message).encode('utf-8'))
-                message = string.replace(message, '\n', '<br />')
-                logging.info("{0} ({1}): {2}".format(session['nick'], room, message))
+                message = message.replace('\n', '<br />')
+
+                logging.info("{0} ({1}): {2}".format(
+                    session['nick'], room, message))
+
                 r.publish('webchat.room.' + room, json.dumps({
                     'message': message,
                     'nick': session['nick'],
@@ -197,7 +206,7 @@ def join_rooms():
                 add_user(session['nick'], room)
 
             r.publish('webchat.users', json.dumps(create_user_dict()))
-        except redis.Error as e:
+        except redis.RedisError as e:
             logging.critical(e)
 
         return Response(json.dumps(session['rooms']), 200)
@@ -221,7 +230,7 @@ def leave_room():
         session['rooms'].remove(room)
 
         if not session['rooms']:
-            quit()
+            disconnect()
             return Response(status=404)
 
         try:
@@ -282,7 +291,7 @@ def pong():
 
 
 @app.route('/quit', methods=['GET'])
-def quit():
+def disconnect():
     '''Logout'''
     try:
         r.srem('user_list', session['nick'])
