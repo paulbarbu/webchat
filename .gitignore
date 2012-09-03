@@ -3,3 +3,4 @@ src/data/*
 webchat-vhost.conf
 logs.log
 keys
+redis
