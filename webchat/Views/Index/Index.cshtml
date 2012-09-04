@@ -1,0 +1,63 @@
+﻿@model webchat.Models.IndexModel
+
+@using Recaptcha;
+
+@using(Html.BeginForm("Index", "Index", FormMethod.Post)){
+    @Html.AntiForgeryToken()
+
+    @Html.TextBox("nick", null, new { 
+        @tabindex = 1,
+        @placeholder = "Type your nickname here",
+        @style = "width:434px"
+    })
+    
+    <br />
+    
+    @Html.TextBox("rooms", null, new {
+        @tabindex = 2,
+        @placeholder = "Join rooms",
+        @style="width:434px"
+    })
+    
+    <span class="help-block">Room names must be separated by spaces.</span>
+    
+    @Html.Raw(Html.GenerateCaptcha("captcha", "clean"))
+    
+    <input type="submit" name="submit" class="btn btn-primary" value="Connect!"/>
+}
+
+@if(!ViewData.ModelState.IsValid){
+    <div id="form-errors">
+        @{
+            var errors = ViewData.ModelState.Values.SelectMany(v => v.Errors);
+
+            foreach(var error in errors) {
+                <div class="alert alert-error">
+                    @error.ErrorMessage
+                </div>
+            }
+        }
+    </div>
+}
+<!--
+{% if form.errors %}
+
+    <div id="form-errors">
+    {% for error in form.nick.errors %}
+        <div class="alert alert-error">{{ error }}</div>
+    {% endfor %}
+    {% for error in form.rooms.errors %}
+        <div class="alert alert-error">{{ error }}</div>
+    {% endfor %}
+    
+    </div>
+{% endif %}
+{% if errors %}
+
+    <div id="errors">
+    {% for error in errors %}
+        <div class="alert alert-error">{{ error }}</div>
+    {% endfor %}
+    </div>
+{% endif %}
+-->
