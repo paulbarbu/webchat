@@ -5,8 +5,9 @@ using System.Web;
 using System.Web.Mvc;
 using Recaptcha;
 using webchat.Models;
-
 using System.Diagnostics;
+using ServiceStack.Redis;
+using ServiceStack.Redis.Generic;
 
 namespace webchat.Controllers
 {
@@ -24,18 +25,22 @@ namespace webchat.Controllers
         [ValidateAntiForgeryToken]
         [RecaptchaControlMvc.CaptchaValidator]
         public ActionResult Index(IndexModel indexModel, bool captchaValid, string captchaErrorMessage) {
-            Debug.WriteLine("nick: " + indexModel.Nick);
-            /*int i = 0;
-            foreach(var room in indexModel.Rooms) {
-                Debug.WriteLine(string.Format("{0}: {1}", i, room));
-                i++;
-            }*/
+            if(Session["nick"] != null) {
+                RedirectToAction("Chat", "Chat"); // TODO: implement this action/controller
+            }
 
             if(!captchaValid) {
                 ModelState.AddModelError("captcha", "Invalid captcha words, please try again!");
             }
             else if(ModelState.IsValid) {
-                //this is good
+                Session["nick"] = indexModel.Nick;
+
+                indexModel.insertNick();
+                indexModel.notify();
+                //TODO: add nick to DB, Session["nick"]
+                //TODO: add nick to the rooms he joined
+                //TODO: publish the changes and go to chat
+                //TODO: regenerate session
             }
 
             return View(indexModel);
