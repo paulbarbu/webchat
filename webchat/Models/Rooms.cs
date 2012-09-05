@@ -15,29 +15,25 @@ namespace webchat.Models {
             this.AddRange(rooms);
         }
 
-        //TODO: join just a specific set of rooms? maybe I need this for the chat page
         public void AddUser(string nick) {
+            List<string> user_list;
 
-            List<string> user_list = new List<string>();
-            //TODO: this now works but it's SO messy
-            using(var redis = new RedisClient("localhost")) {
-
-                Thread.Sleep(5000); //TODO: remove me
+            using(var r = new RedisClient().As<List<string>>()) {
+                var room_user_list = r.GetHash<string>("room_user_list");
                 
                 foreach (var room in this) {
-                    string current_users = redis.GetValueFromHash("users", room);
-
-                    if(null == current_users) { //TODO: properly inspect and check this
+                    bool room_exists = room_user_list.TryGetValue(room, out user_list); 
+                    
+                    if(!room_exists) {
                         user_list = new List<string> { nick };
                     }
                     else {
-                        user_list = JsonConvert.DeserializeObject<List<string>>(current_users);
                         user_list.Add(nick);
 
                         user_list = user_list.Distinct().ToList();
                     }
 
-                    redis.SetEntryInHash("users", room, JsonConvert.SerializeObject(user_list));
+                    r.SetEntryInHash(room_user_list, room, user_list);
 	            }
             }
         }

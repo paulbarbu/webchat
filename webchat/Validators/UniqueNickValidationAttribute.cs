@@ -19,8 +19,10 @@ namespace webchat.Validators {
 
             string nick = (string)value;
 
-            using(var redisClient = new RedisClient("localhost")) {
-                if(redisClient.SetContainsItem("user_list", nick)) {
+            using(var redis = new RedisClient().As<string>()) {
+                var global_user_list = redis.Sets["global_user_list"];
+
+                if(redis.SetContainsItem(global_user_list, nick)) {
                     return false;
                 }
             }

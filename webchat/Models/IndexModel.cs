@@ -20,10 +20,9 @@ namespace webchat.Models {
         public Rooms Rooms { get; set; }
 
         public void Store() {
-            //TODO: think about the strongly typed client
-
-            using(var redis = new RedisClient()){
-                redis.AddItemToSet("user_list", Nick);
+            using(var redis = new RedisClient().As<string>()){
+                var global_user_list = redis.Sets["global_user_list"];
+                redis.AddItemToSet(global_user_list, Nick);
             }
             
             Rooms.AddUser(Nick);
