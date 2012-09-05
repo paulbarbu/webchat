@@ -35,8 +35,8 @@ namespace webchat.Controllers
             else if(ModelState.IsValid) {
                 Session["nick"] = indexModel.Nick;
 
-                indexModel.insertNick();
-                indexModel.notify();
+                indexModel.Store();
+                //indexModel.notify();
                 //TODO: add nick to DB, Session["nick"]
                 //TODO: add nick to the rooms he joined
                 //TODO: publish the changes and go to chat

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 using webchat.Validators;
+using ServiceStack.Redis;
 
 namespace webchat.Models {
     public class IndexModel {
@@ -18,9 +19,14 @@ namespace webchat.Models {
         [RoomsValidation]
         public Rooms Rooms { get; set; }
 
-        //TODO: handle the database
         public void Store() {
-            //TODO: code me
+            //TODO: think about the strongly typed client
+
+            using(var redis = new RedisClient()){
+                redis.AddItemToSet("user_list", Nick);
+            }
+            
+            Rooms.AddUser(Nick);
         }
     }
 }
