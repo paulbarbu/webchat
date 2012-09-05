@@ -25,20 +25,20 @@ namespace webchat.Controllers
         [RecaptchaControlMvc.CaptchaValidator]
         public ActionResult Index(IndexModel indexModel, bool captchaValid, string captchaErrorMessage) {
             Debug.WriteLine("nick: " + indexModel.Nick);
-            int i = 0;
+            /*int i = 0;
             foreach(var room in indexModel.Rooms) {
                 Debug.WriteLine(string.Format("{0}: {1}", i, room));
                 i++;
-            }
+            }*/
 
             if(!captchaValid) {
                 ModelState.AddModelError("captcha", "Invalid captcha words, please try again!");
             }
-            else {
+            else if(ModelState.IsValid) {
                 //this is good
             }
 
-            return View();
+            return View(indexModel);
         }
     }
 }

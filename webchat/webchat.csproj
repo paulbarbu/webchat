@@ -130,7 +130,7 @@
     </Compile>
     <Compile Include="Models\IndexModel.cs" />
     <Compile Include="Models\Rooms.cs" />
-    <Compile Include="Models\RoomsModelBiner.cs" />
+    <Compile Include="Models\RoomsModelBinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
