@@ -12,9 +12,15 @@ namespace webchat.Models {
             ErrorMessage = "Your nickname must be at least 3 characters long!")]
         [RegularExpression(@"^[\w]+$",
             ErrorMessage = "Your nickname must be composed only of alphanumeric characters and underscores!")]
+        [UniqueNickValidation]
         public string Nick { get; set; }
 
         [RoomsValidation]
         public Rooms Rooms { get; set; }
+
+        //TODO: handle the database
+        public void Store() {
+            //TODO: code me
+        }
     }
 }

@@ -133,6 +133,7 @@
     <Compile Include="Models\RoomsModelBinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validators\RoomsValidationAttribute.cs" />
+    <Compile Include="Validators\UniqueNickValidationAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
