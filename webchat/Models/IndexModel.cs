@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
+using webchat.Validators;
 
 namespace webchat.Models {
     public class IndexModel {
@@ -13,8 +14,7 @@ namespace webchat.Models {
             ErrorMessage = "Your nickname must be composed only of alphanumeric characters and underscores!")]
         public string Nick { get; set; }
 
-        [RegularExpression(@"^[\w ]+$",
-            ErrorMessage = "Room names may be composed only of alphanumeric characters and underscores!")]
+        [RoomsValidation]
         public Rooms Rooms { get; set; }
     }
 }

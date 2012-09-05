@@ -646,7 +646,7 @@ function show_error_dialog(){
         closeOnEscape: false,
         buttons: {
             'OK': function(){
-                window.location.replace($SCRIPT_ROOT + '/quit');
+                window.location.replace($SCRIPT_ROOT + '/disconnect');
             }
         },
         open: function(event, ui){
