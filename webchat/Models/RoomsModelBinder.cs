@@ -16,8 +16,8 @@ namespace webchat.Models {
                 .ToArray()
             );
             
-            if(0 == rooms.Count) {
-                rooms.Add("default");
+            if(1 == rooms.Count && "" == rooms[0]) {
+                rooms[0] ="default";
             }
 
             return rooms;
