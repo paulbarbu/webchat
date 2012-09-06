@@ -10,7 +10,7 @@ namespace webchat.Validators {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple=false, Inherited=false)]
     public class RoomsValidationAttribute : ValidationAttribute {
         public RoomsValidationAttribute()
-            : base("Room names may be composed only of alphanumeric characters and underscores!") {
+            : base(Resources.Strings.CharRoomsError) {
         }
 
         public override bool IsValid(object value) {

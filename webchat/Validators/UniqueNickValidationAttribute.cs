@@ -9,7 +9,7 @@ namespace webchat.Validators {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple=false, Inherited=false)]
     public class UniqueNickValidationAttribute : ValidationAttribute {
         public UniqueNickValidationAttribute()
-            : base("This nick is already in use!") {
+            : base(Resources.Strings.UniqueNickError) {
         }
 
         public override bool IsValid(object value) {

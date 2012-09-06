@@ -19,7 +19,7 @@ namespace webchat.Models {
             List<string> user_list;
 
             using(var r = new RedisClient().As<List<string>>()) {
-                var room_user_list = r.GetHash<string>("room_user_list");
+                var room_user_list = r.GetHash<string>(Resources.Strings.RoomUserListKey);
                 
                 foreach (var room in this) {
                     bool room_exists = room_user_list.TryGetValue(room, out user_list); 

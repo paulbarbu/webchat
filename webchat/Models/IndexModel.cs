@@ -8,11 +8,12 @@ using ServiceStack.Redis;
 
 namespace webchat.Models {
     public class IndexModel {
-        [Required(ErrorMessage = "Please provide a valid nickname in order to connect!")]
-        [StringLength(30, MinimumLength = 3,
-            ErrorMessage = "Your nickname must be at least 3 characters long!")]
-        [RegularExpression(@"^[\w]+$",
-            ErrorMessage = "Your nickname must be composed only of alphanumeric characters and underscores!")]
+        [Required(ErrorMessageResourceName = "RequiredNickError",
+            ErrorMessageResourceType=typeof(Resources.Strings))]
+        [StringLength(30, MinimumLength = 3, ErrorMessageResourceName = "LengthNickError",
+            ErrorMessageResourceType = typeof(Resources.Strings))]
+        [RegularExpression(@"^[\w]+$", ErrorMessageResourceName = "CharNickError",
+            ErrorMessageResourceType = typeof(Resources.Strings))]
         [UniqueNickValidation]
         public string Nick { get; set; }
 
@@ -21,7 +22,7 @@ namespace webchat.Models {
 
         public void Store() {
             using(var redis = new RedisClient().As<string>()){
-                var global_user_list = redis.Sets["global_user_list"];
+                var global_user_list = redis.Sets[Resources.Strings.GlobalUserListKey];
                 redis.AddItemToSet(global_user_list, Nick);
             }
             

@@ -30,7 +30,7 @@ namespace webchat.Controllers
             }
 
             if(!captchaValid) {
-                ModelState.AddModelError("captcha", "Invalid captcha words, please try again!");
+                ModelState.AddModelError("captcha", Resources.Strings.CaptchaError);
             }
             else if(ModelState.IsValid) {
                 Session["nick"] = indexModel.Nick;
