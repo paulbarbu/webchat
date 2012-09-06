@@ -135,6 +135,12 @@
   <data name="GlobalUserListKey" xml:space="preserve">
     <value>global_user_list</value>
   </data>
+  <data name="JoinRoomsHelpBlock" xml:space="preserve">
+    <value>Room names must be separated by spaces.</value>
+  </data>
+  <data name="JoinRoomsLabel" xml:space="preserve">
+    <value>Join rooms (separated by spaces)</value>
+  </data>
   <data name="LengthNickError" xml:space="preserve">
     <value>Your nickname must be at least 3 characters long!</value>
   </data>

@@ -115,6 +115,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Room names must be separated by spaces..
+        /// </summary>
+        public static string JoinRoomsHelpBlock {
+            get {
+                return ResourceManager.GetString("JoinRoomsHelpBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Join rooms (separated by spaces).
+        /// </summary>
+        public static string JoinRoomsLabel {
+            get {
+                return ResourceManager.GetString("JoinRoomsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your nickname must be at least 3 characters long!.
         /// </summary>
         public static string LengthNickError {
