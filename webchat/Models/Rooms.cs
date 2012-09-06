@@ -43,8 +43,8 @@ namespace webchat.Models {
                 var r = redis.As<List<string>>();
                 var room_user_list = r.GetHash<string>(Resources.Strings.RoomUserListKey);
 
-                //TODO: test
-                //redis.PublishMessage(Resources.Strings.UsersEventChannel, room_user_list.ToString());               
+                redis.PublishMessage(Resources.Strings.UsersEventChannel,
+                    JsonConvert.SerializeObject(room_user_list));
             }
         }
     }
