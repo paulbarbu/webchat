@@ -124,10 +124,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\ChatController.cs" />
     <Compile Include="Controllers\IndexController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ChatModel.cs" />
     <Compile Include="Models\IndexModel.cs" />
     <Compile Include="Models\Rooms.cs" />
     <Compile Include="Models\RoomsModelBinder.cs" />
@@ -151,12 +153,12 @@
     <Content Include="Static\bootstrap\img\glyphicons-halflings.png" />
     <Content Include="Static\bootstrap\js\bootstrap.js" />
     <Content Include="Static\bootstrap\js\bootstrap.min.js" />
-    <Content Include="src\static\chat.js" />
-    <Content Include="src\static\EventSource.js" />
+    <Content Include="Static\Js\chat.js" />
+    <Content Include="Static\Js\EventSource.js" />
     <Content Include="Static\favicon.ico" />
     <Content Include="Static\Css\jquery-ui-1.8.22.custom.css" />
-    <Content Include="src\static\jquery.caret.min.js" />
-    <Content Include="src\static\notificon.min.js" />
+    <Content Include="Static\Js\jquery.caret.min.js" />
+    <Content Include="Static\Js\notificon.min.js" />
     <Content Include="Static\Css\style.css" />
     <Content Include="src\templates\chat.html" />
     <Content Include="src\templates\index.html" />
@@ -204,6 +206,9 @@
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Resources</CustomToolNamespace>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Chat\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

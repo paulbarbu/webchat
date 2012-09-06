@@ -1,0 +1,94 @@
+﻿<div id="error-dialog" title="Connection error!" hidden="hidden">
+<p style="color:#000000">A connection error occured, please reconnect!</p>
+</div>
+
+<div class="chat-window" id="chat">
+</div>
+
+@{
+//TODO: errors?
+}
+
+<span class="pull-right actionbox-toolbar">
+    <a href="#" title="Toggle the actionbox">
+        <i id='toggler' class="icon-resize-small"></i></a>&nbsp;
+</span>
+
+<div class="well well-small" id="actionbox">
+    @using(Html.BeginForm("Index", "Chat", FormMethod.Post, new {@style = "margin:0px"})){
+        @Html.Label((string)Session["nick"], new {@for = "text"})
+        @Html.TextBox("text", null, new {
+            @tabinde = 1,
+            @style = "width: 99%" // ugly fix so that the textbox stays contained in the well
+        })
+
+        <input type="submit" class="btn btn-primary" tabindex="2" id="send" name="send" value="Send!"/>
+        
+        @Html.Label("join_rooms_label", Resources.Strings.JoinRoomsLabel)
+        @Html.TextBox("join_rooms", null, new {
+            @tabindex = 3,
+            @style = "width:99%" //same fix as above
+        })
+
+        <input id="join" name="join" tabindex="4" type="submit" value="Join!">
+        <br />
+        <br />
+        <input class="btn btn-danger" id="quit" name="quit" tabindex="5" type="submit" value="Quit!">
+        @Html.Hidden("rooms", /*model.Rooms*/"rooms liost")
+    }
+</div>
+<!--
+{% if errors %}
+
+<div id="errors">
+    {% for err in errors[:-1] %}
+    <div class="alert alert-error">{{ err }}</div>
+    {% endfor %}
+    <div class="alert alert-error">{{ errors[-1] }}</div>
+</div>
+{% endif %}
+
+<div class="well well-small" id="actionbox">
+<form method="POST" style="margin: 0px">
+    <label for="text">{{ nick }}:</label> {{ form.text(tabindex=1,
+        style="width:99%") }} <!-- ugly fix so that the textbox stays contained
+        in the well-->
+    <!-- {{ form.send(class="btn btn-primary", tabindex=2) }}
+
+    {{ form.join_rooms.label }}{{ form.join_rooms(tabindex=3,
+        style="width:99%") }} <!-- ugly fix so that the textbox stays contained
+        in the well
+
+    {{ form.join(tabindex=4) }}
+    {{ form.rooms }}
+
+    <br />
+    <br />
+    {{ form.quit(class="btn btn-danger", tabindex=5) }}
+</form>
+</div>
+-->
+
+<script type=text/javascript>
+    $SCRIPT_ROOT = "TODO";
+    @{ //TODO: api/....
+    }
+     
+    users = "JSON.parse('{{ users|safe }}')";
+    @{ //TODO: get this out of the model
+    }
+</script>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"
+    type="text/javascript"></script>
+
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js"
+    type="text/javascript"></script>
+
+<script type="text/javascript" src="@Url.Content("~/Static/bootstrap/js/bootstrap.js")"></script>
+
+<script type="text/javascript" src="@Url.Content("~/Static/Js/notificon.min.js")"></script>
+
+<script type="text/javascript" src="@Url.Content("~/Static/Js/jquery.caret.min.js")"></script>
+
+<script type="text/javascript" src="@Url.Content("~/Static/Js/chat.js")"></script>
