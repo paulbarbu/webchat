@@ -16,8 +16,11 @@ namespace webchat.Controllers
         //
         // GET: /Index/
 
-        public ActionResult Index()
-        {  
+        public ActionResult Index(){
+            if(Session["nick"] != null) {
+                return RedirectToAction("Index", "Chat");
+            }
+
             return View();
         }
 
@@ -25,10 +28,6 @@ namespace webchat.Controllers
         [ValidateAntiForgeryToken]
         [RecaptchaControlMvc.CaptchaValidator]
         public ActionResult Index(IndexModel indexModel, bool captchaValid, string captchaErrorMessage) {
-            if(Session["nick"] != null) {
-                return RedirectToAction("Index", "Chat"); // TODO: implement this action/controller
-            }
-
             if(!captchaValid) {
                 ModelState.AddModelError("captcha", Resources.Strings.CaptchaError);
             }
