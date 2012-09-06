@@ -7,6 +7,7 @@ using Recaptcha;
 using webchat.Models;
 using System.Diagnostics;
 using ServiceStack.Redis;
+using System.Web.Security;
 
 namespace webchat.Controllers
 {
@@ -16,7 +17,7 @@ namespace webchat.Controllers
         // GET: /Index/
 
         public ActionResult Index()
-        {
+        {  
             return View();
         }
 
@@ -32,8 +33,6 @@ namespace webchat.Controllers
                 ModelState.AddModelError("captcha", Resources.Strings.CaptchaError);
             }
             else if(ModelState.IsValid) {
-                Session["nick"] = indexModel.Nick;
-
                 try {
                     indexModel.Store();
                     indexModel.Rooms.NotifyJoin();
@@ -43,9 +42,10 @@ namespace webchat.Controllers
 
                     return View(indexModel);
                 }
-
-                //TODO: publish the changes and go to chat
-                //TODO: regenerate session
+                
+                Session["nick"] = indexModel.Nick;
+                
+                RedirectToAction("Chat", "Chat");
             }
 
             return View(indexModel);
