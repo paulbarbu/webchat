@@ -7,7 +7,6 @@ using Recaptcha;
 using webchat.Models;
 using System.Diagnostics;
 using ServiceStack.Redis;
-using ServiceStack.Redis.Generic;
 
 namespace webchat.Controllers
 {
@@ -35,10 +34,16 @@ namespace webchat.Controllers
             else if(ModelState.IsValid) {
                 Session["nick"] = indexModel.Nick;
 
-                indexModel.Store();
-                //indexModel.notify();
-                //TODO: add nick to DB, Session["nick"]
-                //TODO: add nick to the rooms he joined
+                try {
+                    indexModel.Store();
+                    indexModel.Rooms.NotifyJoin();
+                }
+                catch(RedisException) {
+                    ModelState.AddModelError("general", Resources.Strings.DatabaseError);
+
+                    return View(indexModel);
+                }
+
                 //TODO: publish the changes and go to chat
                 //TODO: regenerate session
             }

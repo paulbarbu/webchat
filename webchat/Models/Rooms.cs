@@ -37,5 +37,15 @@ namespace webchat.Models {
 	            }
             }
         }
+
+        public void NotifyJoin(){
+            using(var redis = new RedisClient()) {
+                var r = redis.As<List<string>>();
+                var room_user_list = r.GetHash<string>(Resources.Strings.RoomUserListKey);
+
+                //TODO: test
+                //redis.PublishMessage(Resources.Strings.UsersEventChannel, room_user_list.ToString());               
+            }
+        }
     }
 }
