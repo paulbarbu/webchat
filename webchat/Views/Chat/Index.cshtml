@@ -1,4 +1,6 @@
-﻿<div id="error-dialog" title="Connection error!" hidden="hidden">
+﻿@model webchat.Models.ChatModel
+
+<div id="error-dialog" title="Connection error!" hidden="hidden">
 <p style="color:#000000">A connection error occured, please reconnect!</p>
 </div>
 
@@ -6,7 +8,7 @@
 </div>
 
 @{
-//TODO: errors?
+        //TODO: errors?
 }
 
 <span class="pull-right actionbox-toolbar">
@@ -15,12 +17,12 @@
 </span>
 
 <div class="well well-small" id="actionbox">
-    @using(Html.BeginForm("Index", "Chat", FormMethod.Post, new {@style = "margin:0px"})){
-        @Html.Label((string)Session["nick"], new {@for = "text"})
+    @using(Html.BeginForm("Index", "Chat", FormMethod.Post, new { @style = "margin:0px" })) {
+        @Html.Label((string)Session["nick"], new { @for = "text" })
         @Html.TextBox("text", null, new {
             @tabinde = 1,
             @style = "width: 99%" // ugly fix so that the textbox stays contained in the well
-        })
+            })
 
         <input type="submit" class="btn btn-primary" tabindex="2" id="send" name="send" value="Send!"/>
         
@@ -30,11 +32,12 @@
             @style = "width:99%" //same fix as above
         })
 
-        <input id="join" name="join" tabindex="4" type="submit" value="Join!">
+        <input id="join" name="join" tabindex="4" type="submit" value="Join!" />
         <br />
         <br />
-        <input class="btn btn-danger" id="quit" name="quit" tabindex="5" type="submit" value="Quit!">
-        @Html.Hidden("rooms", /*model.Rooms*/"rooms liost")
+        <input class="btn btn-danger" id="quit" name="quit" tabindex="5" type="submit" value="Quit!" />
+        
+        @Html.Hidden("rooms", Json.Encode(Model.Rooms))
     }
 </div>
 <!--

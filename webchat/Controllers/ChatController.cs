@@ -1,8 +1,10 @@
-﻿using System;
+﻿using ServiceStack.Redis;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using webchat.Models;
 
 namespace webchat.Controllers
 {
@@ -17,7 +19,15 @@ namespace webchat.Controllers
                 return RedirectToAction("Index", "Index");
             }
 
-            return View();
+            ChatModel chatModel = new ChatModel();
+            try {
+                chatModel.Rooms = new Rooms((string)Session["nick"]);
+            }
+            catch(RedisException) {
+                //TODO:
+            }
+
+            return View(chatModel);
         }
 
     }
