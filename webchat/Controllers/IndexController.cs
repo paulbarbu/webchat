@@ -26,7 +26,7 @@ namespace webchat.Controllers
         [RecaptchaControlMvc.CaptchaValidator]
         public ActionResult Index(IndexModel indexModel, bool captchaValid, string captchaErrorMessage) {
             if(Session["nick"] != null) {
-                RedirectToAction("Chat", "Chat"); // TODO: implement this action/controller
+                return RedirectToAction("Index", "Chat"); // TODO: implement this action/controller
             }
 
             if(!captchaValid) {
@@ -45,7 +45,7 @@ namespace webchat.Controllers
                 
                 Session["nick"] = indexModel.Nick;
                 
-                RedirectToAction("Chat", "Chat");
+                return RedirectToAction("Index", "Chat");
             }
 
             return View(indexModel);
