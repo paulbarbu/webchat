@@ -53,11 +53,8 @@ namespace webchat.Models {
 
         public void NotifyJoin(){
             using(var redis = new RedisClient()) {
-                var r = redis.As<List<string>>();
-                var room_user_list = r.GetHash<string>(Resources.Strings.RoomUserListKey);
-
                 redis.PublishMessage(Resources.Strings.UsersEventChannel,
-                    JsonConvert.SerializeObject(room_user_list));
+                    JsonConvert.SerializeObject(GetUsers()));
             }
         }
 
