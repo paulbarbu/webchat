@@ -31,11 +31,13 @@
         @Html.TextBox("join_rooms", null, new { tabindex = 3 })
 
         <input id="join" name="join" tabindex="4" type="submit" value="Join!" />
-        <br />
-        <br />
-        <input class="btn btn-danger" id="quit" name="quit" tabindex="5" type="submit" value="Quit!" />
         
         @Html.Hidden("rooms", Json.Encode(Model))
+    }
+
+    @using(Html.BeginForm("Disconnect", "Chat", FormMethod.Post)) {
+        <br />
+        <input class="btn btn-danger" id="quit" name="quit" tabindex="5" type="submit" value="Quit!" />
     }
 </div>
 

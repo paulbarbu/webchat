@@ -29,5 +29,21 @@ namespace webchat.Controllers
             return View(rooms);
         }
 
+        public ActionResult Disconnect() {
+            Rooms rooms = new Rooms((string)Session["nick"]);
+
+            try {
+                rooms.DelUser((string)Session["nick"]);
+                rooms.Notify();
+            }
+            catch(RedisException) {
+                //TODO: log the failure but get the user out
+            }
+
+            Session.Abandon();
+
+            return RedirectToAction("Index", "Index");
+        }
+
     }
 }
