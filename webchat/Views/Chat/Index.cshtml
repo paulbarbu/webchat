@@ -22,15 +22,15 @@
 
 <div class="well well-small" id="actionbox">
     @using(Html.BeginForm("Index", "Chat", FormMethod.Post, new { @style = "margin:0px" })) {
-        @Html.Label((string)Session["nick"], new { @for = "text" })
+        @Html.Label("text", (string)Session["nick"])
         @Html.TextBox("text", null, new {
-            @tabinde = 1,
-            @style = "width: 99%" // ugly fix so that the textbox stays contained in the well
-            })
+             @tabindex = 1,
+             @style = "width: 99%" // ugly fix so that the textbox stays contained in the well
+        })
 
         <input type="submit" class="btn btn-primary" tabindex="2" id="send" name="send" value="Send!"/>
         
-        @Html.Label("join_rooms_label", Resources.Strings.JoinRoomsLabel)
+        @Html.Label("join_rooms", Resources.Strings.JoinRoomsLabel)
         @Html.TextBox("join_rooms", null, new {
             @tabindex = 3,
             @style = "width:99%" //same fix as above
@@ -41,7 +41,7 @@
         <br />
         <input class="btn btn-danger" id="quit" name="quit" tabindex="5" type="submit" value="Quit!" />
         
-        @Html.Hidden("rooms", Json.Encode(Model.Rooms))
+        @Html.Hidden("rooms", Json.Encode(Model))
     }
 </div>
 <!--
