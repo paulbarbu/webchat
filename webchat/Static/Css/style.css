@@ -5,10 +5,11 @@
 .footer{
     bottom: 0px;
     width: 100%;
+    margin: 0px;
 }
 
 body{
-    margin: 20px;
+    margin: 20px 20px 0px 20px;
 }
 
 .ui-effects-transfer{
@@ -51,7 +52,7 @@ body{
     width: 99%;
 }
 
-form {
+#actionbox form {
     margin: 0px;
 }
 
