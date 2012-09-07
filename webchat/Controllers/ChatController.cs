@@ -4,22 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using webchat.Filters;
 using webchat.Models;
 
 namespace webchat.Controllers
 {
+    [AuthenticationFilter]
     public class ChatController : Controller
     {
-        public ActionResult Index()
-        {
-            if(null == Session["nick"]) {
-                return RedirectToAction("Index", "Index");
-            }
-
+        public ActionResult Index() {
             Rooms rooms = null;
 
             try {
-                //throw new RedisException("bye");
                 rooms = new Rooms((string)Session["nick"]);
             }
             catch(RedisException) {
@@ -31,11 +27,6 @@ namespace webchat.Controllers
 
         [HttpPost]
         public ActionResult Disconnect() {
-            //TODO: replace all occurrences of this with a filter?
-            if(null == Session["nick"]) {
-                return RedirectToAction("Index", "Index");
-            }
-
             Rooms rooms = new Rooms((string)Session["nick"]);
 
             try {

@@ -126,6 +126,7 @@
   <ItemGroup>
     <Compile Include="Controllers\ChatController.cs" />
     <Compile Include="Controllers\IndexController.cs" />
+    <Compile Include="Filters\AuthenticationFilterAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

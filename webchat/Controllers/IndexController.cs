@@ -14,7 +14,7 @@ namespace webchat.Controllers
     public class IndexController : Controller
     {
         public ActionResult Index(){
-            if(Session["nick"] != null) {
+            if(Session["nick"] != null) { //TODO: maybe create a filter for this one too?
                 return RedirectToAction("Index", "Chat");
             }
 
