@@ -1,6 +1,7 @@
 ﻿@model webchat.Models.IndexModel
 
 @using Recaptcha;
+@using webchat.Helpers;
 
 @using(Html.BeginForm("Index", "Index", FormMethod.Post)){
     @Html.AntiForgeryToken()
@@ -27,15 +28,6 @@
 }
 
 @if(!ViewData.ModelState.IsValid){
-    <div id="form-errors">
-        @{
-            var errors = ViewData.ModelState.Values.SelectMany(v => v.Errors);
-
-            foreach(var error in errors) {
-                <div class="alert alert-error">
-                    @error.ErrorMessage
-                </div>
-            }
-        }
-    </div>
+    var errors = ViewData.ModelState.Values.SelectMany(v => v.Errors).Select(t => t.ErrorMessage);
+    @Html.ErrorSummary("form-errors", errors.ToList(), null, new { @class = "alert alert-error" })
 }

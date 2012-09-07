@@ -1,4 +1,12 @@
-﻿@model webchat.Models.ChatModel
+﻿@model webchat.Models.Rooms
+
+@using webchat.Helpers;
+
+@if(!ViewData.ModelState.IsValid){
+    var errors = ViewData.ModelState.Values.SelectMany(v => v.Errors).Select(t => t.ErrorMessage);
+    @Html.ErrorSummary("errors", errors.ToList(), null, new { @class = "alert alert-error"});
+    return;
+}
 
 <div id="error-dialog" title="Connection error!" hidden="hidden">
 <p style="color:#000000">A connection error occured, please reconnect!</p>
@@ -6,10 +14,6 @@
 
 <div class="chat-window" id="chat">
 </div>
-
-@{
-        //TODO: errors?
-}
 
 <span class="pull-right actionbox-toolbar">
     <a href="#" title="Toggle the actionbox">
