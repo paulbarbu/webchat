@@ -19,15 +19,17 @@ namespace webchat.Controllers
                 return RedirectToAction("Index", "Index");
             }
 
-            ChatModel chatModel = new ChatModel();
+            Rooms rooms = null;
+
             try {
-                chatModel.Rooms = new Rooms((string)Session["nick"]);
+                //throw new RedisException("bye");
+                rooms = new Rooms((string)Session["nick"]);
             }
             catch(RedisException) {
-                //TODO:
+                ModelState.AddModelError("error", Resources.Strings.DatabaseError);
             }
 
-            return View(chatModel);
+            return View(rooms);
         }
 
     }

@@ -15,10 +15,6 @@ namespace webchat.Models {
         public Rooms(string[] rooms) {
             this.AddRange(rooms);
         }
-
-        public Rooms() {
-            Update();
-        }
         
         public Rooms(string nick) {
             Update(nick);
