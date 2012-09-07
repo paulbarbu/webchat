@@ -43,6 +43,14 @@ namespace webchat.Models {
             }
         }
 
+        public Dictionary<string, List<string>> GetUsers() {
+            using(var r = new RedisClient().As<List<string>>()) {
+                var room_user_list = r.GetHash<string>(Resources.Strings.RoomUserListKey);
+
+                return r.GetAllEntriesFromHash<string>(room_user_list);
+            }
+        }
+
         public void NotifyJoin(){
             using(var redis = new RedisClient()) {
                 var r = redis.As<List<string>>();

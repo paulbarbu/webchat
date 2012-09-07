@@ -44,9 +44,7 @@
     @{ //TODO: api/....
     }
      
-    users = "users";
-    @{ //TODO: get this out of the model
-    }
+    users = JSON.parse('@Html.Raw(Json.Encode(Model.GetUsers()))');
 </script>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"
