@@ -7,23 +7,22 @@
     @Html.AntiForgeryToken()
 
     @Html.TextBox("nick", null, new { 
-        @tabindex = 1,
-        @placeholder = Resources.Strings.NickPlaceHolder,
-        @style = "width:434px"
+        tabindex = 1,
+        placeholder = Resources.Strings.NickPlaceHolder,
     })
     
     <br />
     
     @Html.TextBox("rooms", null, new {
-        @tabindex = 2,
-        @placeholder = Resources.Strings.RoomsPlaceHolder,
-        @style="width:434px"
+        tabindex = 2,
+        placeholder = Resources.Strings.RoomsPlaceHolder,
     })
     
     <span class="help-block">@Resources.Strings.JoinRoomsHelpBlock</span>
     
     @Html.Raw(Html.GenerateCaptcha("captcha", "clean"))
     
+    <br />
     <input type="submit" name="submit" class="btn btn-primary" value="Connect!"/>
 }
 

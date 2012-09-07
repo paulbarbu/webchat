@@ -9,7 +9,7 @@
 }
 
 <div id="error-dialog" title="Connection error!" hidden="hidden">
-<p style="color:#000000">A connection error occured, please reconnect!</p>
+<p>A connection error occured, please reconnect!</p>
 </div>
 
 <div class="chat-window" id="chat">
@@ -21,20 +21,14 @@
 </span>
 
 <div class="well well-small" id="actionbox">
-    @using(Html.BeginForm("Index", "Chat", FormMethod.Post, new { @style = "margin:0px" })) {
+    @using(Html.BeginForm("Index", "Chat", FormMethod.Post)) {
         @Html.Label("text", (string)Session["nick"])
-        @Html.TextBox("text", null, new {
-             @tabindex = 1,
-             @style = "width: 99%" // ugly fix so that the textbox stays contained in the well
-        })
+        @Html.TextBox("text", null, new { tabindex = 1 })
 
         <input type="submit" class="btn btn-primary" tabindex="2" id="send" name="send" value="Send!"/>
         
         @Html.Label("join_rooms", Resources.Strings.JoinRoomsLabel)
-        @Html.TextBox("join_rooms", null, new {
-            @tabindex = 3,
-            @style = "width:99%" //same fix as above
-        })
+        @Html.TextBox("join_rooms", null, new { tabindex = 3 })
 
         <input id="join" name="join" tabindex="4" type="submit" value="Join!" />
         <br />
@@ -44,44 +38,13 @@
         @Html.Hidden("rooms", Json.Encode(Model))
     }
 </div>
-<!--
-{% if errors %}
-
-<div id="errors">
-    {% for err in errors[:-1] %}
-    <div class="alert alert-error">{{ err }}</div>
-    {% endfor %}
-    <div class="alert alert-error">{{ errors[-1] }}</div>
-</div>
-{% endif %}
-
-<div class="well well-small" id="actionbox">
-<form method="POST" style="margin: 0px">
-    <label for="text">{{ nick }}:</label> {{ form.text(tabindex=1,
-        style="width:99%") }} <!-- ugly fix so that the textbox stays contained
-        in the well-->
-    <!-- {{ form.send(class="btn btn-primary", tabindex=2) }}
-
-    {{ form.join_rooms.label }}{{ form.join_rooms(tabindex=3,
-        style="width:99%") }} <!-- ugly fix so that the textbox stays contained
-        in the well
-
-    {{ form.join(tabindex=4) }}
-    {{ form.rooms }}
-
-    <br />
-    <br />
-    {{ form.quit(class="btn btn-danger", tabindex=5) }}
-</form>
-</div>
--->
 
 <script type=text/javascript>
     $SCRIPT_ROOT = "TODO";
     @{ //TODO: api/....
     }
      
-    users = "JSON.parse('{{ users|safe }}')";
+    users = "users";
     @{ //TODO: get this out of the model
     }
 </script>

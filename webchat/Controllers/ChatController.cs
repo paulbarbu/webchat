@@ -10,9 +10,6 @@ namespace webchat.Controllers
 {
     public class ChatController : Controller
     {
-        //
-        // GET: /Chat/
-
         public ActionResult Index()
         {
             if(null == Session["nick"]) {

@@ -34,3 +34,27 @@ body{
 .spaced{
     margin-top: 20px;
 }
+
+#nick{
+    width: 434px;
+}
+
+#rooms{
+    width: 434px;
+}
+
+#text {
+    width: 99%;
+}
+
+#join_rooms {
+    width: 99%;
+}
+
+form {
+    margin: 0px;
+}
+
+#error-dialog p {
+    color: #000;
+}

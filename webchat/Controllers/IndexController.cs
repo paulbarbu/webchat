@@ -13,9 +13,6 @@ namespace webchat.Controllers
 {
     public class IndexController : Controller
     {
-        //
-        // GET: /Index/
-
         public ActionResult Index(){
             if(Session["nick"] != null) {
                 return RedirectToAction("Index", "Chat");
