@@ -37,7 +37,7 @@ namespace webchat.Controllers
                     indexModel.Rooms.NotifyJoin();
                 }
                 catch(RedisException) {
-                    ModelState.AddModelError("general", Resources.Strings.DatabaseError);
+                    ModelState.AddModelError("error", Resources.Strings.DatabaseError);
 
                     return View(indexModel);
                 }
