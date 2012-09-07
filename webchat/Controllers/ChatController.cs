@@ -25,7 +25,6 @@ namespace webchat.Controllers
             return View(rooms);
         }
 
-        [HttpPost]
         public ActionResult Disconnect() {
             Rooms rooms = new Rooms((string)Session["nick"]);
 

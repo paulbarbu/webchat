@@ -115,7 +115,7 @@ Handler = {
         //if the status is 404 then the user closed his last room, so we logged
         //him out
         if(404 === e.status){
-            window.location.replace($SCRIPT_ROOT);
+            window.location.replace(Url.Index);
         }
         else{
             var lineDiv = document.createElement('div');
@@ -646,7 +646,7 @@ function show_error_dialog(){
         closeOnEscape: false,
         buttons: {
             'OK': function(){
-                window.location.replace($SCRIPT_ROOT + '/disconnect');
+                window.location.replace(Url.Disconnect);
             }
         },
         open: function(event, ui){

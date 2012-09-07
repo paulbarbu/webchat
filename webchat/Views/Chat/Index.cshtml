@@ -43,7 +43,11 @@
 
 <script type=text/javascript>
     $SCRIPT_ROOT = "TODO";
-    @{ //TODO: api/....
+    Url = {
+        Index:      '@Url.Action("Index", "Index")',
+        Disconnect: '@Url.Action("Disconnect", "Chat")',
+    }
+    @{ //TODO: the script root will be split to api/Foo, api/Bar, etc
     }
      
     users = JSON.parse('@Html.Raw(Json.Encode(Model.GetUsers()))');
