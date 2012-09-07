@@ -154,7 +154,6 @@
     <Content Include="Static\bootstrap\js\bootstrap.js" />
     <Content Include="Static\bootstrap\js\bootstrap.min.js" />
     <Content Include="Static\Js\chat.js" />
-    <Content Include="Static\Js\EventSource.js" />
     <Content Include="Static\favicon.ico" />
     <Content Include="Static\Css\jquery-ui-1.8.22.custom.css" />
     <Content Include="Static\Js\jquery.caret.min.js" />

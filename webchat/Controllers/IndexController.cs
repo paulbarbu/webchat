@@ -30,8 +30,8 @@ namespace webchat.Controllers
             }
             else if(ModelState.IsValid) {
                 try {
-                    indexModel.Store();
-                    indexModel.Rooms.NotifyJoin();
+                    indexModel.Rooms.AddUser(indexModel.Nick);
+                    indexModel.Rooms.Notify();
                 }
                 catch(RedisException) {
                     ModelState.AddModelError("error", Resources.Strings.DatabaseError);

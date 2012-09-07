@@ -19,14 +19,5 @@ namespace webchat.Models {
 
         [RoomsValidation]
         public Rooms Rooms { get; set; }
-
-        public void Store() {
-            using(var redis = new RedisClient().As<string>()){
-                var global_user_list = redis.Sets[Resources.Strings.GlobalUserListKey];
-                redis.AddItemToSet(global_user_list, Nick);
-            }
-            
-            Rooms.AddUser(Nick);
-        }
     }
 }
