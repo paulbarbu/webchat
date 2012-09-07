@@ -29,7 +29,13 @@ namespace webchat.Controllers
             return View(rooms);
         }
 
+        [HttpPost]
         public ActionResult Disconnect() {
+            //TODO: replace all occurrences of this with a filter?
+            if(null == Session["nick"]) {
+                return RedirectToAction("Index", "Index");
+            }
+
             Rooms rooms = new Rooms((string)Session["nick"]);
 
             try {
