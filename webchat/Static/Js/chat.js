@@ -370,10 +370,19 @@ function join_rooms(e){
  * Events) and display the rooms the user joined
  */
 function load_chat(){
-    var stream = new EventSource($SCRIPT_ROOT + '/_sse_stream');
+    var stream = new EventSource("http://localhost:5000/api/EventStream");
 
-    stream.onmessage = Handler.event_message;
-    stream.onerror = Handler.event_error;
+    stream.onmessage = function (event) {
+        alert("msg: "  + event.data);
+    };
+    //stream.onmessage = Handler.event_message;
+    //stream.onerror = Handler.event_error;
+    stream.onerror = function (event) {
+        alert("err: " + event.data);
+    };
+    stream.onopen = function (event) {
+        alert("open: " + event.data);
+    };
 
     stream.addEventListener('users', Handler.event_users);
     stream.addEventListener('ping', Handler.event_ping);
