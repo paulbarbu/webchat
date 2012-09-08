@@ -23,31 +23,30 @@ namespace webchat.Controllers
             return response;
         }
         
+        //TODO: refactor these
         public static void OnStreamAvailable(Stream stream, HttpContent content, TransportContext context) {
             StreamWriter streamwriter = new StreamWriter(stream);
 
-            ThreadPool.QueueUserWorkItem(x => {
-                using(var redis = new RedisClient()) {
-                    using(var sub = redis.CreateSubscription()) {
-                        sub.OnMessage = (channel, msg) => {
-                            streamwriter.WriteLine("data: " + msg + " on: " + channel + "\n");
-                            streamwriter.Flush();
+            using(var redis = new RedisClient()) {
+                using(var sub = redis.CreateSubscription()) {
+                    sub.OnMessage = (channel, msg) => {
+                        streamwriter.WriteLine("data: " + msg + " on: " + channel + "\n");
+                        streamwriter.Flush();
 
-                            Debug.WriteLine("data: " + msg + " on: " + channel);
-                        };
+                        Debug.WriteLine("data: " + msg + " on: " + channel);
+                    };
 
-                        sub.OnSubscribe = channel => {
-                            Debug.WriteLine(string.Format("Subscribed to '{0}'", channel));
-                        };
+                    sub.OnSubscribe = channel => {
+                        Debug.WriteLine(string.Format("Subscribed to '{0}'", channel));
+                    };
 
-                        sub.OnUnSubscribe = channel => {
-                            Debug.WriteLine(string.Format("UnSubscribed from '{0}'", channel));
-                        };
+                    sub.OnUnSubscribe = channel => {
+                        Debug.WriteLine(string.Format("UnSubscribed from '{0}'", channel));
+                    };
 
-                        sub.SubscribeToChannels("webchat");
-                    }
+                    sub.SubscribeToChannels("webchat");
                 }
-            });
+            }
         }
     }
 }

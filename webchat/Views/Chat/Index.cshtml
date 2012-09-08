@@ -46,8 +46,9 @@
     Url = {
         Index:      '@Url.Action("Index", "Index")',
         Disconnect: '@Url.Action("Disconnect", "Chat")',
-    }
+    };
     @{ //TODO: the script root will be split to api/Foo, api/Bar, etc
+       //as I see it I won;t generate the api URLs here...
     }
      
     users = JSON.parse('@Html.Raw(Json.Encode(Model.GetUsers()))');
