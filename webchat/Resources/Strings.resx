@@ -162,4 +162,7 @@
   <data name="UsersEventChannel" xml:space="preserve">
     <value>webchat.users</value>
   </data>
+  <data name="UnexpectedError" xml:space="preserve">
+    <value>An unexpected error occurred, please try again later!</value>
+  </data>
 </root>

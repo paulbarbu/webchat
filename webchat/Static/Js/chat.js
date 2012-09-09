@@ -88,7 +88,7 @@ Handler = {
      */
     event_error: function handle_event_error(e){
         this.close(); //here, `this` refers to `stream`
-        //show_error_dialog();
+        show_error_dialog(); //TODO: https://github.com/paullik/webchat/issues/43
     },
 
     /**
@@ -372,17 +372,8 @@ function join_rooms(e){
 function load_chat(){
     var stream = new EventSource("/api/EventStream");
 
-    stream.onmessage = function (event) {
-        alert("msg: "  + event.data);
-    }; //TODO: restore these
-    //stream.onmessage = Handler.event_message;
-    //stream.onerror = Handler.event_error;
-    stream.onerror = function (event) {
-        alert("err: " + event.data);
-    };
-    stream.onopen = function (event) {
-        alert("open: " + event.data);
-    };
+    stream.onmessage = Handler.event_message;
+    stream.onerror = Handler.event_error;
 
     stream.addEventListener('users', Handler.event_users);
     stream.addEventListener('ping', Handler.event_ping);
