@@ -165,4 +165,10 @@
   <data name="UnexpectedError" xml:space="preserve">
     <value>An unexpected error occurred, please try again later!</value>
   </data>
+  <data name="MessagesEventChannel" xml:space="preserve">
+    <value>webchat.messages</value>
+  </data>
+  <data name="PingEventChannel" xml:space="preserve">
+    <value>webchat.ping</value>
+  </data>
 </root>

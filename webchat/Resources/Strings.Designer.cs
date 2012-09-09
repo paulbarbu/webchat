@@ -142,11 +142,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to webchat.messages.
+        /// </summary>
+        public static string MessagesEventChannel {
+            get {
+                return ResourceManager.GetString("MessagesEventChannel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Type your nickname here.
         /// </summary>
         public static string NickPlaceHolder {
             get {
                 return ResourceManager.GetString("NickPlaceHolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to webchat.ping.
+        /// </summary>
+        public static string PingEventChannel {
+            get {
+                return ResourceManager.GetString("PingEventChannel", resourceCulture);
             }
         }
         

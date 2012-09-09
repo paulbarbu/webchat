@@ -23,12 +23,12 @@ namespace webchat.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [RecaptchaControlMvc.CaptchaValidator]
-        public ActionResult Index(IndexModel indexModel, bool captchaValid, string captchaErrorMessage) {
-            if(!captchaValid) {
+        //[RecaptchaControlMvc.CaptchaValidator]
+        public ActionResult Index(IndexModel indexModel, /*bool captchaValid,*/ string captchaErrorMessage) {
+            /*if(!captchaValid) {
                 ModelState.AddModelError("captcha", Resources.Strings.CaptchaError);
             }
-            else if(ModelState.IsValid) {
+            else */if(ModelState.IsValid) {
                 try {
                     indexModel.Rooms.AddUser(indexModel.Nick);
                     indexModel.Rooms.Notify();

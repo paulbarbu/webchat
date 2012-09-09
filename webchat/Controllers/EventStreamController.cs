@@ -8,60 +8,76 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
+using System.Web;
 using System.Web.Http;
 using webchat.Filters;
 
 namespace webchat.Controllers
 {
     public class EventStreamController : ApiController {
+        private delegate void Writer(string data);
+        
         [AuthenticationFilter]
         public HttpResponseMessage Get(HttpRequestMessage request){
             HttpResponseMessage response = request.CreateResponse();
+            
             response.Content = new PushStreamContent(OnStreamAvailable, "text/event-stream");
+            response.Headers.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue();
+            response.Headers.CacheControl.NoCache = true;
 
             return response;
         }
         
-        //TODOL enum for the event type
-        //TODO: refactor these
         private static void OnStreamAvailable(Stream stream, HttpContent content, TransportContext context) {
-            StreamWriter writer = new StreamWriter(stream);
             string eventPattern = "event: {0}\ndata: {1}\n\n";
+            StreamWriter streamWriter = new StreamWriter(stream);
+
+            Dictionary<string, Writer> write = new Dictionary<string, Writer> {
+                { Resources.Strings.MessagesEventChannel , (data) => {
+                    streamWriter.Write(eventPattern, "message", data);
+                } },
+                { Resources.Strings.UsersEventChannel , (data) => {
+                    streamWriter.Write(eventPattern, "users", data);
+                } },
+                { Resources.Strings.PingEventChannel , (data) => {
+                    streamWriter.Write(eventPattern, "ping", data);
+                } },
+                { "error" , (data) => {
+                    streamWriter.Write(eventPattern, "error", data);
+                } },
+            };
             
             try {
                 using(var redis = new RedisClient()) {
                     using(var sub = redis.CreateSubscription()) {
-                        sub.OnMessage = (channel, msg) => {
-                            writer.Write(eventPattern, "message", "data: " + msg + " on: " + channel);
-                            writer.Flush();
+                        sub.OnMessage = (channel, data) => {
+                            write[channel](data);
+                            streamWriter.Flush();
                         };
 
                         sub.OnUnSubscribe = channel => {
-                            writer.Flush();
+                            streamWriter.Flush();
                         };
-
-                        string[] a = new string[] {                            
-                            "webchat.room.*",
-                            "webchat.users*",
-                            "webchat.ping*"
-                        };
-
-                        sub.SubscribeToChannels("webchat.ping", "webchat.users");
+                        
+                        sub.SubscribeToChannels(Resources.Strings.MessagesEventChannel,
+                            Resources.Strings.UsersEventChannel,
+                            Resources.Strings.PingEventChannel
+                        );
                     }
                 }
             }
             catch(RedisException) {
-                //TODO: error, log
-                writer.Write(eventPattern, "error", "data: " + Resources.Strings.DatabaseError);
+                //TODO: log
+                write["error"](Resources.Strings.DatabaseError);
             }
             catch(Exception) {
-                //TODO: error, log
-                writer.Write(eventPattern, "error", "data: " + Resources.Strings.UnexpectedError);
+                //TODO: log
+                write["error"](Resources.Strings.UnexpectedError);
             }
-            
+
             //If we reach this point we caught an exception
-            writer.Flush();
-            writer.Close();
+            streamWriter.Flush();
+            streamWriter.Close();
         }
     }
 }
