@@ -128,12 +128,16 @@
     <Compile Include="Controllers\ChatController.cs" />
     <Compile Include="Controllers\EventStreamController.cs" />
     <Compile Include="Controllers\IndexController.cs" />
+    <Compile Include="Controllers\MessageController.cs" />
     <Compile Include="Filters\AuthenticationFilterAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\BindingHelpers.cs" />
     <Compile Include="Helpers\ErrorSummary.cs" />
     <Compile Include="Models\IndexModel.cs" />
+    <Compile Include="Models\MessageModel.cs" />
+    <Compile Include="Models\MessageModelBinder.cs" />
     <Compile Include="Models\Rooms.cs" />
     <Compile Include="Models\RoomsModelBinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -142,6 +146,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
+    <Compile Include="Validators\JoinedRoomValidationAttribute.cs" />
     <Compile Include="Validators\RoomsValidationAttribute.cs" />
     <Compile Include="Validators\UniqueNickValidationAttribute.cs" />
   </ItemGroup>

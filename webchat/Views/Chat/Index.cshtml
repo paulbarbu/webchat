@@ -23,7 +23,7 @@
 <div class="well well-small" id="actionbox">
     @using(Html.BeginForm("Index", "Chat", FormMethod.Post)) {
         @Html.Label("text", (string)Session["nick"])
-        @Html.TextBox("text", null, new { tabindex = 1 })
+        @Html.TextArea("text", null, new { tabindex = 1 })
 
         <input type="submit" class="btn btn-primary" tabindex="2" id="send" name="send" value="Send!"/>
         
@@ -46,6 +46,7 @@
     Url = {
         Index:      '@Url.Action("Index", "Index")',
         Disconnect: '@Url.Action("Disconnect", "Chat")',
+        MessageEvent: '@Url.Action("Post", "Message")',
     };
     @{ //TODO: the script root will be split to api/Foo, api/Bar, etc
        //as I see it I won;t generate the api URLs here...

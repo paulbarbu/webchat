@@ -2,7 +2,7 @@ Handler = {
     /**
      * Display a user's message
      */
-    event_message: function handle_event_message(e){
+    event_message: function handle_event_message(e) {
         var rooms = JSON.parse($('#rooms').val());
         var data = JSON.parse(e.data);
 
@@ -167,7 +167,7 @@ function publish_message(e){
     e.preventDefault();
     var message = $('#text').val();
 
-    $.post($SCRIPT_ROOT + '/_publish_message',
+    $.post(Url.MessageEvent,
         {
             'message': message,
             'room': $('.tab-pane.active').attr('id')
