@@ -19,6 +19,7 @@ namespace webchat.Controllers
                 rooms = new Rooms((string)Session["nick"]);
             }
             catch(RedisException) {
+                //TODO: log
                 ModelState.AddModelError("error", Resources.Strings.DatabaseError);
             }
 

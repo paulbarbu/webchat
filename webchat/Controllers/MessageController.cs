@@ -15,7 +15,7 @@ namespace webchat.Controllers
     public class MessageController : Controller
     {
         [HttpPost]
-        [ValidateInput(false)] //TODO: https://github.com/paullik/webchat/issues/48
+        [ValidateInput(false)]
         public HttpStatusCode Post(MessageModel m) {
             if(!ModelState.IsValid){
                 return HttpStatusCode.Forbidden;

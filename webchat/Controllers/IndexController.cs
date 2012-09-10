@@ -22,6 +22,7 @@ namespace webchat.Controllers
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         [ValidateAntiForgeryToken]
         [RecaptchaControlMvc.CaptchaValidator]
         public ActionResult Index(IndexModel indexModel, bool captchaValid, string captchaErrorMessage) {
@@ -34,6 +35,7 @@ namespace webchat.Controllers
                     indexModel.Rooms.Notify();
                 }
                 catch(RedisException) {
+                    //TODO: log
                     ModelState.AddModelError("error", Resources.Strings.DatabaseError);
 
                     return View(indexModel);
