@@ -27,9 +27,10 @@ namespace webchat.Controllers
         }
 
         public ActionResult Disconnect() {
-            Rooms rooms = new Rooms((string)Session["nick"]);
-
+            Rooms rooms = null;
+            
             try {
+                rooms = new Rooms((string)Session["nick"]);
                 rooms.DelUser((string)Session["nick"]);
                 rooms.Notify();
             }
