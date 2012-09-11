@@ -6,44 +6,8 @@ using System.Linq;
 
 namespace Ping {
     public class Rooms : List<string> {
-        public Rooms(string[] rooms) {
-            this.AddRange(rooms);
-        }
-
         public Rooms(string nick) {
             Update(nick);
-        }
-
-        public void AddUser(string nick) {
-            List<string> user_list;
-
-            using (var r = new RedisClient().As<List<string>>()) {
-                var room_user_list = r.GetHash<string>("room_user_list");
-
-                foreach (var room in this) {
-                    bool room_exists = room_user_list.TryGetValue(room, out user_list);
-
-                    if (!room_exists) {
-                        user_list = new List<string> { nick };
-                    }
-                    else {
-                        user_list.Add(nick);
-
-                        user_list = user_list.Distinct().ToList();
-                    }
-
-                    r.SetEntryInHash(room_user_list, room, user_list);
-                }
-            }
-
-            AddUserToGlobalList(nick);
-        }
-
-        private void AddUserToGlobalList(string nick) {
-            using (var redis = new RedisClient().As<string>()) {
-                var global_user_list = redis.Sets["global_user_list"];
-                redis.AddItemToSet(global_user_list, nick);
-            }
         }
 
         //TODO: docs
@@ -79,14 +43,6 @@ namespace Ping {
             using (var redis = new RedisClient().As<string>()) {
                 var global_user_list = redis.Sets["global_user_list"];
                 redis.RemoveItemFromSet(global_user_list, nick);
-            }
-        }
-
-        public Dictionary<string, List<string>> GetUsers() {
-            using (var r = new RedisClient().As<List<string>>()) {
-                var room_user_list = r.GetHash<string>("room_user_list");
-
-                return r.GetAllEntriesFromHash<string>(room_user_list);
             }
         }
 

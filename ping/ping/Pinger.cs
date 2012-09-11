@@ -22,23 +22,7 @@ namespace Ping {
                     return;
                 }
 
-                using (var r = new RedisClient().As<string>()) {
-                    /**
-                     * For every user on the chat get his current rooms and store them
-                     * in a set, the set's key is the user's nick
-                     */
-                    foreach (var user in users) {
-                        var user_rooms = r.Sets[user];
-
-                        Rooms rooms = new Rooms(user);
-
-                        foreach(var room in rooms){
-                            r.AddItemToSet(user_rooms, room);
-                        }
-
-                        rooms.DelUser(user);
-                    }
-                }
+                BackupRooms(users);
 
                 using (var r = new RedisClient()) {
                     r.PublishMessage("webchat.ping", "ping");
@@ -62,6 +46,26 @@ namespace Ping {
                 var global_user_list = redis.Sets["global_user_list"];
 
                 return global_user_list.ToList();
+            }
+        }
+
+        private void BackupRooms(List<string> users) {
+            using (var r = new RedisClient().As<string>()) {
+                /**
+                 * For every user on the chat get his current rooms and store them
+                 * in a set, the set's key is the user's nick
+                 */
+                foreach (var user in users) {
+                    var user_rooms = r.Sets[user];
+
+                    Rooms rooms = new Rooms(user);
+
+                    foreach (var room in rooms) {
+                        r.AddItemToSet(user_rooms, room);
+                    }
+
+                    rooms.DelUser(user);
+                }
             }
         }
     }
