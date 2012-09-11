@@ -5,7 +5,7 @@ using System.Web;
 using webchat.Validators;
 
 namespace webchat.Models {
-    public class JoinLeaveModel {
+    public class JoinModel {
         [RoomsValidation(AllowEmpty=false)]
         public Rooms Rooms { get; set; }
     }

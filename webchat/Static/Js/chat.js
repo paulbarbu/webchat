@@ -196,7 +196,7 @@ function publish_message(e){
 function leave_room(room, active_room){
     var room_name = room.children().attr("href").slice(1);
 
-    $.post($SCRIPT_ROOT + '/_leave_room', {'room': room_name})
+    $.post(Url.LeaveRooms, {'room': room_name})
         .fail(Handler.leave_room_error)
         .success(function(e){
             var active_room_name = active_room.children().attr("href").slice(1);

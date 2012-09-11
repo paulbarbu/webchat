@@ -18,7 +18,7 @@ namespace webchat.Controllers
     {
         [HttpPost]
         [ValidateInput(false)]
-        public string Join(JoinLeaveModel joinModel)
+        public string Join(JoinModel joinModel)
         {
             if(!ModelState.IsValid) {                
                 Response.StatusCode = 400; // Bad Request
@@ -34,7 +34,6 @@ namespace webchat.Controllers
                 joinModel.Rooms.AddUser((string)Session["nick"]);
                 joinModel.Rooms.Notify();
 
-                joinModel.Rooms.Clear();
                 joinModel.Rooms.Update((string)Session["nick"]);
             }
             catch(RedisException) {
@@ -46,5 +45,37 @@ namespace webchat.Controllers
             return JsonConvert.SerializeObject(joinModel.Rooms);
         }
 
+        [HttpPost]
+        [ValidateInput(false)]
+        public string Leave(LeaveModel leaveModel) {
+            if(!ModelState.IsValid) {
+                Response.StatusCode = 400; // Bad Request                
+                return Resources.Strings.CharRoomsError;
+            }
+
+            Rooms currentRooms = null;
+            
+            try {
+                currentRooms = new Rooms(new[]{leaveModel.Room});
+          
+                currentRooms.DelUser((string)Session["nick"]);
+                currentRooms.Notify();
+
+                currentRooms.Update((string)Session["nick"]);
+
+                if(0 == currentRooms.Count){
+                    Session.Abandon();
+                    Response.StatusCode = 404;
+                    return "";
+                }
+            }
+            catch(RedisException) {
+                //TODO: log
+                Response.StatusCode = 500; // Internal Error
+                return Resources.Strings.DatabaseError;
+            }
+    
+            return JsonConvert.SerializeObject(currentRooms);
+        }
     }
 }

@@ -42,16 +42,14 @@
 </div>
 
 <script type=text/javascript>
-    $SCRIPT_ROOT = "TODO";
+    $SCRIPT_ROOT = "TODO"; // TODO: search this in chat.js
     Url = {
         Index:      '@Url.Action("Index", "Index")',
         Disconnect: '@Url.Action("Disconnect", "Chat")',
         MessageEvent: '@Url.Action("Post", "Message")',
         JoinRooms: '@Url.Action("Join", "Room")',
+        LeaveRooms: '@Url.Action("Leave", "Room")',
     };
-    @{ //TODO: the script root will be split to api/Foo, api/Bar, etc
-       //as I see it I won;t generate the api URLs here...
-    }
      
     users = JSON.parse('@Html.Raw(Json.Encode(Model.GetUsers()))');
 </script>
