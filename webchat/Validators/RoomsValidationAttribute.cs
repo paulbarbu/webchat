@@ -26,7 +26,7 @@ namespace webchat.Validators {
             Match m;
 
             foreach(var room in rooms) {
-                m = Regex.Match(room, @"^[\w ]+$", RegexOptions.Compiled);
+                m = Regex.Match(room, @"^[\w]+$", RegexOptions.Compiled);
 
                 if(!m.Success) {
                     return false;
