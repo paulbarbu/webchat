@@ -425,7 +425,7 @@ function get_current_time(){
  * @return bool true if the user is mentioned, else false
  */
 function is_mention(message){
-    var nick = $('label[for="text"]').html().slice(0, -1);
+    var nick = $('label[for="text"]').html();
     var pos = message.indexOf(nick);
 
     while(-1 !== pos){
