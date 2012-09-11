@@ -62,7 +62,7 @@ Handler = {
      * Callback to respond to ping events via AJAX
      */
     event_ping: function handle_event_ping(e){
-        $.post($SCRIPT_ROOT + '/_pong', 'PONG!');
+        $.post(Url.PongEvent, 'PONG!');
     },
 
     /**

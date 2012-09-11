@@ -49,6 +49,7 @@
         MessageEvent: '@Url.Action("Post", "Message")',
         JoinRooms: '@Url.Action("Join", "Room")',
         LeaveRooms: '@Url.Action("Leave", "Room")',
+        PongEvent: '@Url.Action("Index", "Pong")',
     };
      
     users = JSON.parse('@Html.Raw(Json.Encode(Model.GetUsers()))');
