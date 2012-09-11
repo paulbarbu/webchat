@@ -356,7 +356,7 @@ function get_current_rooms(){
  */
 function join_rooms(e){
     e.preventDefault();
-    $.post($SCRIPT_ROOT + '/_join_rooms', {'join_rooms': $('#join_rooms').val()})
+    $.post(Url.JoinRooms, {'rooms': $('#join_rooms').val()})
         .fail(Handler.join_error)
         .success(function(e){
             $('#rooms').val(e);

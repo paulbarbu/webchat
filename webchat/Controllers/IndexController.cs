@@ -30,6 +30,11 @@ namespace webchat.Controllers
                 ModelState.AddModelError("captcha", Resources.Strings.CaptchaError);
             }
             else if(ModelState.IsValid) {
+
+                if(1 == indexModel.Rooms.Count && "" == indexModel.Rooms[0].Trim()) {
+                    indexModel.Rooms[0] = Resources.Strings.DefaultRoom;
+                }
+
                 try {
                     indexModel.Rooms.AddUser(indexModel.Nick);
                     indexModel.Rooms.Notify();

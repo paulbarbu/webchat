@@ -18,7 +18,7 @@ namespace webchat.Controllers
         [ValidateInput(false)]
         public HttpStatusCode Post(MessageModel m) {
             if(!ModelState.IsValid){
-                return HttpStatusCode.Forbidden;
+                return HttpStatusCode.BadRequest;
             }
 
             Dictionary<string, string> data = new Dictionary<string, string>(){

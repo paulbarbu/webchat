@@ -9,6 +9,9 @@ using webchat.Models;
 namespace webchat.Validators {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple=false, Inherited=false)]
     public class RoomsValidationAttribute : ValidationAttribute {
+
+        public bool AllowEmpty = true;
+
         public RoomsValidationAttribute()
             : base(Resources.Strings.CharRoomsError) {
         }
@@ -16,8 +19,8 @@ namespace webchat.Validators {
         public override bool IsValid(object value) {
             Rooms rooms = (Rooms)value;
 
-            if(1 == rooms.Count && "" == rooms[0]){
-                return true;
+            if(1 == rooms.Count && "" == rooms[0].Trim()){
+                return AllowEmpty;
             }
 
             Match m;

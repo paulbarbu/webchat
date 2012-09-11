@@ -129,6 +129,7 @@
     <Compile Include="Controllers\EventStreamController.cs" />
     <Compile Include="Controllers\IndexController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
+    <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Filters\AuthenticationFilterAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -136,6 +137,7 @@
     <Compile Include="Helpers\BindingHelpers.cs" />
     <Compile Include="Helpers\ErrorSummary.cs" />
     <Compile Include="Models\IndexModel.cs" />
+    <Compile Include="Models\JoinLeaveModel.cs" />
     <Compile Include="Models\MessageModel.cs" />
     <Compile Include="Models\MessageModelBinder.cs" />
     <Compile Include="Models\Rooms.cs" />

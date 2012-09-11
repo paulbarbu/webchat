@@ -16,10 +16,6 @@ namespace webchat.Models {
                 .Distinct()
                 .ToArray()
             );
-            
-            if(1 == rooms.Count && "" == rooms[0]) {
-                rooms[0] = Resources.Strings.DefaultRoom;
-            }
 
             return rooms;
         } 
