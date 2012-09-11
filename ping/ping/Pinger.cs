@@ -8,8 +8,11 @@ using ServiceStack.Redis;
 namespace Ping {
     class Pinger {
         private Timer timer;
+        private int interval;
 
-        public Pinger(int interval = 30000) {
+        public Pinger(int i = 60000) {
+            interval = i;
+
             timer = new Timer(interval);
             timer.Elapsed += (object source, ElapsedEventArgs e) => { Ping(); };
             timer.Start();
@@ -63,6 +66,8 @@ namespace Ping {
                     foreach (var room in rooms) {
                         r.AddItemToSet(user_rooms, room);
                     }
+
+                    r.ExpireEntryIn(user, new TimeSpan(0, 0, interval/1000 - 10));
 
                     rooms.DelUser(user);
                 }
