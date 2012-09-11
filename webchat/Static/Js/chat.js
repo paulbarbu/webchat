@@ -86,9 +86,11 @@ Handler = {
     /**
      * Callback for handling SSE errors
      */
-    event_error: function handle_event_error(e){
-        this.close(); //here, `this` refers to `stream`
-        show_error_dialog(); //TODO: https://github.com/paullik/webchat/issues/43
+    event_error: function handle_event_error(e) {
+        if (e.readyState != EventSource.CLOSED) {
+            this.close(); //here, `this` refers to `stream`
+            //show_error_dialog(); //https://github.com/paullik/webchat/issues/43
+        }
     },
 
     /**
