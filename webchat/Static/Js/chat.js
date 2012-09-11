@@ -563,9 +563,15 @@ $(document).keypress(function(e){
     }
     else if('text' == e.target.id && (10 == e.which
             //this part is needed in order to solve browser incompatibilities
-            || 13 == e.which && e.ctrlKey)){
-        $('#text').val($('#text').val() + '\n');
-        return false;
+            || 13 == e.which && e.ctrlKey)) {
+        var start_pos = $('#text').caret().start;
+        var end_pos = $('#text').caret().end;
+
+        if (start_pos == end_pos) {
+            $('#text').val($('#text').val().slice(0, start_pos) + '\n' + $('#text').val().slice(start_pos));
+
+            return false;
+        }
     }
     else if('text' == e.target.id && 13 == e.which){
         publish_message(e);
