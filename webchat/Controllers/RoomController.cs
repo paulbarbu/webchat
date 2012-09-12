@@ -2,11 +2,11 @@
 using ServiceStack.Redis;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using webchat.Filters;
+using webchat.Helpers;
 using webchat.Models;
 using webchat.Validators;
 
@@ -36,8 +36,10 @@ namespace webchat.Controllers
 
                 joinModel.Rooms.Update((string)Session["nick"]);
             }
-            catch(RedisException) {
-                //TODO: log
+            catch(RedisException e) {
+                Logger.Log(Resources.Strings.DatabaseError, "ERROR");
+                Logger.Log(e.ToString(), "ERROR");
+
                 Response.StatusCode = 500; // Internal Error
                 return Resources.Strings.DatabaseError;
             }
@@ -69,8 +71,10 @@ namespace webchat.Controllers
                     return "";
                 }
             }
-            catch(RedisException) {
-                //TODO: log
+            catch(RedisException e) {
+                Logger.Log(Resources.Strings.DatabaseError, "ERROR");
+                Logger.Log(e.ToString(), "ERROR");
+
                 Response.StatusCode = 500; // Internal Error
                 return Resources.Strings.DatabaseError;
             }

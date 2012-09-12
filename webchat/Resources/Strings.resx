@@ -171,4 +171,10 @@
   <data name="PingEventChannel" xml:space="preserve">
     <value>webchat.ping</value>
   </data>
+  <data name="DateTimeFormat" xml:space="preserve">
+    <value>dd/MM/yyyy HH:mm:ss</value>
+  </data>
+  <data name="LogFile" xml:space="preserve">
+    <value>trace.log</value>
+  </data>
 </root>

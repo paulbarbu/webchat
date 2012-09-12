@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using webchat.Helpers;
 using webchat.Models;
 
 namespace webchat.Validators {
@@ -19,8 +20,10 @@ namespace webchat.Validators {
             try {
                 rooms = new Rooms((string)HttpContext.Current.Session["nick"]);
             }
-            catch(RedisException) {
-                //TODO: log
+            catch(RedisException e) {
+                Logger.Log(Resources.Strings.DatabaseError, "ERROR");
+                Logger.Log(e.ToString(), "ERROR");
+
                 return false;
             }
 

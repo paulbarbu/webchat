@@ -6,6 +6,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using webchat.Filters;
+using webchat.Helpers;
 using webchat.Models;
 
 namespace webchat.Controllers
@@ -31,8 +32,10 @@ namespace webchat.Controllers
                     r.RemoveEntry((string)Session["nick"]);
                 }
             }
-            catch(RedisException) {
-                //TODO: log
+            catch(RedisException e) {
+                Logger.Log(Resources.Strings.DatabaseError, "ERROR");
+                Logger.Log(e.ToString(), "ERROR");
+
                 return HttpStatusCode.InternalServerError;
             }
 

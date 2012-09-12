@@ -97,6 +97,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to dd/MM/yyyy HH:mm:ss.
+        /// </summary>
+        public static string DateTimeFormat {
+            get {
+                return ResourceManager.GetString("DateTimeFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to default.
         /// </summary>
         public static string DefaultRoom {
@@ -138,6 +147,15 @@ namespace Resources {
         public static string LengthNickError {
             get {
                 return ResourceManager.GetString("LengthNickError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to trace.log.
+        /// </summary>
+        public static string LogFile {
+            get {
+                return ResourceManager.GetString("LogFile", resourceCulture);
             }
         }
         

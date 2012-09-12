@@ -137,6 +137,7 @@
     </Compile>
     <Compile Include="Helpers\BindingHelpers.cs" />
     <Compile Include="Helpers\ErrorSummary.cs" />
+    <Compile Include="Helpers\Logger.cs" />
     <Compile Include="Models\IndexModel.cs" />
     <Compile Include="Models\JoinModel.cs" />
     <Compile Include="Models\LeaveModel.cs" />

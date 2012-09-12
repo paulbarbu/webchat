@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using webchat.Filters;
+using webchat.Helpers;
 using webchat.Models;
 
 namespace webchat.Controllers
@@ -18,8 +19,10 @@ namespace webchat.Controllers
             try {
                 rooms = new Rooms((string)Session["nick"]);
             }
-            catch(RedisException) {
-                //TODO: log
+            catch(RedisException e) {
+                Logger.Log(Resources.Strings.DatabaseError, "ERROR");
+                Logger.Log(e.ToString(), "ERROR");
+
                 ModelState.AddModelError("error", Resources.Strings.DatabaseError);
             }
 
@@ -34,8 +37,9 @@ namespace webchat.Controllers
                 rooms.DelUser((string)Session["nick"]);
                 rooms.Notify();
             }
-            catch(RedisException) {
-                //TODO: log the failure but get the user out
+            catch(RedisException e) {
+                Logger.Log(Resources.Strings.DatabaseError, "ERROR");
+                Logger.Log(e.ToString(), "ERROR");
             }
 
             Session.Abandon();

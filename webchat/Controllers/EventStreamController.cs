@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -11,6 +10,7 @@ using System.Threading;
 using System.Web;
 using System.Web.Http;
 using webchat.Filters;
+using webchat.Helpers;
 
 namespace webchat.Controllers
 {
@@ -66,12 +66,16 @@ namespace webchat.Controllers
                     }
                 }
             }
-            catch(RedisException) {
-                //TODO: log
+            catch(RedisException e) {
+                Logger.Log(Resources.Strings.DatabaseError, "ERROR");
+                Logger.Log(e.ToString(), "ERROR");
+
                 write["error"](Resources.Strings.DatabaseError);
             }
-            catch(Exception) {
-                //TODO: log
+            catch(Exception e) {
+                Logger.Log(Resources.Strings.UnexpectedError, "ERROR");
+                Logger.Log(e.ToString(), "ERROR");
+
                 write["error"](Resources.Strings.UnexpectedError);
             }
 

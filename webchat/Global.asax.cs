@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
@@ -16,6 +17,9 @@ namespace webchat {
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+
+            Trace.Listeners.Add(new TextWriterTraceListener(Server.MapPath(Resources.Strings.LogFile)));
+            Trace.AutoFlush = true;
         }
     }
 }
