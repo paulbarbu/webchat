@@ -3,7 +3,6 @@ Handler = {
      * Display a user's message
      */
     event_message: function handle_event_message(e) {
-        var rooms = JSON.parse($('#rooms').val());
         var data = JSON.parse(e.data);
 
         /**
@@ -222,7 +221,7 @@ function leave_room(room, active_room){
 
             $($('.active').children().attr('href')).addClass('active');
 
-            $('#rooms').val(e);
+            rooms = JSON.parse(e);
             display_users($('.active').children().attr('href').slice(1));
             $('#text').focus();
             update_typeahead();
@@ -236,12 +235,12 @@ function leave_room(room, active_room){
  * just some of the tabs by array difference
  */
 function display_rooms(){
-    var rooms = JSON.parse($('#rooms').val());
-
     var close_btn = $('<button>').attr({
         class: 'close',
         onclick: 'leave_room($(this).parent().parent(), $("li.active"))'
     }).html('&nbsp;&times;');
+
+    var display_rooms = rooms;
 
     /**
      * starting from one when joining rooms at login,
@@ -255,9 +254,9 @@ function display_rooms(){
             $('<ul>').attr({class: 'nav nav-tabs'}).append(
                 $('<li>').attr({class: 'active'}).append(
                     $('<a>').attr({
-                        href: '#' + rooms[0],
+                        href: '#' + display_rooms[0],
                         'data-toggle': 'tab',
-                    }).html(rooms[0] + close_btn.prop('outerHTML'))
+                    }).html(display_rooms[0] + close_btn.prop('outerHTML'))
                     .on('show', Handler.tab_show)
                     .on('shown', Handler.tab_shown)
                 )
@@ -269,7 +268,7 @@ function display_rooms(){
                 $('<div>').attr({class: 'tab-content span11', id: 'content'}).append(
                     $('<div>').attr({
                         class: 'tab-pane active',
-                        id: rooms[0],
+                        id: display_rooms[0],
                     })
                 )
             ).append(
@@ -281,7 +280,7 @@ function display_rooms(){
           //new rooms since the rest are already displayed
         var current_rooms = get_current_rooms();
 
-        rooms = rooms.filter(function(i){
+        display_rooms = rooms.filter(function(i){
             return current_rooms.indexOf(i) < 0;
         });
 
@@ -292,13 +291,13 @@ function display_rooms(){
         pos = 0;
     }
 
-    for(i=pos; i<rooms.length; i++){
+    for(i=pos; i<display_rooms.length; i++){
         $('.nav.nav-tabs').append(
             $('<li>').append(
                 $('<a>').attr({
-                    href: '#' + rooms[i],
+                    href: '#' + display_rooms[i],
                     'data-toggle': 'tab',
-                }).html(rooms[i] + close_btn.prop('outerHTML'))
+                }).html(display_rooms[i] + close_btn.prop('outerHTML'))
                 .on('show', Handler.tab_show)
                 .on('shown', Handler.tab_shown)
             )
@@ -307,13 +306,13 @@ function display_rooms(){
         $('.tab-content').append(
             $('<div>').attr({
                 class: 'tab-pane',
-                id: rooms[i],
+                id: display_rooms[i],
             })
         );
 
-        if(0 == pos && i == rooms.length - 1){
+        if(0 == pos && i == display_rooms.length - 1){
             options = {
-                to: $('a[href="' + '#' + rooms[i] + '"]'),
+                to: $('a[href="' + '#' + display_rooms[i] + '"]'),
                 className: 'ui-effects-transfer'
             };
             $('[name="join"]').effect("transfer", options, 700);
@@ -361,7 +360,7 @@ function join_rooms(e){
     $.post(Url.JoinRooms, {'rooms': $('#join_rooms').val()})
         .fail(Handler.join_error)
         .success(function(e){
-            $('#rooms').val(e);
+            rooms = JSON.parse(e);
             display_rooms();
             $('#join_rooms').val('');
         });

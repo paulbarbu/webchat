@@ -42,7 +42,6 @@
 </div>
 
 <script type=text/javascript>
-    $SCRIPT_ROOT = "TODO"; // TODO: search this in chat.js
     Url = {
         Index:      '@Url.Action("Index", "Index")',
         Disconnect: '@Url.Action("Disconnect", "Chat")',
@@ -53,6 +52,7 @@
     };
      
     users = JSON.parse('@Html.Raw(Json.Encode(Model.GetUsers()))');
+    rooms = JSON.parse('@Html.Raw(Json.Encode(Model))');
 </script>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"
