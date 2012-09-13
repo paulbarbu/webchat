@@ -131,6 +131,8 @@
     <Compile Include="Controllers\MessageController.cs" />
     <Compile Include="Controllers\PongController.cs" />
     <Compile Include="Controllers\RoomController.cs" />
+    <Compile Include="Database\Database.cs" />
+    <Compile Include="Database\Publisher.cs" />
     <Compile Include="Filters\AuthenticationFilterAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -217,6 +219,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

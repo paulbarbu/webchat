@@ -160,7 +160,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to webchat.messages.
+        ///   Looks up a localized string similar to messages.
         /// </summary>
         public static string MessagesEventChannel {
             get {
@@ -178,7 +178,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to webchat.ping.
+        ///   Looks up a localized string similar to ping.
         /// </summary>
         public static string PingEventChannel {
             get {
@@ -232,7 +232,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to webchat.users.
+        ///   Looks up a localized string similar to users.
         /// </summary>
         public static string UsersEventChannel {
             get {
