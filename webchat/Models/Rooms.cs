@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using ServiceStack.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
+using webchat.Database;
 
 namespace webchat.Models {
     [ModelBinder(typeof(RoomsModelBinder))]
@@ -20,35 +20,22 @@ namespace webchat.Models {
         }
 
         public void AddUser(string nick) {
-            List<string> user_list;
 
-            using(var r = new RedisClient().As<List<string>>()) {
-                var room_user_list = r.GetHash<string>(Resources.Strings.RoomUserListKey);
-                
-                foreach (var room in this) {
-                    bool room_exists = room_user_list.TryGetValue(room, out user_list); 
-                    
-                    if(!room_exists) {
-                        user_list = new List<string> { nick };
-                    }
-                    else {
-                        user_list.Add(nick);
+            //TODO: lock 
+            foreach (var room in this) {
+                Db.RoomUsersList.AddOrUpdate(room, new List<string> { nick }, (key, val) => {
+                    val.Add(nick);
 
-                        user_list = user_list.Distinct().ToList();
-                    }
-
-                    r.SetEntryInHash(room_user_list, room, user_list);
-	            }
-            }
+                    return val.Distinct().ToList();
+                });
+	        }
 
             AddUserToGlobalList(nick);
         }
 
         private void AddUserToGlobalList(string nick) {
-            using(var redis = new RedisClient().As<string>()) {
-                var global_user_list = redis.Sets[Resources.Strings.GlobalUserListKey];
-                redis.AddItemToSet(global_user_list, nick);
-            }
+            //TODO: lock
+            Db.Users.Add(nick);
         }
 
         //TODO: docs
@@ -57,22 +44,19 @@ namespace webchat.Models {
 
         public void DelUser(string nick) {
             List<string> user_list;
+            //TODO: lock
+            foreach(var room in this) {
+                bool room_exists = Db.RoomUsersList.TryGetValue(room, out user_list);
 
-            using(var r = new RedisClient().As<List<string>>()) {
-                var room_user_list = r.GetHash<string>(Resources.Strings.RoomUserListKey);
+                if(room_exists) {
+                    user_list.Remove(nick);
 
-                foreach(var room in this) {
-                    bool room_exists = room_user_list.TryGetValue(room, out user_list);
-
-                    if(room_exists) {
-                        user_list.Remove(nick);
-
-                        if(0 == user_list.Count) {
-                            r.RemoveEntryFromHash(room_user_list, room);
-                        }
-                        else {
-                            r.SetEntryInHash(room_user_list, room, user_list);
-                        }
+                    if(0 == user_list.Count) {
+                        //TODO: check retval
+                        Db.RoomUsersList.TryRemove(room, out user_list);
+                    }
+                    else {
+                        Db.RoomUsersList.AddOrUpdate(room, user_list, (key, val) => user_list);
                     }
                 }
             }
@@ -81,41 +65,24 @@ namespace webchat.Models {
         }
 
         private void DelUserFromGlobalList(string nick) {
-            using(var redis = new RedisClient().As<string>()){
-                var global_user_list = redis.Sets[Resources.Strings.GlobalUserListKey];
-                redis.RemoveItemFromSet(global_user_list, nick);
-            }
+            //TODO: lock
+            Db.Users.Remove(nick);
         }
 
         public Dictionary<string, List<string>> GetUsers() {
-            using(var r = new RedisClient().As<List<string>>()) {
-                var room_user_list = r.GetHash<string>(Resources.Strings.RoomUserListKey);
-
-                return r.GetAllEntriesFromHash<string>(room_user_list);
-            }
-        }
-
-        public void Notify(){
-            using(var redis = new RedisClient()) {
-                redis.PublishMessage(Resources.Strings.UsersEventChannel,
-                    JsonConvert.SerializeObject(GetUsers()));
-            }
+            return Db.RoomUsersList.ToDictionary(k => k.Key, k => k.Value);
         }
 
         public void Update(string nick = null) {
-            using(var r = new RedisClient().As<List<string>>()) {
-                var room_user_list = r.GetHash<string>(Resources.Strings.RoomUserListKey);
-
-                this.Clear();
+            this.Clear();
                                 
-                if(null == nick){
-                    this.AddRange(r.GetHashKeys<string>(room_user_list));
-                }
-                else{
-                    var users = from n in room_user_list where room_user_list[n.Key].Contains(nick) select n.Key;
+            if(null == nick){
+                this.AddRange(Db.RoomUsersList.Keys);
+            }
+            else{
+                var users = from n in Db.RoomUsersList where Db.RoomUsersList[n.Key].Contains(nick) select n.Key;
 
-                    this.AddRange(users.ToList());
-                }
+                this.AddRange(users.ToList());
             }
         }
     }

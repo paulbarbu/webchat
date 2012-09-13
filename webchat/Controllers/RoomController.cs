@@ -1,10 +1,10 @@
 ﻿using Newtonsoft.Json;
-using ServiceStack.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using webchat.Database;
 using webchat.Filters;
 using webchat.Helpers;
 using webchat.Models;
@@ -30,19 +30,12 @@ namespace webchat.Controllers
                 return Resources.Strings.CharRoomsError;   
             }
 
-            try {
-                joinModel.Rooms.AddUser((string)Session["nick"]);
-                joinModel.Rooms.Notify();
+            joinModel.Rooms.AddUser((string)Session["nick"]);
 
-                joinModel.Rooms.Update((string)Session["nick"]);
-            }
-            catch(RedisException e) {
-                Logger.Log(Resources.Strings.DatabaseError, "ERROR");
-                Logger.Log(e.ToString(), "ERROR");
+            Publisher.Publish(Resources.Strings.UsersEventChannel,
+                JsonConvert.SerializeObject(joinModel.Rooms.GetUsers()));
 
-                Response.StatusCode = 500; // Internal Error
-                return Resources.Strings.DatabaseError;
-            }
+            joinModel.Rooms.Update((string)Session["nick"]);
 
             return JsonConvert.SerializeObject(joinModel.Rooms);
         }
@@ -55,30 +48,21 @@ namespace webchat.Controllers
                 return Resources.Strings.CharRoomsError;
             }
 
-            Rooms currentRooms = null;
-            
-            try {
-                currentRooms = new Rooms(new[]{leaveModel.Room});
+            Rooms currentRooms = new Rooms(new[] { leaveModel.Room });
           
-                currentRooms.DelUser((string)Session["nick"]);
-                currentRooms.Notify();
+            currentRooms.DelUser((string)Session["nick"]);
 
-                currentRooms.Update((string)Session["nick"]);
+            Publisher.Publish(Resources.Strings.UsersEventChannel,
+                JsonConvert.SerializeObject(currentRooms.GetUsers()));
 
-                if(0 == currentRooms.Count){
-                    Session.Abandon();
-                    Response.StatusCode = 404;
-                    return "";
-                }
+            currentRooms.Update((string)Session["nick"]);
+
+            if(0 == currentRooms.Count){
+                Session.Abandon();
+                Response.StatusCode = 404;
+                return "";
             }
-            catch(RedisException e) {
-                Logger.Log(Resources.Strings.DatabaseError, "ERROR");
-                Logger.Log(e.ToString(), "ERROR");
-
-                Response.StatusCode = 500; // Internal Error
-                return Resources.Strings.DatabaseError;
-            }
-    
+                
             return JsonConvert.SerializeObject(currentRooms);
         }
     }

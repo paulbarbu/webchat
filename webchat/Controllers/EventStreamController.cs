@@ -1,5 +1,4 @@
-﻿using ServiceStack.Redis;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -31,7 +30,7 @@ namespace webchat.Controllers
         
         private void OnStreamAvailable(Stream stream, HttpContent content, TransportContext context) {
             StreamWriter streamWriter = new StreamWriter(stream);
-            Publisher.clients.Enqueue(streamWriter);
+            Publisher.Clients.Enqueue(streamWriter);
         }
     }
 }

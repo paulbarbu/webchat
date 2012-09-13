@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 using webchat.Validators;
-using ServiceStack.Redis;
 
 namespace webchat.Models {
     public class IndexModel {

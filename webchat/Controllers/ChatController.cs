@@ -1,9 +1,10 @@
-﻿using ServiceStack.Redis;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using webchat.Database;
 using webchat.Filters;
 using webchat.Helpers;
 using webchat.Models;
@@ -14,33 +15,16 @@ namespace webchat.Controllers
     public class ChatController : Controller
     {
         public ActionResult Index() {
-            Rooms rooms = null;
-
-            try {
-                rooms = new Rooms((string)Session["nick"]);
-            }
-            catch(RedisException e) {
-                Logger.Log(Resources.Strings.DatabaseError, "ERROR");
-                Logger.Log(e.ToString(), "ERROR");
-
-                ModelState.AddModelError("error", Resources.Strings.DatabaseError);
-            }
+            Rooms rooms = new Rooms((string)Session["nick"]);
 
             return View(rooms);
         }
 
         public ActionResult Disconnect() {
-            Rooms rooms = null;
-            
-            try {
-                rooms = new Rooms((string)Session["nick"]);
-                rooms.DelUser((string)Session["nick"]);
-                rooms.Notify();
-            }
-            catch(RedisException e) {
-                Logger.Log(Resources.Strings.DatabaseError, "ERROR");
-                Logger.Log(e.ToString(), "ERROR");
-            }
+            Rooms rooms = new Rooms((string)Session["nick"]);
+
+            rooms.DelUser((string)Session["nick"]);
+            Publisher.Publish(Resources.Strings.UsersEventChannel, JsonConvert.SerializeObject(rooms.GetUsers()));
 
             Session.Abandon();
 

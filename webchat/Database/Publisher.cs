@@ -7,13 +7,12 @@ using System.Web;
 
 namespace webchat.Database {
     public static class Publisher {
-        private delegate void Writer(string data);
-        private static string eventPattern = "event: {0}\ndata: {1}\n\n";
+        private const string eventPattern = "event: {0}\ndata: {1}\n\n";
 
-        public static readonly ConcurrentQueue<StreamWriter> clients = new ConcurrentQueue<StreamWriter>();
+        public static readonly ConcurrentQueue<StreamWriter> Clients = new ConcurrentQueue<StreamWriter>();
 
         public static void Publish(string channel, string message) {
-            foreach(var subscriber in clients) {
+            foreach(var subscriber in Clients) {
                 subscriber.Write(eventPattern, channel, message);
                 subscriber.Flush();
             }

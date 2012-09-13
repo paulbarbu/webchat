@@ -160,7 +160,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to messages.
+        ///   Looks up a localized string similar to message.
         /// </summary>
         public static string MessagesEventChannel {
             get {

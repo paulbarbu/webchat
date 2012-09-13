@@ -1,5 +1,4 @@
-﻿using ServiceStack.Redis;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -15,17 +14,7 @@ namespace webchat.Validators {
         }
 
         public override bool IsValid(object value) {
-            Rooms rooms = null;
-
-            try {
-                rooms = new Rooms((string)HttpContext.Current.Session["nick"]);
-            }
-            catch(RedisException e) {
-                Logger.Log(Resources.Strings.DatabaseError, "ERROR");
-                Logger.Log(e.ToString(), "ERROR");
-
-                return false;
-            }
+            Rooms rooms = new Rooms((string)HttpContext.Current.Session["nick"]);
 
             string room = (string)value;
 

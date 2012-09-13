@@ -5,9 +5,10 @@ using System.Web;
 using System.Web.Mvc;
 using Recaptcha;
 using webchat.Models;
-using ServiceStack.Redis;
 using System.Web.Security;
 using webchat.Helpers;
+using webchat.Database;
+using Newtonsoft.Json;
 
 namespace webchat.Controllers
 {
@@ -34,18 +35,9 @@ namespace webchat.Controllers
                     indexModel.Rooms[0] = Resources.Strings.DefaultRoom;
                 }
 
-                try {
-                    indexModel.Rooms.AddUser(indexModel.Nick);
-                    indexModel.Rooms.Notify();
-                }
-                catch(RedisException e) {
-                    Logger.Log(Resources.Strings.DatabaseError, "ERROR");
-                    Logger.Log(e.ToString(), "ERROR");
-
-                    ModelState.AddModelError("error", Resources.Strings.DatabaseError);
-
-                    return View(indexModel);
-                }
+                indexModel.Rooms.AddUser(indexModel.Nick);
+                Publisher.Publish(Resources.Strings.UsersEventChannel,
+                    JsonConvert.SerializeObject(indexModel.Rooms.GetUsers()));
                 
                 Session["nick"] = indexModel.Nick;
                 
