@@ -1,6 +1,7 @@
 ﻿@model webchat.Models.Rooms
 
 @using webchat.Helpers;
+@using webchat.Database;
 
 @if(!ViewData.ModelState.IsValid){
     var errors = ViewData.ModelState.Values.SelectMany(v => v.Errors).Select(t => t.ErrorMessage);
@@ -51,7 +52,7 @@
         PongEvent: '@Url.Action("Index", "Pong")',
     };
      
-    users = JSON.parse('@Html.Raw(Json.Encode(Model.GetUsers()))');
+    users = JSON.parse('@Html.Raw(Json.Encode(Db.GetUsers()))');
     rooms = JSON.parse('@Html.Raw(Json.Encode(Model))');
 </script>
 

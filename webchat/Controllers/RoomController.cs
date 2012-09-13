@@ -30,12 +30,13 @@ namespace webchat.Controllers
                 return Resources.Strings.CharRoomsError;   
             }
 
-            joinModel.Rooms.AddUser((string)Session["nick"]);
+            Db.AddUser(joinModel.Rooms, (string)Session["nick"]);
 
             Publisher.Publish(Resources.Strings.UsersEventChannel,
-                JsonConvert.SerializeObject(joinModel.Rooms.GetUsers()));
+                JsonConvert.SerializeObject(Db.GetUsers()));
 
-            joinModel.Rooms.Update((string)Session["nick"]);
+            joinModel.Rooms.Clear();
+            joinModel.Rooms.AddRange(Db.GetRooms((string)Session["nick"]));
 
             return JsonConvert.SerializeObject(joinModel.Rooms);
         }
@@ -50,12 +51,13 @@ namespace webchat.Controllers
 
             Rooms currentRooms = new Rooms(new[] { leaveModel.Room });
           
-            currentRooms.DelUser((string)Session["nick"]);
+            Db.DelUser(currentRooms, (string)Session["nick"]);
 
             Publisher.Publish(Resources.Strings.UsersEventChannel,
-                JsonConvert.SerializeObject(currentRooms.GetUsers()));
+                JsonConvert.SerializeObject(Db.GetUsers()));
 
-            currentRooms.Update((string)Session["nick"]);
+            currentRooms.Clear();
+            currentRooms.AddRange(Db.GetRooms((string)Session["nick"]));
 
             if(0 == currentRooms.Count){
                 Session.Abandon();

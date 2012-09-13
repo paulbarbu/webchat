@@ -23,8 +23,8 @@ namespace webchat.Controllers
         public ActionResult Disconnect() {
             Rooms rooms = new Rooms((string)Session["nick"]);
 
-            rooms.DelUser((string)Session["nick"]);
-            Publisher.Publish(Resources.Strings.UsersEventChannel, JsonConvert.SerializeObject(rooms.GetUsers()));
+            Db.DelUser(rooms, (string)Session["nick"]);
+            Publisher.Publish(Resources.Strings.UsersEventChannel, JsonConvert.SerializeObject(Db.GetUsers()));
 
             Session.Abandon();
 
