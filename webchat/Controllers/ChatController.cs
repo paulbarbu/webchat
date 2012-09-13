@@ -15,13 +15,11 @@ namespace webchat.Controllers
     public class ChatController : Controller
     {
         public ActionResult Index() {
-            Rooms rooms = new Rooms((string)Session["nick"]);
-
-            return View(rooms);
+            return View(Db.GetRooms((string)Session["nick"]));
         }
 
         public ActionResult Disconnect() {
-            Rooms rooms = new Rooms((string)Session["nick"]);
+            List<string> rooms = Db.GetRooms((string)Session["nick"]);
 
             Db.DelUser(rooms, (string)Session["nick"]);
             Publisher.Publish(Resources.Strings.UsersEventChannel, JsonConvert.SerializeObject(Db.GetUsers()));

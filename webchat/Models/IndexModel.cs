@@ -4,8 +4,10 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 using webchat.Validators;
+using System.Web.Mvc;
 
 namespace webchat.Models {
+    [ModelBinder(typeof(IndexModelBinder))]
     public class IndexModel {
         [Required(ErrorMessageResourceName = "RequiredNickError",
             ErrorMessageResourceType=typeof(Resources.Strings))]
@@ -17,6 +19,6 @@ namespace webchat.Models {
         public string Nick { get; set; }
 
         [RoomsValidation]
-        public Rooms Rooms { get; set; }
+        public List<string> Rooms { get; set; }
     }
 }

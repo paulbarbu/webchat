@@ -17,7 +17,7 @@ namespace webchat.Validators {
         }
 
         public override bool IsValid(object value) {
-            Rooms rooms = (Rooms)value;
+            List<string> rooms = (List<string>)value;
 
             if(1 == rooms.Count && "" == rooms[0].Trim()){
                 return AllowEmpty;

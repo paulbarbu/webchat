@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using webchat.Database;
 using webchat.Helpers;
 using webchat.Models;
 
@@ -14,7 +15,7 @@ namespace webchat.Validators {
         }
 
         public override bool IsValid(object value) {
-            Rooms rooms = new Rooms((string)HttpContext.Current.Session["nick"]);
+            List<string> rooms = Db.GetRooms((string)HttpContext.Current.Session["nick"]);
 
             string room = (string)value;
 

@@ -1,6 +1,4 @@
-﻿@model webchat.Models.Rooms
-
-@using webchat.Helpers;
+﻿@using webchat.Helpers;
 @using webchat.Database;
 
 @if(!ViewData.ModelState.IsValid){
@@ -32,8 +30,6 @@
         @Html.TextBox("join_rooms", null, new { tabindex = 3 })
 
         <input id="join" name="join" tabindex="4" type="submit" value="Join!" />
-        
-        @Html.Hidden("rooms", Json.Encode(Model))
     }
 
     @using(Html.BeginForm("Disconnect", "Chat", FormMethod.Post)) {

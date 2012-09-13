@@ -49,7 +49,7 @@ namespace webchat.Controllers
                 return Resources.Strings.CharRoomsError;
             }
 
-            Rooms currentRooms = new Rooms(new[] { leaveModel.Room });
+            List<string> currentRooms = new List<string> { leaveModel.Room };
           
             Db.DelUser(currentRooms, (string)Session["nick"]);
 
