@@ -10,17 +10,17 @@ namespace webchat.Database {
         public static readonly HashSet<string> Users = new HashSet<string>();
 
         //TODO: lock for this
-        private static readonly ConcurrentDictionary<string, List<string>> RoomUsersList = 
-            new ConcurrentDictionary<string, List<string>>();
+        private static readonly ConcurrentDictionary<string, HashSet<string>> RoomUsersList = 
+            new ConcurrentDictionary<string, HashSet<string>>();
 
-        public static void AddUser(List<string> rooms, string nick) {
+        public static void AddUser(IEnumerable<string> rooms, string nick) {
 
             //TODO: lock 
             foreach(var room in rooms) {
-                RoomUsersList.AddOrUpdate(room, new List<string> { nick }, (key, val) => {
+                RoomUsersList.AddOrUpdate(room, new HashSet<string> { nick }, (key, val) => {
                     val.Add(nick);
 
-                    return val.Distinct().ToList();
+                    return val;
                 });
             }
 
@@ -32,8 +32,8 @@ namespace webchat.Database {
             Users.Add(nick);
         }
         
-        public static void DelUser(List<string> rooms, string nick) {
-            List<string> user_list;
+        public static void DelUser(IEnumerable<string> rooms, string nick) {
+            HashSet<string> user_list;
             //TODO: lock
             foreach(var room in rooms) {
                 bool room_exists = RoomUsersList.TryGetValue(room, out user_list);
@@ -59,7 +59,7 @@ namespace webchat.Database {
             Users.Remove(nick);
         }
 
-        public static Dictionary<string, List<string>> GetUsers() {
+        public static Dictionary<string, HashSet<string>> GetUsers() {
             return RoomUsersList.ToDictionary(k => k.Key, k => k.Value);
         }
 
