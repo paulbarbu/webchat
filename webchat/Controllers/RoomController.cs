@@ -18,27 +18,27 @@ namespace webchat.Controllers
     {
         [HttpPost]
         [ValidateInput(false)]
-        public string Join(JoinModel joinModel)
+        public string Join(RoomsModel roomsModel)
         {
             if(!ModelState.IsValid) {                
                 Response.StatusCode = 400; // Bad Request
                 
-                if(joinModel.Rooms[0] == "") {
-                    return "";
-                }
-
                 return Resources.Strings.CharRoomsError;   
             }
 
-            Db.AddUser(joinModel.Rooms, (string)Session["nick"]);
+            if(roomsModel.Rooms[0] == "") {
+                return "";
+            }
+
+            Db.AddUser(roomsModel.Rooms, (string)Session["nick"]);
 
             Publisher.Publish(Resources.Strings.UsersEventChannel,
                 JsonConvert.SerializeObject(Db.GetUsers()));
 
-            joinModel.Rooms.Clear();
-            joinModel.Rooms.AddRange(Db.GetRooms((string)Session["nick"]));
+            roomsModel.Rooms.Clear();
+            roomsModel.Rooms.AddRange(Db.GetRooms((string)Session["nick"]));
 
-            return JsonConvert.SerializeObject(joinModel.Rooms);
+            return JsonConvert.SerializeObject(roomsModel.Rooms);
         }
 
         [HttpPost]

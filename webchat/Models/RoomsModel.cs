@@ -6,9 +6,9 @@ using System.Web.Mvc;
 using webchat.Validators;
 
 namespace webchat.Models {
-    [ModelBinder(typeof(JoinModelBinder))]
-    public class JoinModel {
-        [RoomsValidation(AllowEmpty=false)]
+    [ModelBinder(typeof(RoomsModelBinder))]
+    public class RoomsModel {
+        [RoomsValidation]
         public List<string> Rooms { get; set; }
     }
 }

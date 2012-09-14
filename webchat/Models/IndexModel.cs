@@ -7,8 +7,7 @@ using webchat.Validators;
 using System.Web.Mvc;
 
 namespace webchat.Models {
-    [ModelBinder(typeof(IndexModelBinder))]
-    public class IndexModel {
+    public class IndexModel : RoomsModel {
         [Required(ErrorMessageResourceName = "RequiredNickError",
             ErrorMessageResourceType=typeof(Resources.Strings))]
         [StringLength(30, MinimumLength = 3, ErrorMessageResourceName = "LengthNickError",
@@ -17,8 +16,5 @@ namespace webchat.Models {
             ErrorMessageResourceType = typeof(Resources.Strings))]
         [UniqueNickValidation]
         public string Nick { get; set; }
-
-        [RoomsValidation]
-        public List<string> Rooms { get; set; }
     }
 }

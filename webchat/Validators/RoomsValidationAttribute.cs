@@ -9,18 +9,15 @@ using webchat.Models;
 namespace webchat.Validators {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple=false, Inherited=false)]
     public class RoomsValidationAttribute : ValidationAttribute {
-
-        public bool AllowEmpty = true;
-
         public RoomsValidationAttribute()
             : base(Resources.Strings.CharRoomsError) {
         }
 
         public override bool IsValid(object value) {
             List<string> rooms = (List<string>)value;
-
+            
             if(1 == rooms.Count && "" == rooms[0].Trim()){
-                return AllowEmpty;
+                return true;
             }
 
             Match m;

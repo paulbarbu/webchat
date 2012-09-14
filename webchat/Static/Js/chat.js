@@ -359,10 +359,12 @@ function join_rooms(e){
     e.preventDefault();
     $.post(Url.JoinRooms, {'rooms': $('#join_rooms').val()})
         .fail(Handler.join_error)
-        .success(function(e){
-            rooms = JSON.parse(e);
-            display_rooms();
-            $('#join_rooms').val('');
+        .success(function (e) {
+            if ("" != e) {
+                rooms = JSON.parse(e);
+                display_rooms();
+                $('#join_rooms').val('');
+            }
         });
 }
 
