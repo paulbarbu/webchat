@@ -9,12 +9,9 @@ using webchat.Helpers;
 namespace webchat.Ping {
     public class Pinger {
         private Timer timer;
-        private int interval;
 
         public Pinger(int i = 60000) {
-            interval = i;
-
-            timer = new Timer(interval);
+            timer = new Timer(i);
             timer.Elapsed += (object source, ElapsedEventArgs e) => { Ping(); };
             timer.Start();
         }
