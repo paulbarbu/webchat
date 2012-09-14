@@ -157,9 +157,6 @@
     <Content Include="Static\Js\jquery.caret.min.js" />
     <Content Include="Static\Js\notificon.min.js" />
     <Content Include="Static\Css\style.css" />
-    <Content Include="src\templates\chat.html" />
-    <Content Include="src\templates\index.html" />
-    <Content Include="src\templates\layout.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -176,17 +173,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="src\const.py" />
-    <Content Include="src\deploy.sh" />
-    <Content Include="src\event.py" />
-    <Content Include="src\forms.py" />
-    <Content Include="src\index.py" />
-    <Content Include="src\ping.py" />
-    <Content Include="src\run.sh" />
-    <Content Include="src\vhost_tmpl" />
-    <Content Include="src\webchat.wsgi" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Index\Index.cshtml" />
