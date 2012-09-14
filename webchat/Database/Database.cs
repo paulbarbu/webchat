@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using webchat.Helpers;
 
 namespace webchat.Database {
     public static class Db {
@@ -46,8 +47,10 @@ namespace webchat.Database {
                     user_list.Remove(nick);
 
                     if(0 == user_list.Count) {
-                        //TODO: check retval
-                        RoomUsersList.TryRemove(room, out user_list);
+                        if(!RoomUsersList.TryRemove(room, out user_list)) {
+                            Logger.Log(string.Format("Deleting key {0} from Db.RoomUsersList failed, giving up!", room),
+                                "ERROR");
+                        }
                     }
                     else {
                         RoomUsersList.AddOrUpdate(room, user_list, (key, val) => user_list);
@@ -88,10 +91,12 @@ namespace webchat.Database {
             foreach(var user in Users.ToList()) {
                 List<string> rooms = GetRooms(user);
 
-                //TODO check retval
-                BackupRoomUsersList.TryAdd(user, rooms);
-
-                DelUser(rooms, user);
+                if(BackupRoomUsersList.TryAdd(user, rooms)) {
+                    DelUser(rooms, user);
+                }
+                else {
+                    Logger.Log(string.Format("Backup for {0} failed, giving up!", user), "ERROR");
+                }
             }
         }
     }
