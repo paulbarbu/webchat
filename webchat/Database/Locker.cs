@@ -5,6 +5,6 @@ using System.Web;
 
 namespace webchat.Database {
     public static class Locker {
-        public static Object locker = new Object();
+        public static readonly Object locker = new Object();
     }
 }
