@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -25,9 +26,12 @@ namespace webchat.Controllers
             string nick = (string)Session["nick"];
 
             List<string> rooms = Db.GetBackupRooms(nick);
-            Db.AddUser(rooms, nick);
 
-            Publisher.Publish(Resources.Strings.UsersEventChannel, JsonConvert.SerializeObject(Db.GetUsers()));
+            lock(Locker.locker) {
+                Db.AddUser(rooms, nick);
+
+                Publisher.Publish(Resources.Strings.UsersEventChannel, JsonConvert.SerializeObject(Db.GetUsers()));
+            }
 
             return HttpStatusCode.OK;
         }

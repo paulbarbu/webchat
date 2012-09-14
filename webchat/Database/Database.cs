@@ -17,10 +17,10 @@ namespace webchat.Database {
 
         public static void AddUser(IEnumerable<string> rooms, string nick) {
             foreach(var room in rooms) {
-                RoomUsersList.AddOrUpdate(room, 
-                    (arg) => { 
-                        return new HashSet<string>{nick};
-                    }, 
+                RoomUsersList.AddOrUpdate(room,
+                    (arg) => {
+                        return new HashSet<string> { nick };
+                    },
                     (key, val) => {
                         val.Add(nick);
                         return val;

@@ -35,9 +35,12 @@ namespace webchat.Controllers
                     indexModel.Rooms[0] = Resources.Strings.DefaultRoom;
                 }
 
-                Db.AddUser(indexModel.Rooms, indexModel.Nick);
-                Publisher.Publish(Resources.Strings.UsersEventChannel,
-                    JsonConvert.SerializeObject(Db.GetUsers()));
+                lock(Locker.locker) {
+                    Db.AddUser(indexModel.Rooms, indexModel.Nick);
+
+                    Publisher.Publish(Resources.Strings.UsersEventChannel,
+                        JsonConvert.SerializeObject(Db.GetUsers()));
+                }
                 
                 Session["nick"] = indexModel.Nick;
                 

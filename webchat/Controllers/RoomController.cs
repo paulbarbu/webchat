@@ -30,10 +30,12 @@ namespace webchat.Controllers
                 return "";
             }
 
-            Db.AddUser(roomsModel.Rooms, (string)Session["nick"]);
+            lock(Locker.locker) {
+                Db.AddUser(roomsModel.Rooms, (string)Session["nick"]);
 
-            Publisher.Publish(Resources.Strings.UsersEventChannel,
-                JsonConvert.SerializeObject(Db.GetUsers()));
+                Publisher.Publish(Resources.Strings.UsersEventChannel,
+                    JsonConvert.SerializeObject(Db.GetUsers()));
+            }
 
             roomsModel.Rooms.Clear();
             roomsModel.Rooms.AddRange(Db.GetRooms((string)Session["nick"]));
@@ -50,11 +52,13 @@ namespace webchat.Controllers
             }
 
             List<string> currentRooms = new List<string> { leaveModel.Room };
-          
-            Db.DelUser(currentRooms, (string)Session["nick"]);
 
-            Publisher.Publish(Resources.Strings.UsersEventChannel,
-                JsonConvert.SerializeObject(Db.GetUsers()));
+            lock(Locker.locker) {
+                Db.DelUser(currentRooms, (string)Session["nick"]);
+
+                Publisher.Publish(Resources.Strings.UsersEventChannel,
+                    JsonConvert.SerializeObject(Db.GetUsers()));
+            }
 
             currentRooms.Clear();
             currentRooms.AddRange(Db.GetRooms((string)Session["nick"]));

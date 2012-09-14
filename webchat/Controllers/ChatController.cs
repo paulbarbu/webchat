@@ -19,10 +19,12 @@ namespace webchat.Controllers
         }
 
         public ActionResult Disconnect() {
-            List<string> rooms = Db.GetRooms((string)Session["nick"]);
+            lock(Locker.locker) {
+                List<string> rooms = Db.GetRooms((string)Session["nick"]);
 
-            Db.DelUser(rooms, (string)Session["nick"]);
-            Publisher.Publish(Resources.Strings.UsersEventChannel, JsonConvert.SerializeObject(Db.GetUsers()));
+                Db.DelUser(rooms, (string)Session["nick"]);
+                Publisher.Publish(Resources.Strings.UsersEventChannel, JsonConvert.SerializeObject(Db.GetUsers()));
+            }
 
             Session.Abandon();
 
