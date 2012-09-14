@@ -19,14 +19,17 @@ namespace webchat.Database {
             new ConcurrentDictionary<string, List<string>>();
 
         public static void AddUser(IEnumerable<string> rooms, string nick) {
-
             //TODO: lock 
             foreach(var room in rooms) {
-                RoomUsersList.AddOrUpdate(room, new HashSet<string> { nick }, (key, val) => {
-                    val.Add(nick);
-
-                    return val;
-                });
+                RoomUsersList.AddOrUpdate(room, 
+                    (arg) => { 
+                        return new HashSet<string>{nick};
+                    }, 
+                    (key, val) => {
+                        val.Add(nick);
+                        return val;
+                    }
+                );
             }
 
             AddUserToGlobalList(nick);
