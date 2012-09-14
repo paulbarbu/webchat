@@ -19,7 +19,7 @@ namespace webchat.Validators {
 
             string nick = (string)value;
 
-            if(Db.Users.Contains(nick)) {
+            if(Db.IsUser(nick)) {
                 return false;
             }
 

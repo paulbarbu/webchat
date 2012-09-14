@@ -17,13 +17,13 @@ namespace webchat.Ping {
         }
 
         public void Ping() {
-            if(0 == Db.Users.Count) {
+            if(!Db.IsPopulated()) {
                 return;
             }
 
             Db.Backup();
 
-            Publisher.Publish(Resources.Strings.PingEventChannel, "ping");            
+            Publisher.Publish(Resources.Strings.PingEventChannel, "ping");
             Logger.Log(string.Format("Ping sent at {0}", DateTime.Now), "INFO");
         }
     }

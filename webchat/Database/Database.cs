@@ -7,19 +7,15 @@ using webchat.Helpers;
 
 namespace webchat.Database {
     public static class Db {
-        //TODO: lock for this
-        public static readonly HashSet<string> Users = new HashSet<string>();
+        private static readonly HashSet<string> Users = new HashSet<string>();
 
-        //TODO: lock for this
         private static readonly ConcurrentDictionary<string, HashSet<string>> RoomUsersList = 
             new ConcurrentDictionary<string, HashSet<string>>();
 
-        //TODO:lock
         private static readonly ConcurrentDictionary<string, List<string>> BackupRoomUsersList =
             new ConcurrentDictionary<string, List<string>>();
 
         public static void AddUser(IEnumerable<string> rooms, string nick) {
-            //TODO: lock 
             foreach(var room in rooms) {
                 RoomUsersList.AddOrUpdate(room, 
                     (arg) => { 
@@ -36,13 +32,12 @@ namespace webchat.Database {
         }
 
         private static void AddUserToGlobalList(string nick) {
-            //TODO: lock
             Users.Add(nick);
         }
         
         public static void DelUser(IEnumerable<string> rooms, string nick) {
             HashSet<string> user_list;
-            //TODO: lock
+
             foreach(var room in rooms) {
                 bool room_exists = RoomUsersList.TryGetValue(room, out user_list);
 
@@ -65,7 +60,6 @@ namespace webchat.Database {
         }
 
         private static void DelUserFromGlobalList(string nick) {
-            //TODO: lock
             Users.Remove(nick);
         }
 
@@ -88,7 +82,6 @@ namespace webchat.Database {
         }
 
         public static void Backup() {
-            //TODO: lock
             BackupRoomUsersList.Clear();
 
             foreach(var user in Users.ToList()) {
@@ -101,6 +94,14 @@ namespace webchat.Database {
                     Logger.Log(string.Format("Backup for {0} failed, giving up!", user), "ERROR");
                 }
             }
+        }
+
+        public static bool IsPopulated() {
+            return Users.Count > 0;
+        }
+
+        public static bool IsUser(string nick) {
+            return Users.Contains(nick);
         }
     }
 }
