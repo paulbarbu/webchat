@@ -13,6 +13,10 @@ namespace webchat.Database {
         private static readonly ConcurrentDictionary<string, HashSet<string>> RoomUsersList = 
             new ConcurrentDictionary<string, HashSet<string>>();
 
+        //TODO:lock
+        private static readonly ConcurrentDictionary<string, List<string>> BackupRoomUsersList =
+            new ConcurrentDictionary<string, List<string>>();
+
         public static void AddUser(IEnumerable<string> rooms, string nick) {
 
             //TODO: lock 
@@ -67,10 +71,28 @@ namespace webchat.Database {
             return RoomUsersList.Keys.ToList();
         }
 
+        public static List<string> GetBackupRooms(string nick) {
+            return BackupRoomUsersList[nick];
+        }
+
         public static List<string> GetRooms(string nick) {
             var users = from n in RoomUsersList where RoomUsersList[n.Key].Contains(nick) select n.Key;
 
             return users.ToList();
+        }
+
+        public static void Backup() {
+            //TODO: lock
+            BackupRoomUsersList.Clear();
+
+            foreach(var user in Users.ToList()) {
+                List<string> rooms = GetRooms(user);
+
+                //TODO check retval
+                BackupRoomUsersList.TryAdd(user, rooms);
+
+                DelUser(rooms, user);
+            }
         }
     }
 }

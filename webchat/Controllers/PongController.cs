@@ -1,10 +1,11 @@
-﻿using ServiceStack.Redis;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using webchat.Database;
 using webchat.Filters;
 using webchat.Helpers;
 using webchat.Models;
@@ -21,23 +22,12 @@ namespace webchat.Controllers
                 return HttpStatusCode.BadRequest;
             }
 
-            try {
-                using(var r = new RedisClient().As<string>()) {
-                    var user_rooms = r.Sets[(string)Session["nick"]];
+            string nick = (string)Session["nick"];
 
-                    Rooms rooms = new Rooms(user_rooms.ToArray());
-                    rooms.AddUser((string)Session["nick"]);
-                    rooms.Notify();
+            List<string> rooms = Db.GetBackupRooms(nick);
+            Db.AddUser(rooms, nick);
 
-                    r.RemoveEntry((string)Session["nick"]);
-                }
-            }
-            catch(RedisException e) {
-                Logger.Log(Resources.Strings.DatabaseError, "ERROR");
-                Logger.Log(e.ToString(), "ERROR");
-
-                return HttpStatusCode.InternalServerError;
-            }
+            Publisher.Publish(Resources.Strings.UsersEventChannel, JsonConvert.SerializeObject(Db.GetUsers()));
 
             return HttpStatusCode.OK;
         }

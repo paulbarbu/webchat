@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
+using webchat.Ping;
 
 namespace webchat {
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
@@ -20,6 +21,8 @@ namespace webchat {
 
             Trace.Listeners.Add(new TextWriterTraceListener(Server.MapPath(Resources.Strings.LogFile)));
             Trace.AutoFlush = true;
+
+            Pinger p = new Pinger(); // start pinging users
         }
     }
 }
