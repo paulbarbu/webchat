@@ -23,6 +23,11 @@ NoSQL database the chat is based on.
 
 * ASP.NET MVC is the webframework that powers this chat, it handles everything
   described above.
+  
+**Note:** Redis is now replaced by an in-application database which in fact is just 
+a static class handled by the threads as if it were a real database, I decided 
+to switch because the code is now more clear and there's nothing that Redis 
+had and I cannot replicate with this in-application database.
 
 Python
 ======
