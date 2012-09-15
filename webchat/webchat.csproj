@@ -147,17 +147,17 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Global.asax" />
-    <Content Include="Static\bootstrap\css\bootstrap.css" />
-    <Content Include="Static\bootstrap\css\bootstrap.min.css" />
-    <Content Include="Static\bootstrap\img\glyphicons-halflings-white.png" />
-    <Content Include="Static\bootstrap\img\glyphicons-halflings.png" />
-    <Content Include="Static\bootstrap\js\bootstrap.js" />
-    <Content Include="Static\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Static\Css\bootstrap.css" />
+    <Content Include="Static\Css\bootstrap.min.css" />
+    <Content Include="Static\Img\glyphicons-halflings-white.png" />
+    <Content Include="Static\Img\glyphicons-halflings.png" />
+    <Content Include="Static\Js\lib\bootstrap.js" />
+    <Content Include="Static\Js\lib\bootstrap.min.js" />
     <Content Include="Static\Js\chat.js" />
     <Content Include="Static\favicon.ico" />
     <Content Include="Static\Css\jquery-ui-1.8.22.custom.css" />
-    <Content Include="Static\Js\jquery.caret.min.js" />
-    <Content Include="Static\Js\notificon.min.js" />
+    <Content Include="Static\Js\lib\jquery.caret.min.js" />
+    <Content Include="Static\Js\lib\notificon.min.js" />
     <Content Include="Static\Css\style.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
