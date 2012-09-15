@@ -152,7 +152,6 @@
     <Content Include="Static\Img\glyphicons-halflings-white.png" />
     <Content Include="Static\Img\glyphicons-halflings.png" />
     <Content Include="Static\Js\lib\bootstrap.js" />
-    <Content Include="Static\Js\lib\bootstrap.min.js" />
     <Content Include="Static\Js\chat.js" />
     <Content Include="Static\favicon.ico" />
     <Content Include="Static\Css\jquery-ui-1.8.22.custom.css" />
