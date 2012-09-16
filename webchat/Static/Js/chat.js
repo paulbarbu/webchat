@@ -43,7 +43,7 @@ Handler = {
 
         notify_activity(data['room']);
 
-        $('div#content').trigger('update_scrollbar');
+        Handler.update_scrollbar();
     },
 
     /**
@@ -75,7 +75,7 @@ Handler = {
             lineDiv.innerHTML = e.responseText;
 
             $('.tab-pane.active').append(lineDiv);
-            $('div#content').trigger('update_scrollbar');
+            Handler.update_scrollbar();
         }
         else{
             show_error_dialog();
@@ -106,7 +106,7 @@ Handler = {
         lineDiv.innerHTML = e.responseText;
 
         $('.tab-pane.active').append(lineDiv);
-        $('div#content').trigger('update_scrollbar');
+        Handler.update_scrollbar();
     },
 
     /**
@@ -125,14 +125,14 @@ Handler = {
             lineDiv.innerHTML = e.responseText;
 
             $('.tab-pane.active').append(lineDiv);
-            $('div#content').trigger('update_scrollbar');
+            Handler.update_scrollbar();
         }
     },
 
     /**
      * Move the scrollbar at the bottom in order to see the latest message
      */
-    update_scrollbar: function handle_updatescrollbar(e){
+    update_scrollbar: function handle_update_scrollbar(e){
         $('#content').scrollTop($('#content')[0].scrollHeight + 42);
     },
 
@@ -504,7 +504,7 @@ function add_hr(obj){
         }
     }
 
-    $('div#content').trigger('update_scrollbar');
+    Handler.update_scrollbar();
 }
 
 /**
@@ -726,6 +726,7 @@ function toggle_actionbox(){
 
     $('#actionbox').slideToggle('fast', function(){
         adjust_blocks(!toolbar_hidden);
+        Handler.update_scrollbar();
     });
 
     $('#toggler').toggleClass('icon-resize-small')
@@ -788,7 +789,6 @@ var unsent_message = '';
 $('[name="send"]').click(publish_message);
 $('[name="join"]').click(join_rooms);
 $('.actionbox-toolbar').click(toggle_actionbox);
-$('div#content').bind('update_scrollbar', Handler.update_scrollbar);
 
 $(document).ready(adjust_blocks);
 $(window).resize(adjust_blocks);
