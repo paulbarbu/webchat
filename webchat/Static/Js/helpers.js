@@ -49,7 +49,7 @@ function add_hr(obj) {
         }
     }
 
-    $('div#content').trigger('update_scrollbar');
+    handle_update_scrollbar();
 }
 
 /**
@@ -119,10 +119,10 @@ function get_last_word(text) {
  * Adjust the height of the content where the messages appear in order to keep
  * the whole app on the screen.
  */
-function adjust_blocks(e) {
+function adjust_blocks() {
     var box_h = 0;
 
-    if (!toolbar_hidden) { //if the toolbar is hidden then don't include it
+    if (!Actionbox.hidden) { //if the toolbar is not hidden then include it's height in the calculation
         box_h = $('#actionbox').outerHeight(true);
     }
 
@@ -157,10 +157,11 @@ function handle_event_error(e) {
  * according to the state of the actionbox.
  */
 function toggle_actionbox() {
-    toolbar_hidden = !toolbar_hidden;
+    Actionbox.hidden = !Actionbox.hidden;
 
     $('#actionbox').slideToggle('fast', function () {
-        adjust_blocks(!toolbar_hidden);
+        adjust_blocks();
+        handle_update_scrollbar();
     });
 
     $('#toggler').toggleClass('icon-resize-small')

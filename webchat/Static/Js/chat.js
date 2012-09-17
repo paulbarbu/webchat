@@ -102,12 +102,6 @@ $('#text').typeahead().data('typeahead').select = function () {
     return this.hide()
 }
 
-var away = false;
-var toolbar_hidden = false;
-var message_list = [];
-var current_msg = 0;
-var unsent_message = '';
-
 $('[name="send"]').click(publish_message);
 $('[name="join"]').click(join_rooms);
 $('.actionbox-toolbar').click(toggle_actionbox);

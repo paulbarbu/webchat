@@ -151,6 +151,7 @@
     <Content Include="Static\Css\bootstrap.min.css" />
     <Content Include="Static\Img\glyphicons-halflings-white.png" />
     <Content Include="Static\Img\glyphicons-halflings.png" />
+    <Content Include="Static\Js\Copy of chat.js" />
     <Content Include="Static\Js\helpers.js" />
     <Content Include="Static\Js\lib\bootstrap.js" />
     <Content Include="Static\Js\chat.js" />

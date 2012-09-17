@@ -26,7 +26,7 @@ function handle_join_error(e) {
     lineDiv.innerHTML = e.responseText;
 
     $('.tab-pane.active').append(lineDiv);
-    $('div#content').trigger('update_scrollbar');
+    handle_update_scrollbar();
 }
 
 /**
@@ -153,7 +153,7 @@ function handle_leave_room_error(e) {
         lineDiv.innerHTML = e.responseText;
 
         $('.tab-pane.active').append(lineDiv);
-        $('div#content').trigger('update_scrollbar');
+        handle_update_scrollbar();
     }
 }
 

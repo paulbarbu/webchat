@@ -51,18 +51,8 @@
     users = JSON.parse('@Html.Raw(Json.Encode(Db.GetUsers()))');
     rooms = JSON.parse('@Html.Raw(Json.Encode(Model))');
 
-    User = {
-        away: false,
-    };
-
     Actionbox = {
         hidden: false,
-    };
-
-    Message = {
-        list: [],
-        current: 0,
-        unsent: '',
     };
 </script>
 

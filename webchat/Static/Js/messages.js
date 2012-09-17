@@ -1,11 +1,16 @@
-﻿/**
+﻿Message = {
+    list: [],
+    current: 0,
+    unsent: '',
+};
+/**
  * Adds a message to the back of the list
  *
  * @param string msg the message you want to add to the list
  */
 function add_message(msg) {
-    message_list.push(msg);
-    current_msg = message_list.length;
+    Message.list.push(msg);
+    Message.current = Message.list.length;
 }
 
 /**
@@ -17,7 +22,7 @@ function add_message(msg) {
  * message doesn't exist
  */
 function get_message(n) {
-    return message_list[n] || '';
+    return Message.list[n] || '';
 }
 
 /**
@@ -31,7 +36,7 @@ function handle_publish_error(e) {
         lineDiv.innerHTML = e.responseText;
 
         $('.tab-pane.active').append(lineDiv);
-        $('div#content').trigger('update_scrollbar');
+        handle_update_scrollbar();
     }
     else {
         show_error_dialog();
@@ -54,7 +59,7 @@ function publish_message(e) {
         .fail(handle_publish_error)
         .success(function () {
             $('#text').val('');
-            unsent_message = '';
+            Message.unsent = '';
 
             // only store the message if it's not empty
             message && add_message(message);
@@ -107,13 +112,13 @@ function handle_event_message(e) {
 
     notify_activity(data['room']);
 
-    $('div#content').trigger('update_scrollbar');
+    handle_update_scrollbar();
 }
 
 /**
  * Move the scrollbar at the bottom in order to see the latest message
  */
-function handle_update_scrollbar(e) {
+function handle_update_scrollbar() {
     $('#content').scrollTop($('#content')[0].scrollHeight + 42);
 }
 
@@ -135,41 +140,41 @@ $(document).keydown(function (e) {
 
         switch (e.keyCode) {
             case 40: //down
-                if (current_msg == message_list.length) {
-                    unsent_message = message;
-                    current_msg++;
+                if (Message.current == Message.list.length) {
+                    Message.unsent = message;
+                    Message.current++;
                 }
 
-                if (current_msg < message_list.length) {
-                    current_msg++;
+                if (Message.current < Message.list.length) {
+                    Message.current++;
                 }
 
-                if (current_msg == message_list.length) {
-                    $('#text').val(unsent_message);
+                if (Message.current == Message.list.length) {
+                    $('#text').val(Message.unsent);
                 }
                 else {
-                    $('#text').val(get_message(current_msg));
+                    $('#text').val(get_message(Message.current));
                 }
 
                 break;
             case 38: //up
-                if (current_msg == message_list.length) {
-                    unsent_message = message;
+                if (Message.current == Message.list.length) {
+                    Message.unsent = message;
                 }
 
-                if (current_msg > 0) {
-                    current_msg--;
+                if (Message.current > 0) {
+                    Message.current--;
                 }
 
-                if (!unsent_message && current_msg == message_list.length) {
-                    current_msg--;
+                if (!Message.unsent && Message.current == Message.list.length) {
+                    Message.current--;
                 }
 
-                if (current_msg == message_list.length) {
-                    $('#text').val(unsent_message);
+                if (Message.current == Message.list.length) {
+                    $('#text').val(Message.unsent);
                 }
                 else {
-                    $('#text').val(get_message(current_msg));
+                    $('#text').val(get_message(Message.current));
                 }
 
                 break;

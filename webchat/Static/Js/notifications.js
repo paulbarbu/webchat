@@ -1,4 +1,8 @@
-﻿/**
+﻿User = {
+    away: false,
+};
+
+/**
  * Check if the user is mentioned in the message
  *
  * A user is mentioned when his nick appears as a word in a message:
@@ -53,7 +57,7 @@ function notify_activity(room_name) {
         }
     }
 
-    if (away) {
+    if (User.away) {
         Notificon("!", {
             font: '10px arial',
             color: '#ffffff',
@@ -66,12 +70,12 @@ function notify_activity(room_name) {
 
 //if the browser or the browser's tab is not focused display a Notificon
 $(window).focus(function () {
-    away = false;
+    User.away = false;
     Notificon('');
 });
 
 $(window).blur(function () {
-    away = true;
+    User.away = true;
 
     add_hr($('div.tab-pane'));
 });
