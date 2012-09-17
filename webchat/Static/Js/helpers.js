@@ -181,3 +181,33 @@ function update_typeahead() {
 
     autocomplete.data('typeahead').source = users[$('.tab-pane.active').attr('id')];
 }
+
+/**
+ * Update scrollbars and focus the textbox when moving through tabs
+ */
+function handle_tab_shown(e) {
+    handle_update_scrollbar();
+    $('#text').focus();
+    update_typeahead();
+}
+
+/**
+ * This is fired when a tab is clicked on
+ */
+function handle_tab_show(e) {
+    display_users($(e.target).attr('href').slice(1));
+    $('#icon-' + $(e.target).attr('href').slice(1)).remove();
+
+    //add a <hr> to the last tab in order to mark the activity on that room
+    //since the user moved away
+    if (typeof e.relatedTarget !== 'undefined') {
+        add_hr($('div' + $(e.relatedTarget).attr('href')));
+    }
+}
+
+/**
+ * Callback to respond to ping events via AJAX
+ */
+function handle_event_ping(e) {
+    $.post(Url.PongEvent, 'PONG!');
+}
