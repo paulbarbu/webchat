@@ -168,3 +168,15 @@ function toggle_actionbox() {
 
     $('.footer').toggleClass('spaced');
 }
+
+
+/**
+ * Update the data-source for typeahead with the users on the current room
+ *
+ * This should be called if the user chages rooms
+ */
+function update_typeahead() {
+    var autocomplete = $('#text').typeahead();
+
+    autocomplete.data('typeahead').source = users[$('.tab-pane.active').attr('id')];
+}
