@@ -175,7 +175,7 @@ function publish_message(e){
         .fail(Handler.publish_error)
         .success(function(){
             $('#text').val('');
-            unsent_message = '';
+            Message.unsent = '';
             
             // only store the message if it's not empty
             message && add_message(message);
@@ -536,8 +536,8 @@ function adjust_blocks(e) {
  * @param string msg the message you want to add to the list
  */
 function add_message(msg){
-    message_list.push(msg);
-    current_msg = message_list.length;
+    Message.list.push(msg);
+    Message.current = Message.list.length;
 }
 
 /**
@@ -549,7 +549,7 @@ function add_message(msg){
  * message doesn't exist
  */
 function get_message(n){
-    return message_list[n] || '';
+    return Message.list[n] || '';
 }
 
 /**
@@ -598,41 +598,41 @@ $(document).keydown(function(e){
         
         switch(e.keyCode){
             case 40: //down
-                if(current_msg == message_list.length){
-                    unsent_message = message;
-                    current_msg++;
+                if(Message.current == Message.list.length){
+                    Message.unsent = message;
+                    Message.current++;
                 }
 
-                if(current_msg < message_list.length){
-                    current_msg++;
+                if(Message.current < Message.list.length){
+                    Message.current++;
                 }
                 
-                if(current_msg == message_list.length){
-                    $('#text').val(unsent_message);
+                if(Message.current == Message.list.length){
+                    $('#text').val(Message.unsent);
                 }
                 else{
-                    $('#text').val(get_message(current_msg));
+                    $('#text').val(get_message(Message.current));
                 }
 
                 break;
             case 38: //up
-                if(current_msg == message_list.length){
-                    unsent_message = message;
+                if(Message.current == Message.list.length){
+                    Message.unsent = message;
                 }
 
-                if(current_msg > 0){
-                    current_msg--;
+                if(Message.current > 0){
+                    Message.current--;
                 }
 
-                if(!unsent_message && current_msg == message_list.length){
-                    current_msg--;
+                if(!Message.unsent && Message.current == Message.list.length){
+                    Message.current--;
                 }
 
-                if(current_msg == message_list.length){
-                    $('#text').val(unsent_message);
+                if(Message.current == Message.list.length){
+                    $('#text').val(Message.unsent);
                 }
                 else{
-                    $('#text').val(get_message(current_msg));
+                    $('#text').val(get_message(Message.current));
                 }
 
                 break;
@@ -778,10 +778,6 @@ $(window).blur(function(){
 
     add_hr($('div.tab-pane'));
 });
-
-var message_list = [];
-var current_msg = 0;
-var unsent_message = '';
 
 $('[name="send"]').click(publish_message);
 $('[name="join"]').click(join_rooms);
