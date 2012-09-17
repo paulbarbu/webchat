@@ -21,7 +21,7 @@ namespace webchat.Ping {
                 return;
             }
 
-            Db.Backup();
+            lock(Locker.locker) Db.Backup();
 
             Publisher.Publish(Resources.Strings.PingEventChannel, "ping");
             Logger.Log("Ping!", "INFO");

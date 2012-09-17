@@ -15,7 +15,7 @@ namespace webchat.Controllers
     public class ChatController : Controller
     {
         public ActionResult Index() {
-            return View(Db.GetRooms((string)Session["nick"]));
+            lock(Locker.locker) return View(Db.GetRooms((string)Session["nick"]));
         }
 
         public ActionResult Disconnect() {

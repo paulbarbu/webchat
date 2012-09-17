@@ -38,7 +38,7 @@ namespace webchat.Controllers
             }
 
             roomsModel.Rooms.Clear();
-            roomsModel.Rooms.AddRange(Db.GetRooms((string)Session["nick"]));
+            lock(Locker.locker) roomsModel.Rooms.AddRange(Db.GetRooms((string)Session["nick"]));
 
             return JsonConvert.SerializeObject(roomsModel.Rooms);
         }
@@ -61,7 +61,7 @@ namespace webchat.Controllers
             }
 
             currentRooms.Clear();
-            currentRooms.AddRange(Db.GetRooms((string)Session["nick"]));
+            lock(Locker.locker) currentRooms.AddRange(Db.GetRooms((string)Session["nick"]));
 
             if(0 == currentRooms.Count){
                 Session.Abandon();

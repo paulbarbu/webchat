@@ -15,7 +15,11 @@ namespace webchat.Validators {
         }
 
         public override bool IsValid(object value) {
-            List<string> rooms = Db.GetRooms((string)HttpContext.Current.Session["nick"]);
+            List<string> rooms;
+
+            lock(Locker.locker) {
+                rooms = Db.GetRooms((string)HttpContext.Current.Session["nick"]);
+            }
 
             string room = (string)value;
 

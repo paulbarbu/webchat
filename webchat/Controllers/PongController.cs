@@ -24,10 +24,9 @@ namespace webchat.Controllers
             }
 
             string nick = (string)Session["nick"];
-
-            List<string> rooms = Db.GetBackupRooms(nick);
-
+            
             lock(Locker.locker) {
+                List<string> rooms = Db.GetBackupRooms(nick);
                 Db.AddUser(rooms, nick);
 
                 Publisher.Publish(Resources.Strings.UsersEventChannel, JsonConvert.SerializeObject(Db.GetUsers()));
