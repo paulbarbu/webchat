@@ -168,8 +168,7 @@ function publish_message(e){
     e.preventDefault();
     var message = $('#text').val();
 
-    $.post(Url.MessageEvent,
-        {
+    $.post(Url.MessageEvent, {
             'message': message,
             'room': $('.tab-pane.active').attr('id')
         })
@@ -480,7 +479,7 @@ function notify_activity(room_name){
         }
     }
 
-    if(away){
+    if(User.away){
         Notificon("!", {
             font: '10px arial',
             color: '#ffffff',
@@ -770,17 +769,16 @@ $('#text').typeahead().data('typeahead').select = function () {
 
 //if the browser or the browser's tab is not focused display a Notificon
 $(window).focus(function(){
-    away = false;
+    User.away = false;
     Notificon('');
 });
 
 $(window).blur(function(){
-    away = true;
+    User.away = true;
 
     add_hr($('div.tab-pane'));
 });
 
-var away = false;
 var toolbar_hidden = false;
 var message_list = [];
 var current_msg = 0;
