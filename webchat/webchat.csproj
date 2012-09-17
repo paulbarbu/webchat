@@ -163,7 +163,6 @@
     <Content Include="Static\Js\notifications.js" />
     <Content Include="Static\Js\pong.js" />
     <Content Include="Static\Js\rooms.js" />
-    <Content Include="Static\Js\typeahead.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
