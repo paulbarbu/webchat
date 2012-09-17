@@ -117,7 +117,7 @@ function handle_event_message(e) {
      * don't display the message if the user is not on the room 
      * where the message comes from
      */
-    if (-1 === rooms.indexOf(data['room'])) {
+    if (-1 === Data.rooms.indexOf(data['room'])) {
         return;
     }
 

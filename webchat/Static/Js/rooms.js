@@ -41,7 +41,7 @@ function display_rooms() {
         onclick: 'leave_room($(this).parent().parent(), $("li.active"))'
     }).html('&nbsp;&times;');
 
-    var display_rooms = rooms;
+    var display_rooms = Data.rooms;
 
     /**
      * starting from one when joining rooms at login,
@@ -81,7 +81,7 @@ function display_rooms() {
         //new rooms since the rest are already displayed
         var current_rooms = get_current_rooms();
 
-        display_rooms = rooms.filter(function (i) {
+        display_rooms = Data.rooms.filter(function (i) {
             return current_rooms.indexOf(i) < 0;
         });
 
@@ -130,7 +130,7 @@ function join_rooms(e) {
         .fail(handle_join_error)
         .success(function (e) {
             if ("" != e) {
-                rooms = JSON.parse(e);
+                Data.rooms = JSON.parse(e);
                 display_rooms();
                 $('#join_rooms').val('');
             }
@@ -193,7 +193,7 @@ function leave_room(room, active_room) {
 
             $($('.active').children().attr('href')).addClass('active');
 
-            rooms = JSON.parse(e);
+            Data.rooms = JSON.parse(e);
             display_users($('.active').children().attr('href').slice(1));
             $('#text').focus();
             update_typeahead();

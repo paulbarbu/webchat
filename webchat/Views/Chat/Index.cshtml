@@ -48,8 +48,10 @@
         PongEvent: '@Url.Action("Index", "Pong")',
     };
      
-    users = JSON.parse('@Html.Raw(Json.Encode(Db.GetUsers()))');
-    rooms = JSON.parse('@Html.Raw(Json.Encode(Model))');
+    Data = {
+        users: JSON.parse('@Html.Raw(Json.Encode(Db.GetUsers()))'),
+        rooms: JSON.parse('@Html.Raw(Json.Encode(Model))'),
+    };
 
     Actionbox = {
         hidden: false,

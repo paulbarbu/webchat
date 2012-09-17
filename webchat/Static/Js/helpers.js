@@ -179,7 +179,7 @@ function toggle_actionbox() {
 function update_typeahead() {
     var autocomplete = $('#text').typeahead();
 
-    autocomplete.data('typeahead').source = users[$('.tab-pane.active').attr('id')];
+    autocomplete.data('typeahead').source = Data.users[$('.tab-pane.active').attr('id')];
 }
 
 /**
