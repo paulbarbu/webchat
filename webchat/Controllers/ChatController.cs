@@ -23,6 +23,7 @@ namespace webchat.Controllers
                 List<string> rooms = Db.GetRooms((string)Session["nick"]);
 
                 Db.DelUser(rooms, (string)Session["nick"]);
+                Db.DelUserFromGlobalList((string)Session["nick"]);
                 Publisher.Publish(Resources.Strings.UsersEventChannel, JsonConvert.SerializeObject(Db.GetUsers()));
             }
 
