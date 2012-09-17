@@ -513,7 +513,7 @@ function add_hr(obj){
 function adjust_blocks(e) {
     var box_h = 0;
 
-    if(!toolbar_hidden){ //if the toolbar is hidden then don't include it
+    if(!Actionbox.hidden){ //if the toolbar is not hidden include it's height in the calculation
         box_h = $('#actionbox').outerHeight(true);
     }
 
@@ -721,10 +721,10 @@ function reverse_str(s){
  * according to the state of the actionbox.
  */
 function toggle_actionbox(){
-    toolbar_hidden = !toolbar_hidden;
+    Actionbox.hidden = !Actionbox.hidden;
 
     $('#actionbox').slideToggle('fast', function(){
-        adjust_blocks(!toolbar_hidden);
+        adjust_blocks();
         Handler.update_scrollbar();
     });
 
@@ -779,7 +779,6 @@ $(window).blur(function(){
     add_hr($('div.tab-pane'));
 });
 
-var toolbar_hidden = false;
 var message_list = [];
 var current_msg = 0;
 var unsent_message = '';
