@@ -64,6 +64,7 @@ namespace webchat.Controllers
             lock(Locker.locker) currentRooms.AddRange(Db.GetRooms((string)Session["nick"]));
 
             if(0 == currentRooms.Count){
+                lock(Locker.locker) Db.DelUserFromGlobalList((string)Session["nick"]);
                 Session.Abandon();
                 Response.StatusCode = 404;
                 return "";

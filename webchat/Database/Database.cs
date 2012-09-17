@@ -55,11 +55,9 @@ namespace webchat.Database {
                     }
                 }
             }
-
-            DelUserFromGlobalList(nick);
         }
 
-        private static void DelUserFromGlobalList(string nick) {
+        public static void DelUserFromGlobalList(string nick) {
             Users.Remove(nick);
         }
 
@@ -82,10 +80,15 @@ namespace webchat.Database {
         }
 
         public static void Backup() {
-            BackupRoomUsersList.Clear();
-
             foreach(var user in Users.ToList()) {
                 List<string> rooms = GetRooms(user);
+
+                if(BackupRoomUsersList.ContainsKey(user)){
+                    List<string> t;
+                    if(!BackupRoomUsersList.TryRemove(user, out t)) {
+                        Logger.Log(string.Format("backup cleanup for {0} failed, giving up!", user), "ERROR");
+                    }
+                }
 
                 if(BackupRoomUsersList.TryAdd(user, rooms)) {
                     DelUser(rooms, user);
