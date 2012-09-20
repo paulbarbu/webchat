@@ -6,16 +6,20 @@ using System.Linq;
 using System.Web;
 
 namespace webchat.Database {
-    public static class Publisher {
+    public class Publisher : IPublisher<ConcurrentQueue<StreamWriter>> {
         private const string eventPattern = "event: {0}\ndata: {1}\n\n";
 
-        public static readonly ConcurrentQueue<StreamWriter> Clients = new ConcurrentQueue<StreamWriter>();
+        private readonly ConcurrentQueue<StreamWriter> clients = new ConcurrentQueue<StreamWriter>();
 
-        public static void Publish(string channel, string message) {
-            foreach(var subscriber in Clients) {
+        public void Publish(string channel, string message) {
+            foreach(var subscriber in clients) {
                 subscriber.Write(eventPattern, channel, message);
                 subscriber.Flush();
             }
+        }
+
+        public ConcurrentQueue<StreamWriter> Clients {
+            get { return clients; }
         }
     }
 }

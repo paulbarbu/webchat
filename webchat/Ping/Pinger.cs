@@ -23,7 +23,7 @@ namespace webchat.Ping {
 
             lock(Locker.locker) Db.Backup();
 
-            Publisher.Publish(Resources.Strings.PingEventChannel, "ping");
+            MvcApplication.pub.Publish(Resources.Strings.PingEventChannel, "ping");
             Logger.Log("Ping!", "INFO");
         }
     }

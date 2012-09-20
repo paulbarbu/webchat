@@ -29,7 +29,7 @@ namespace webchat.Controllers
                 List<string> rooms = Db.GetBackupRooms(nick);
                 Db.AddUser(rooms, nick);
 
-                Publisher.Publish(Resources.Strings.UsersEventChannel, JsonConvert.SerializeObject(Db.GetUsers()));
+                MvcApplication.pub.Publish(Resources.Strings.UsersEventChannel, JsonConvert.SerializeObject(Db.GetUsers()));
             }
 
             return HttpStatusCode.OK;

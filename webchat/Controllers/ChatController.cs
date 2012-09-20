@@ -24,7 +24,7 @@ namespace webchat.Controllers
 
                 Db.DelUser(rooms, (string)Session["nick"]);
                 Db.DelUserFromGlobalList((string)Session["nick"]);
-                Publisher.Publish(Resources.Strings.UsersEventChannel, JsonConvert.SerializeObject(Db.GetUsers()));
+                MvcApplication.pub.Publish(Resources.Strings.UsersEventChannel, JsonConvert.SerializeObject(Db.GetUsers()));
             }
 
             Session.Abandon();

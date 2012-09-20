@@ -33,7 +33,7 @@ namespace webchat.Controllers
             lock(Locker.locker) {
                 Db.AddUser(roomsModel.Rooms, (string)Session["nick"]);
 
-                Publisher.Publish(Resources.Strings.UsersEventChannel,
+                MvcApplication.pub.Publish(Resources.Strings.UsersEventChannel,
                     JsonConvert.SerializeObject(Db.GetUsers()));
             }
 
@@ -56,7 +56,7 @@ namespace webchat.Controllers
             lock(Locker.locker) {
                 Db.DelUser(currentRooms, (string)Session["nick"]);
 
-                Publisher.Publish(Resources.Strings.UsersEventChannel,
+                MvcApplication.pub.Publish(Resources.Strings.UsersEventChannel,
                     JsonConvert.SerializeObject(Db.GetUsers()));
             }
 
