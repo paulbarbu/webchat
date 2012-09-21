@@ -19,7 +19,7 @@ namespace webchat.Validators {
 
             string nick = (string)value;
 
-            if(MvcApplication.db.IsUser(nick)) {
+            if(MvcApplication.Db.IsUser(nick)) {
                 return false;
             }
 

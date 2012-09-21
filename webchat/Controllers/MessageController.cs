@@ -28,7 +28,7 @@ namespace webchat.Controllers
                 {"room", m.Room}
             };
 
-            MvcApplication.pub.Publish(Resources.Strings.MessagesEventChannel, JsonConvert.SerializeObject(data));
+            MvcApplication.Pub.Publish(Resources.Strings.MessagesEventChannel, JsonConvert.SerializeObject(data));
             MvcApplication.Logger.Log(string.Format("{0} ({1}): {2}", Session["nick"], m.Room, m.Message), "INFO");
 
             return HttpStatusCode.OK;

@@ -17,13 +17,13 @@ namespace webchat.Ping {
         }
 
         public void Ping() {
-            if(!MvcApplication.db.IsPopulated()) {
+            if(!MvcApplication.Db.IsPopulated()) {
                 return;
             }
 
-            MvcApplication.db.Backup();
+            MvcApplication.Db.Backup();
 
-            MvcApplication.pub.Publish(Resources.Strings.PingEventChannel, "ping");
+            MvcApplication.Pub.Publish(Resources.Strings.PingEventChannel, "ping");
             MvcApplication.Logger.Log("Ping!", "INFO");
         }
     }

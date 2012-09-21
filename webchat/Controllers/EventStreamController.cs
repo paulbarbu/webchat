@@ -30,7 +30,7 @@ namespace webchat.Controllers
         
         private void OnStreamAvailable(Stream stream, HttpContent content, TransportContext context) {
             StreamWriter streamWriter = new StreamWriter(stream);
-            MvcApplication.pub.Clients.Enqueue(streamWriter);
+            MvcApplication.Pub.Clients.Enqueue(streamWriter);
         }
     }
 }

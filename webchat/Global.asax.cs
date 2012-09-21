@@ -17,9 +17,9 @@ namespace webchat {
     // visit http://go.microsoft.com/?LinkId=9394801
     public class MvcApplication : System.Web.HttpApplication {
 
-        public static IPublisher<ConcurrentQueue<StreamWriter>> pub = new Publisher();
-        public static IDatabase db = new Db(pub);
+        public static IPublisher<ConcurrentQueue<StreamWriter>> Pub = new Publisher();
         public static ILogger Logger = new Logger();
+        public static IDatabase Db = new Db(Pub, Logger);
 
         protected void Application_Start() {
             AreaRegistration.RegisterAllAreas();

@@ -30,10 +30,10 @@ namespace webchat.Controllers
                 return "";
             }
 
-            MvcApplication.db.AddUser(roomsModel.Rooms, (string)Session["nick"]);
+            MvcApplication.Db.AddUser(roomsModel.Rooms, (string)Session["nick"]);
 
             roomsModel.Rooms.Clear();
-            roomsModel.Rooms.AddRange(MvcApplication.db.GetRooms((string)Session["nick"]));
+            roomsModel.Rooms.AddRange(MvcApplication.Db.GetRooms((string)Session["nick"]));
 
             return JsonConvert.SerializeObject(roomsModel.Rooms);
         }
@@ -48,19 +48,19 @@ namespace webchat.Controllers
 
             List<string> currentRooms = new List<string> { leaveModel.Room };
 
-            MvcApplication.db.DelUser(currentRooms, (string)Session["nick"]);
+            MvcApplication.Db.DelUser(currentRooms, (string)Session["nick"]);
             
 
             currentRooms.Clear();
-            currentRooms.AddRange(MvcApplication.db.GetRooms((string)Session["nick"]));
+            currentRooms.AddRange(MvcApplication.Db.GetRooms((string)Session["nick"]));
 
             if(0 == currentRooms.Count){
-                MvcApplication.db.DelUserFromGlobalList((string)Session["nick"]);
+                MvcApplication.Db.DelUserFromGlobalList((string)Session["nick"]);
                 Session.Abandon();
                 Response.StatusCode = 404;
                 return "";
             }
-                
+                            
             return JsonConvert.SerializeObject(currentRooms);
         }
     }

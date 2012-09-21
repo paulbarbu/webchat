@@ -17,17 +17,17 @@ namespace webchat.Controllers
         public ActionResult Index() {
             ChatModel model = new ChatModel();
 
-            model.Users = MvcApplication.db.GetUsers();
-            model.Rooms = MvcApplication.db.GetRooms((string)Session["nick"]);
+            model.Users = MvcApplication.Db.GetUsers();
+            model.Rooms = MvcApplication.Db.GetRooms((string)Session["nick"]);
 
             return View(model);
         }
 
         public ActionResult Disconnect() {
-            List<string> rooms = MvcApplication.db.GetRooms((string)Session["nick"]);
+            List<string> rooms = MvcApplication.Db.GetRooms((string)Session["nick"]);
 
-            MvcApplication.db.DelUser(rooms, (string)Session["nick"]);
-            MvcApplication.db.DelUserFromGlobalList((string)Session["nick"]);
+            MvcApplication.Db.DelUser(rooms, (string)Session["nick"]);
+            MvcApplication.Db.DelUserFromGlobalList((string)Session["nick"]);
 
             Session.Abandon();
 
