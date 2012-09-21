@@ -18,13 +18,15 @@ namespace webchat.Database {
             new ConcurrentDictionary<string, List<string>>();
 
         private IPublisher<ConcurrentQueue<StreamWriter>> Pub;
+        private ILogger Logger;
 
-        private object roomUserListLock = new object();
-        private object usersLock = new object();
-        private object backupLock = new object();
+        private readonly object roomUserListLock = new object();
+        private readonly object usersLock = new object();
+        private readonly object backupLock = new object();
 
-        public Db(IPublisher<ConcurrentQueue<StreamWriter>> p) {
+        public Db(IPublisher<ConcurrentQueue<StreamWriter>> p, ILogger l) {
             Pub = p;
+            Logger = l;
         }
 
         public void AddUser(IEnumerable<string> rooms, string nick) {
@@ -64,7 +66,7 @@ namespace webchat.Database {
 
                         if(0 == user_list.Count) {
                             if(!RoomUsersList.TryRemove(room, out user_list)) {
-                                MvcApplication.Logger.Log(
+                                Logger.Log(
                                     string.Format("Deleting key {0} from Db.RoomUsersList failed, giving up!", room),
                                     "ERROR"
                                 );
@@ -113,7 +115,7 @@ namespace webchat.Database {
                     if(BackupRoomUsersList.ContainsKey(user)){
                         List<string> t;
                         if(!BackupRoomUsersList.TryRemove(user, out t)) {
-                            MvcApplication.Logger.Log(string.Format("backup cleanup for {0} failed, giving up!", user),
+                            Logger.Log(string.Format("backup cleanup for {0} failed, giving up!", user),
                                 "ERROR");
                         }
                     }
@@ -122,7 +124,7 @@ namespace webchat.Database {
                         DelUser(rooms, user);
                     }
                     else {
-                        MvcApplication.Logger.Log(string.Format("Backup for {0} failed, giving up!", user), "ERROR");
+                        Logger.Log(string.Format("Backup for {0} failed, giving up!", user), "ERROR");
                     }
                 }
             }
