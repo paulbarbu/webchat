@@ -19,21 +19,27 @@ namespace webchat.Database {
 
         private IPublisher<ConcurrentQueue<StreamWriter>> Pub;
 
+        private object roomUserListLock = new object();
+        private object usersLock = new object();
+        private object backupLock = new object();
+
         public Db(IPublisher<ConcurrentQueue<StreamWriter>> p) {
             Pub = p;
         }
 
         public void AddUser(IEnumerable<string> rooms, string nick) {
-            foreach(var room in rooms) {
-                RoomUsersList.AddOrUpdate(room,
-                    (arg) => {
-                        return new HashSet<string> { nick };
-                    },
-                    (key, val) => {
-                        val.Add(nick);
-                        return val;
-                    }
-                );
+            lock(roomUserListLock) {
+                foreach(var room in rooms) {
+                    RoomUsersList.AddOrUpdate(room,
+                        (arg) => {
+                            return new HashSet<string> { nick };
+                        },
+                        (key, val) => {
+                            val.Add(nick);
+                            return val;
+                        }
+                    );
+                }
             }
 
             AddUserToGlobalList(nick);
@@ -43,28 +49,30 @@ namespace webchat.Database {
         }
 
         private void AddUserToGlobalList(string nick) {
-            Users.Add(nick);
+            lock(usersLock) Users.Add(nick);
         }
         
         public void DelUser(IEnumerable<string> rooms, string nick) {
             HashSet<string> user_list;
 
-            foreach(var room in rooms) {
-                bool room_exists = RoomUsersList.TryGetValue(room, out user_list);
+            lock(roomUserListLock) {
+                foreach(var room in rooms) {
+                    bool room_exists = RoomUsersList.TryGetValue(room, out user_list);
 
-                if(room_exists) {
-                    user_list.Remove(nick);
+                    if(room_exists) {
+                        user_list.Remove(nick);
 
-                    if(0 == user_list.Count) {
-                        if(!RoomUsersList.TryRemove(room, out user_list)) {
-                            MvcApplication.Logger.Log(
-                                string.Format("Deleting key {0} from Db.RoomUsersList failed, giving up!", room),
-                                "ERROR"
-                            );
+                        if(0 == user_list.Count) {
+                            if(!RoomUsersList.TryRemove(room, out user_list)) {
+                                MvcApplication.Logger.Log(
+                                    string.Format("Deleting key {0} from Db.RoomUsersList failed, giving up!", room),
+                                    "ERROR"
+                                );
+                            }
                         }
-                    }
-                    else {
-                        RoomUsersList.AddOrUpdate(room, user_list, (key, val) => user_list);
+                        else {
+                            RoomUsersList.AddOrUpdate(room, user_list, (key, val) => user_list);
+                        }
                     }
                 }
             }
@@ -74,54 +82,58 @@ namespace webchat.Database {
         }
 
         public void DelUserFromGlobalList(string nick) {
-            Users.Remove(nick);
+            lock(usersLock) Users.Remove(nick);
         }
 
         public Dictionary<string, HashSet<string>> GetUsers() {
-            return RoomUsersList.ToDictionary(k => k.Key, k => k.Value);
+            lock(roomUserListLock) return RoomUsersList.ToDictionary(k => k.Key, k => k.Value);
         }
 
         public List<string> GetRooms() {
-            return RoomUsersList.Keys.ToList();
+            lock(roomUserListLock) return RoomUsersList.Keys.ToList();
         }
 
         public List<string> GetBackupRooms(string nick) {
-            return BackupRoomUsersList[nick];
+            lock(backupLock) return BackupRoomUsersList[nick];
         }
 
         public List<string> GetRooms(string nick) {
-            var users = from n in RoomUsersList where RoomUsersList[n.Key].Contains(nick) select n.Key;
+            lock(roomUserListLock) {
+                var users = from n in RoomUsersList where RoomUsersList[n.Key].Contains(nick) select n.Key;
 
-            return users.ToList();
+                return users.ToList();
+            }
         }
 
         public void Backup() {
-            foreach(var user in Users.ToList()) {
-                List<string> rooms = GetRooms(user);
+            lock(backupLock){
+                foreach(var user in Users.ToList()) {
+                    List<string> rooms = GetRooms(user);
 
-                if(BackupRoomUsersList.ContainsKey(user)){
-                    List<string> t;
-                    if(!BackupRoomUsersList.TryRemove(user, out t)) {
-                        MvcApplication.Logger.Log(string.Format("backup cleanup for {0} failed, giving up!", user),
-                            "ERROR");
+                    if(BackupRoomUsersList.ContainsKey(user)){
+                        List<string> t;
+                        if(!BackupRoomUsersList.TryRemove(user, out t)) {
+                            MvcApplication.Logger.Log(string.Format("backup cleanup for {0} failed, giving up!", user),
+                                "ERROR");
+                        }
                     }
-                }
 
-                if(BackupRoomUsersList.TryAdd(user, rooms)) {
-                    DelUser(rooms, user);
-                }
-                else {
-                    MvcApplication.Logger.Log(string.Format("Backup for {0} failed, giving up!", user), "ERROR");
+                    if(BackupRoomUsersList.TryAdd(user, rooms)) {
+                        DelUser(rooms, user);
+                    }
+                    else {
+                        MvcApplication.Logger.Log(string.Format("Backup for {0} failed, giving up!", user), "ERROR");
+                    }
                 }
             }
         }
 
         public bool IsPopulated() {
-            return Users.Count > 0;
+            lock(usersLock) return Users.Count > 0;
         }
 
         public bool IsUser(string nick) {
-            return Users.Contains(nick);
+            lock(usersLock) return Users.Contains(nick);
         }
     }
 }

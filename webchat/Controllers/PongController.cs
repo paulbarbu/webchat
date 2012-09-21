@@ -24,11 +24,8 @@ namespace webchat.Controllers
             }
 
             string nick = (string)Session["nick"];
-            
-            lock(Locker.locker) {
-                List<string> rooms = MvcApplication.db.GetBackupRooms(nick);
-                MvcApplication.db.AddUser(rooms, nick);
-            }
+            List<string> rooms = MvcApplication.db.GetBackupRooms(nick);
+            MvcApplication.db.AddUser(rooms, nick);
 
             return HttpStatusCode.OK;
         }

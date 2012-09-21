@@ -35,9 +35,7 @@ namespace webchat.Controllers
                     indexModel.Rooms[0] = Resources.Strings.DefaultRoom;
                 }
 
-                lock(Locker.locker) {
-                    MvcApplication.db.AddUser(indexModel.Rooms, indexModel.Nick);
-                }
+                MvcApplication.db.AddUser(indexModel.Rooms, indexModel.Nick);
                 
                 Session["nick"] = indexModel.Nick;
                 

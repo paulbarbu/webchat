@@ -30,12 +30,10 @@ namespace webchat.Controllers
                 return "";
             }
 
-            lock(Locker.locker) {
-                MvcApplication.db.AddUser(roomsModel.Rooms, (string)Session["nick"]);
-            }
+            MvcApplication.db.AddUser(roomsModel.Rooms, (string)Session["nick"]);
 
             roomsModel.Rooms.Clear();
-            lock(Locker.locker) roomsModel.Rooms.AddRange(MvcApplication.db.GetRooms((string)Session["nick"]));
+            roomsModel.Rooms.AddRange(MvcApplication.db.GetRooms((string)Session["nick"]));
 
             return JsonConvert.SerializeObject(roomsModel.Rooms);
         }
@@ -50,15 +48,14 @@ namespace webchat.Controllers
 
             List<string> currentRooms = new List<string> { leaveModel.Room };
 
-            lock(Locker.locker) {
-                MvcApplication.db.DelUser(currentRooms, (string)Session["nick"]);
-            }
+            MvcApplication.db.DelUser(currentRooms, (string)Session["nick"]);
+            
 
             currentRooms.Clear();
-            lock(Locker.locker) currentRooms.AddRange(MvcApplication.db.GetRooms((string)Session["nick"]));
+            currentRooms.AddRange(MvcApplication.db.GetRooms((string)Session["nick"]));
 
             if(0 == currentRooms.Count){
-                lock(Locker.locker) MvcApplication.db.DelUserFromGlobalList((string)Session["nick"]);
+                MvcApplication.db.DelUserFromGlobalList((string)Session["nick"]);
                 Session.Abandon();
                 Response.StatusCode = 404;
                 return "";

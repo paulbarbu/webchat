@@ -118,7 +118,6 @@
     <Compile Include="Database\Database.cs" />
     <Compile Include="Database\IDatabase.cs" />
     <Compile Include="Database\IPublisher.cs" />
-    <Compile Include="Database\Locker.cs" />
     <Compile Include="Database\Publisher.cs" />
     <Compile Include="Filters\AuthenticationFilterAttribute.cs" />
     <Compile Include="Global.asax.cs">
