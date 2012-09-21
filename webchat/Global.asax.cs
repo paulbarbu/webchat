@@ -17,6 +17,7 @@ namespace webchat {
     public class MvcApplication : System.Web.HttpApplication {
 
         public static IPublisher<ConcurrentQueue<StreamWriter>> pub = new Publisher();
+        public static IDatabase db = new Db(pub);
 
         protected void Application_Start() {
             AreaRegistration.RegisterAllAreas();

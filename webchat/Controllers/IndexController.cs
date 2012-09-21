@@ -36,10 +36,10 @@ namespace webchat.Controllers
                 }
 
                 lock(Locker.locker) {
-                    Db.AddUser(indexModel.Rooms, indexModel.Nick);
+                    MvcApplication.db.AddUser(indexModel.Rooms, indexModel.Nick);
 
                     MvcApplication.pub.Publish(Resources.Strings.UsersEventChannel,
-                        JsonConvert.SerializeObject(Db.GetUsers()));
+                        JsonConvert.SerializeObject(MvcApplication.db.GetUsers()));
                 }
                 
                 Session["nick"] = indexModel.Nick;

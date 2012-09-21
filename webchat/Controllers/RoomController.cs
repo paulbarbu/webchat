@@ -31,14 +31,14 @@ namespace webchat.Controllers
             }
 
             lock(Locker.locker) {
-                Db.AddUser(roomsModel.Rooms, (string)Session["nick"]);
+                MvcApplication.db.AddUser(roomsModel.Rooms, (string)Session["nick"]);
 
                 MvcApplication.pub.Publish(Resources.Strings.UsersEventChannel,
-                    JsonConvert.SerializeObject(Db.GetUsers()));
+                    JsonConvert.SerializeObject(MvcApplication.db.GetUsers()));
             }
 
             roomsModel.Rooms.Clear();
-            lock(Locker.locker) roomsModel.Rooms.AddRange(Db.GetRooms((string)Session["nick"]));
+            lock(Locker.locker) roomsModel.Rooms.AddRange(MvcApplication.db.GetRooms((string)Session["nick"]));
 
             return JsonConvert.SerializeObject(roomsModel.Rooms);
         }
@@ -54,17 +54,17 @@ namespace webchat.Controllers
             List<string> currentRooms = new List<string> { leaveModel.Room };
 
             lock(Locker.locker) {
-                Db.DelUser(currentRooms, (string)Session["nick"]);
+                MvcApplication.db.DelUser(currentRooms, (string)Session["nick"]);
 
                 MvcApplication.pub.Publish(Resources.Strings.UsersEventChannel,
-                    JsonConvert.SerializeObject(Db.GetUsers()));
+                    JsonConvert.SerializeObject(MvcApplication.db.GetUsers()));
             }
 
             currentRooms.Clear();
-            lock(Locker.locker) currentRooms.AddRange(Db.GetRooms((string)Session["nick"]));
+            lock(Locker.locker) currentRooms.AddRange(MvcApplication.db.GetRooms((string)Session["nick"]));
 
             if(0 == currentRooms.Count){
-                lock(Locker.locker) Db.DelUserFromGlobalList((string)Session["nick"]);
+                lock(Locker.locker) MvcApplication.db.DelUserFromGlobalList((string)Session["nick"]);
                 Session.Abandon();
                 Response.StatusCode = 404;
                 return "";

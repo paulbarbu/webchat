@@ -116,6 +116,7 @@
     <Compile Include="Controllers\PongController.cs" />
     <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Database\Database.cs" />
+    <Compile Include="Database\IDatabase.cs" />
     <Compile Include="Database\IPublisher.cs" />
     <Compile Include="Database\Locker.cs" />
     <Compile Include="Database\Publisher.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="Helpers\BindingHelpers.cs" />
     <Compile Include="Helpers\ErrorSummary.cs" />
     <Compile Include="Helpers\Logger.cs" />
+    <Compile Include="Models\ChatModel.cs" />
     <Compile Include="Models\IndexModel.cs" />
     <Compile Include="Models\RoomsModelBinder.cs" />
     <Compile Include="Models\LeaveModel.cs" />

@@ -1,21 +1,28 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using webchat.Helpers;
 
 namespace webchat.Database {
-    public static class Db {
-        private static readonly HashSet<string> Users = new HashSet<string>();
+    public class Db : IDatabase {
+        private readonly HashSet<string> Users = new HashSet<string>();
 
-        private static readonly ConcurrentDictionary<string, HashSet<string>> RoomUsersList = 
+        private readonly ConcurrentDictionary<string, HashSet<string>> RoomUsersList = 
             new ConcurrentDictionary<string, HashSet<string>>();
 
-        private static readonly ConcurrentDictionary<string, List<string>> BackupRoomUsersList =
+        private readonly ConcurrentDictionary<string, List<string>> BackupRoomUsersList =
             new ConcurrentDictionary<string, List<string>>();
 
-        public static void AddUser(IEnumerable<string> rooms, string nick) {
+        private IPublisher<ConcurrentQueue<StreamWriter>> pub;
+
+        public Db(IPublisher<ConcurrentQueue<StreamWriter>> p) {
+            pub = p;
+        }
+
+        public void AddUser(IEnumerable<string> rooms, string nick) {
             foreach(var room in rooms) {
                 RoomUsersList.AddOrUpdate(room,
                     (arg) => {
@@ -31,11 +38,11 @@ namespace webchat.Database {
             AddUserToGlobalList(nick);
         }
 
-        private static void AddUserToGlobalList(string nick) {
+        private void AddUserToGlobalList(string nick) {
             Users.Add(nick);
         }
         
-        public static void DelUser(IEnumerable<string> rooms, string nick) {
+        public void DelUser(IEnumerable<string> rooms, string nick) {
             HashSet<string> user_list;
 
             foreach(var room in rooms) {
@@ -57,29 +64,29 @@ namespace webchat.Database {
             }
         }
 
-        public static void DelUserFromGlobalList(string nick) {
+        public void DelUserFromGlobalList(string nick) {
             Users.Remove(nick);
         }
 
-        public static Dictionary<string, HashSet<string>> GetUsers() {
+        public Dictionary<string, HashSet<string>> GetUsers() {
             return RoomUsersList.ToDictionary(k => k.Key, k => k.Value);
         }
 
-        public static List<string> GetRooms() {
+        public List<string> GetRooms() {
             return RoomUsersList.Keys.ToList();
         }
 
-        public static List<string> GetBackupRooms(string nick) {
+        public List<string> GetBackupRooms(string nick) {
             return BackupRoomUsersList[nick];
         }
 
-        public static List<string> GetRooms(string nick) {
+        public List<string> GetRooms(string nick) {
             var users = from n in RoomUsersList where RoomUsersList[n.Key].Contains(nick) select n.Key;
 
             return users.ToList();
         }
 
-        public static void Backup() {
+        public void Backup() {
             foreach(var user in Users.ToList()) {
                 List<string> rooms = GetRooms(user);
 
@@ -99,11 +106,11 @@ namespace webchat.Database {
             }
         }
 
-        public static bool IsPopulated() {
+        public bool IsPopulated() {
             return Users.Count > 0;
         }
 
-        public static bool IsUser(string nick) {
+        public bool IsUser(string nick) {
             return Users.Contains(nick);
         }
     }

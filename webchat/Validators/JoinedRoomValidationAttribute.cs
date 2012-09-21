@@ -18,7 +18,7 @@ namespace webchat.Validators {
             List<string> rooms;
 
             lock(Locker.locker) {
-                rooms = Db.GetRooms((string)HttpContext.Current.Session["nick"]);
+                rooms = MvcApplication.db.GetRooms((string)HttpContext.Current.Session["nick"]);
             }
 
             string room = (string)value;

@@ -15,16 +15,24 @@ namespace webchat.Controllers
     public class ChatController : Controller
     {
         public ActionResult Index() {
-            lock(Locker.locker) return View(Db.GetRooms((string)Session["nick"]));
+            ChatModel model = new ChatModel();
+
+            lock(Locker.locker) {
+                model.Users = MvcApplication.db.GetUsers();
+                model.Rooms = MvcApplication.db.GetRooms((string)Session["nick"]);
+            }
+
+            return View(model);
         }
 
         public ActionResult Disconnect() {
             lock(Locker.locker) {
-                List<string> rooms = Db.GetRooms((string)Session["nick"]);
+                List<string> rooms = MvcApplication.db.GetRooms((string)Session["nick"]);
 
-                Db.DelUser(rooms, (string)Session["nick"]);
-                Db.DelUserFromGlobalList((string)Session["nick"]);
-                MvcApplication.pub.Publish(Resources.Strings.UsersEventChannel, JsonConvert.SerializeObject(Db.GetUsers()));
+                MvcApplication.db.DelUser(rooms, (string)Session["nick"]);
+                MvcApplication.db.DelUserFromGlobalList((string)Session["nick"]);
+                MvcApplication.pub.Publish(Resources.Strings.UsersEventChannel,
+                    JsonConvert.SerializeObject(MvcApplication.db.GetUsers()));
             }
 
             Session.Abandon();

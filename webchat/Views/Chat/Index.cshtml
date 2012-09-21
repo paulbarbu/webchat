@@ -1,5 +1,4 @@
 ﻿@using webchat.Helpers;
-@using webchat.Database;
 
 @if(!ViewData.ModelState.IsValid){
     var errors = ViewData.ModelState.Values.SelectMany(v => v.Errors).Select(t => t.ErrorMessage);
@@ -49,8 +48,8 @@
     };
      
     Data = {
-        users: JSON.parse('@Html.Raw(Json.Encode(Db.GetUsers()))'),
-        rooms: JSON.parse('@Html.Raw(Json.Encode(Model))'),
+        users: JSON.parse('@Html.Raw(Json.Encode(Model.Users))'),
+        rooms: JSON.parse('@Html.Raw(Json.Encode(Model.Rooms))'),
     };
 
     Actionbox = {
