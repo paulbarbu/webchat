@@ -31,8 +31,6 @@ namespace webchat.Controllers
 
                 MvcApplication.db.DelUser(rooms, (string)Session["nick"]);
                 MvcApplication.db.DelUserFromGlobalList((string)Session["nick"]);
-                MvcApplication.pub.Publish(Resources.Strings.UsersEventChannel,
-                    JsonConvert.SerializeObject(MvcApplication.db.GetUsers()));
             }
 
             Session.Abandon();

@@ -28,9 +28,6 @@ namespace webchat.Controllers
             lock(Locker.locker) {
                 List<string> rooms = MvcApplication.db.GetBackupRooms(nick);
                 MvcApplication.db.AddUser(rooms, nick);
-
-                MvcApplication.pub.Publish(Resources.Strings.UsersEventChannel,
-                    JsonConvert.SerializeObject(MvcApplication.db.GetUsers()));
             }
 
             return HttpStatusCode.OK;

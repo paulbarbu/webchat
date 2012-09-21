@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -16,10 +17,10 @@ namespace webchat.Database {
         private readonly ConcurrentDictionary<string, List<string>> BackupRoomUsersList =
             new ConcurrentDictionary<string, List<string>>();
 
-        private IPublisher<ConcurrentQueue<StreamWriter>> pub;
+        private IPublisher<ConcurrentQueue<StreamWriter>> Pub;
 
         public Db(IPublisher<ConcurrentQueue<StreamWriter>> p) {
-            pub = p;
+            Pub = p;
         }
 
         public void AddUser(IEnumerable<string> rooms, string nick) {
@@ -36,6 +37,9 @@ namespace webchat.Database {
             }
 
             AddUserToGlobalList(nick);
+
+            Pub.Publish(Resources.Strings.UsersEventChannel,
+                JsonConvert.SerializeObject(GetUsers()));
         }
 
         private void AddUserToGlobalList(string nick) {
@@ -62,6 +66,9 @@ namespace webchat.Database {
                     }
                 }
             }
+
+            Pub.Publish(Resources.Strings.UsersEventChannel,
+                JsonConvert.SerializeObject(GetUsers()));
         }
 
         public void DelUserFromGlobalList(string nick) {
