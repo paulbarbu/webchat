@@ -57,8 +57,10 @@ namespace webchat.Database {
 
                     if(0 == user_list.Count) {
                         if(!RoomUsersList.TryRemove(room, out user_list)) {
-                            Logger.Log(string.Format("Deleting key {0} from Db.RoomUsersList failed, giving up!", room),
-                                "ERROR");
+                            MvcApplication.Logger.Log(
+                                string.Format("Deleting key {0} from Db.RoomUsersList failed, giving up!", room),
+                                "ERROR"
+                            );
                         }
                     }
                     else {
@@ -100,7 +102,8 @@ namespace webchat.Database {
                 if(BackupRoomUsersList.ContainsKey(user)){
                     List<string> t;
                     if(!BackupRoomUsersList.TryRemove(user, out t)) {
-                        Logger.Log(string.Format("backup cleanup for {0} failed, giving up!", user), "ERROR");
+                        MvcApplication.Logger.Log(string.Format("backup cleanup for {0} failed, giving up!", user),
+                            "ERROR");
                     }
                 }
 
@@ -108,7 +111,7 @@ namespace webchat.Database {
                     DelUser(rooms, user);
                 }
                 else {
-                    Logger.Log(string.Format("Backup for {0} failed, giving up!", user), "ERROR");
+                    MvcApplication.Logger.Log(string.Format("Backup for {0} failed, giving up!", user), "ERROR");
                 }
             }
         }

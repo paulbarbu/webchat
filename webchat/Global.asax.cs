@@ -9,6 +9,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
 using webchat.Database;
+using webchat.Helpers;
 using webchat.Ping;
 
 namespace webchat {
@@ -18,6 +19,7 @@ namespace webchat {
 
         public static IPublisher<ConcurrentQueue<StreamWriter>> pub = new Publisher();
         public static IDatabase db = new Db(pub);
+        public static ILogger Logger = new Logger();
 
         protected void Application_Start() {
             AreaRegistration.RegisterAllAreas();

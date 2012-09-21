@@ -5,8 +5,8 @@ using System.Linq;
 using System.Web;
 
 namespace webchat.Helpers {
-    public static class Logger {
-        public static void Log(string message) {
+    public class Logger : ILogger{
+        public void Log(string message) {
             Trace.WriteLine(
                 string.Format("{0} - {1}", 
                     DateTime.Now.ToString(Resources.Strings.DateTimeFormat),
@@ -14,7 +14,7 @@ namespace webchat.Helpers {
             );
         }
 
-        public static void Log(string message, string category) {
+        public void Log(string message, string category) {
             Trace.WriteLine(
                 string.Format("{0} - {1}",
                     DateTime.Now.ToString(Resources.Strings.DateTimeFormat),
