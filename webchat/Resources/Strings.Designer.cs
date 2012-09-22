@@ -61,6 +61,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Toggle the actionbox.
+        /// </summary>
+        public static string ActionBoxTogglerTitle {
+            get {
+                return ResourceManager.GetString("ActionBoxTogglerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid captcha words, please try again!.
         /// </summary>
         public static string CaptchaError {
@@ -88,20 +97,20 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connect!.
+        /// </summary>
+        public static string ConnectButtonText {
+            get {
+                return ResourceManager.GetString("ConnectButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A database error occurred, please try again later!.
         /// </summary>
         public static string DatabaseError {
             get {
                 return ResourceManager.GetString("DatabaseError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to dd/MM/yyyy HH:mm:ss.
-        /// </summary>
-        public static string DateTimeFormat {
-            get {
-                return ResourceManager.GetString("DateTimeFormat", resourceCulture);
             }
         }
         
@@ -115,11 +124,38 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to global_user_list.
+        ///   Looks up a localized string similar to A connection error occured, please reconnect!.
         /// </summary>
-        public static string GlobalUserListKey {
+        public static string ErrorDialogContent {
             get {
-                return ResourceManager.GetString("GlobalUserListKey", resourceCulture);
+                return ResourceManager.GetString("ErrorDialogContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection error!.
+        /// </summary>
+        public static string ErrorDialogTitle {
+            get {
+                return ResourceManager.GetString("ErrorDialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Icons from {0}, licensed under {1}..
+        /// </summary>
+        public static string FooterText {
+            get {
+                return ResourceManager.GetString("FooterText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Join!.
+        /// </summary>
+        public static string JoinButtonText {
+            get {
+                return ResourceManager.GetString("JoinButtonText", resourceCulture);
             }
         }
         
@@ -151,24 +187,6 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to trace.log.
-        /// </summary>
-        public static string LogFile {
-            get {
-                return ResourceManager.GetString("LogFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to message.
-        /// </summary>
-        public static string MessagesEventChannel {
-            get {
-                return ResourceManager.GetString("MessagesEventChannel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Type your nickname here.
         /// </summary>
         public static string NickPlaceHolder {
@@ -178,11 +196,11 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ping.
+        ///   Looks up a localized string similar to Quit!.
         /// </summary>
-        public static string PingEventChannel {
+        public static string QuitButtonText {
             get {
-                return ResourceManager.GetString("PingEventChannel", resourceCulture);
+                return ResourceManager.GetString("QuitButtonText", resourceCulture);
             }
         }
         
@@ -205,11 +223,11 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to room_user_list.
+        ///   Looks up a localized string similar to Send!.
         /// </summary>
-        public static string RoomUserListKey {
+        public static string SendButtonText {
             get {
-                return ResourceManager.GetString("RoomUserListKey", resourceCulture);
+                return ResourceManager.GetString("SendButtonText", resourceCulture);
             }
         }
         
@@ -228,15 +246,6 @@ namespace Resources {
         public static string UniqueNickError {
             get {
                 return ResourceManager.GetString("UniqueNickError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to users.
-        /// </summary>
-        public static string UsersEventChannel {
-            get {
-                return ResourceManager.GetString("UsersEventChannel", resourceCulture);
             }
         }
     }

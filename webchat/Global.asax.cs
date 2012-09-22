@@ -28,7 +28,7 @@ namespace webchat {
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
-            Trace.Listeners.Add(new TextWriterTraceListener(Server.MapPath(Resources.Strings.LogFile)));
+            Trace.Listeners.Add(new TextWriterTraceListener(Server.MapPath(Resources.Internals.LogFile)));
             Trace.AutoFlush = true;
 
             Pinger p = new Pinger(); // start pinging users

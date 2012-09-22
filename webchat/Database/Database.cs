@@ -46,7 +46,7 @@ namespace webchat.Database {
 
             AddUserToGlobalList(nick);
 
-            Pub.Publish(Resources.Strings.UsersEventChannel,
+            Pub.Publish(Resources.Internals.UsersEventChannel,
                 JsonConvert.SerializeObject(GetUsers()));
         }
 
@@ -79,7 +79,7 @@ namespace webchat.Database {
                 }
             }
 
-            Pub.Publish(Resources.Strings.UsersEventChannel,
+            Pub.Publish(Resources.Internals.UsersEventChannel,
                 JsonConvert.SerializeObject(GetUsers()));
         }
 

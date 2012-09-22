@@ -117,67 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CaptchaError" xml:space="preserve">
-    <value>Invalid captcha words, please try again!</value>
+  <data name="DateTimeFormat" xml:space="preserve">
+    <value>dd/MM/yyyy HH:mm:ss</value>
   </data>
-  <data name="CharNickError" xml:space="preserve">
-    <value>Your nickname must be composed only of alphanumeric characters and underscores!</value>
+  <data name="LogFile" xml:space="preserve">
+    <value>trace.log</value>
   </data>
-  <data name="CharRoomsError" xml:space="preserve">
-    <value>Room names may be composed only of alphanumeric characters and underscores!</value>
+  <data name="MessagesEventChannel" xml:space="preserve">
+    <value>message</value>
   </data>
-  <data name="DatabaseError" xml:space="preserve">
-    <value>A database error occurred, please try again later!</value>
+  <data name="PingEventChannel" xml:space="preserve">
+    <value>ping</value>
   </data>
-  <data name="JoinRoomsHelpBlock" xml:space="preserve">
-    <value>Room names must be separated by spaces.</value>
-  </data>
-  <data name="JoinRoomsLabel" xml:space="preserve">
-    <value>Join rooms (separated by spaces)</value>
-  </data>
-  <data name="LengthNickError" xml:space="preserve">
-    <value>Your nickname must be at least 3 characters long!</value>
-  </data>
-  <data name="NickPlaceHolder" xml:space="preserve">
-    <value>Type your nickname here</value>
-  </data>
-  <data name="RequiredNickError" xml:space="preserve">
-    <value>Please provide a valid nickname in order to connect!</value>
-  </data>
-  <data name="RoomsPlaceHolder" xml:space="preserve">
-    <value>Join rooms</value>
-  </data>
-  <data name="UniqueNickError" xml:space="preserve">
-    <value>This nick is already in use!</value>
-  </data>
-  <data name="UnexpectedError" xml:space="preserve">
-    <value>An unexpected error occurred, please try again later!</value>
-  </data>
-  <data name="ActionBoxTogglerTitle" xml:space="preserve">
-    <value>Toggle the actionbox</value>
-  </data>
-  <data name="ConnectButtonText" xml:space="preserve">
-    <value>Connect!</value>
-  </data>
-  <data name="DefaultRoom" xml:space="preserve">
-    <value>default</value>
-  </data>
-  <data name="ErrorDialogContent" xml:space="preserve">
-    <value>A connection error occured, please reconnect!</value>
-  </data>
-  <data name="ErrorDialogTitle" xml:space="preserve">
-    <value>Connection error!</value>
-  </data>
-  <data name="FooterText" xml:space="preserve">
-    <value>Icons from {0}, licensed under {1}.</value>
-  </data>
-  <data name="JoinButtonText" xml:space="preserve">
-    <value>Join!</value>
-  </data>
-  <data name="QuitButtonText" xml:space="preserve">
-    <value>Quit!</value>
-  </data>
-  <data name="SendButtonText" xml:space="preserve">
-    <value>Send!</value>
+  <data name="UsersEventChannel" xml:space="preserve">
+    <value>users</value>
   </data>
 </root>

@@ -6,15 +6,15 @@
     return;
 }
 
-<div id="error-dialog" title="Connection error!" hidden="hidden">
-<p>A connection error occured, please reconnect!</p>
+<div id="error-dialog" title="@Resources.Strings.ErrorDialogTitle" hidden="hidden">
+<p>@Resources.Strings.ErrorDialogContent</p>
 </div>
 
 <div class="chat-window" id="chat">
 </div>
 
 <span class="pull-right actionbox-toolbar">
-    <a href="#" title="Toggle the actionbox">
+    <a href="#" title="@Resources.Strings.ActionBoxTogglerTitle">
         <i id='toggler' class="icon-resize-small"></i></a>&nbsp;
 </span>
 
@@ -23,17 +23,19 @@
         @Html.Label("text", (string)Session["nick"])
         @Html.TextArea("text", null, new { tabindex = 1 })
 
-        <input type="submit" class="btn btn-primary" tabindex="2" id="send" name="send" value="Send!"/>
+        <input type="submit" class="btn btn-primary" tabindex="2" id="send" name="send"
+            value="@Resources.Strings.SendButtonText"/>
         
         @Html.Label("join_rooms", Resources.Strings.JoinRoomsLabel)
         @Html.TextBox("join_rooms", null, new { tabindex = 3 })
 
-        <input id="join" name="join" tabindex="4" type="submit" value="Join!" />
+        <input id="join" name="join" tabindex="4" type="submit" value="@Resources.Strings.JoinButtonText" />
     }
 
     @using(Html.BeginForm("Disconnect", "Chat", FormMethod.Post)) {
         <br />
-        <input class="btn btn-danger" id="quit" name="quit" tabindex="5" type="submit" value="Quit!" />
+        <input class="btn btn-danger" id="quit" name="quit" tabindex="5" type="submit"
+            value="@Resources.Strings.QuitButtonText" />
     }
 </div>
 

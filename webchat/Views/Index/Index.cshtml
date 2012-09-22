@@ -23,7 +23,7 @@
     @Html.Raw(Html.GenerateCaptcha("captcha", "clean"))
     
     <br />
-    <input type="submit" name="submit" class="btn btn-primary" value="Connect!"/>
+    <input type="submit" name="submit" class="btn btn-primary" value="@Resources.Strings.ConnectButtonText"/>
 }
 
 @if(!ViewData.ModelState.IsValid){

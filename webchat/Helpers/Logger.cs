@@ -9,7 +9,7 @@ namespace webchat.Helpers {
         public void Log(string message) {
             Trace.WriteLine(
                 string.Format("{0} - {1}", 
-                    DateTime.Now.ToString(Resources.Strings.DateTimeFormat),
+                    DateTime.Now.ToString(Resources.Internals.DateTimeFormat),
                     message)
             );
         }
@@ -17,7 +17,7 @@ namespace webchat.Helpers {
         public void Log(string message, string category) {
             Trace.WriteLine(
                 string.Format("{0} - {1}",
-                    DateTime.Now.ToString(Resources.Strings.DateTimeFormat),
+                    DateTime.Now.ToString(Resources.Internals.DateTimeFormat),
                     message),
                 category
             );

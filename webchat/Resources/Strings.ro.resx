@@ -118,66 +118,66 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CaptchaError" xml:space="preserve">
-    <value>Invalid captcha words, please try again!</value>
+    <value>Cod de verificare invalid, vă rugăm reîncercați!</value>
   </data>
   <data name="CharNickError" xml:space="preserve">
-    <value>Your nickname must be composed only of alphanumeric characters and underscores!</value>
+    <value>Porecla poate fi compusă doar din caractere alfanumerice și _</value>
   </data>
   <data name="CharRoomsError" xml:space="preserve">
-    <value>Room names may be composed only of alphanumeric characters and underscores!</value>
+    <value>Numele canalelor poate fi compus doar din caractere alfanumerice și _</value>
   </data>
   <data name="DatabaseError" xml:space="preserve">
-    <value>A database error occurred, please try again later!</value>
+    <value>Baza de date nu poate fi accesată, vă rugăm reîncercați!</value>
   </data>
   <data name="JoinRoomsHelpBlock" xml:space="preserve">
-    <value>Room names must be separated by spaces.</value>
+    <value>Canalele trebuie separate prin spații.</value>
   </data>
   <data name="JoinRoomsLabel" xml:space="preserve">
-    <value>Join rooms (separated by spaces)</value>
+    <value>Intră pe canale (separate prin spații)</value>
   </data>
   <data name="LengthNickError" xml:space="preserve">
-    <value>Your nickname must be at least 3 characters long!</value>
+    <value>Porecla dvs. trebuie să aibă lungimea de cel putin trei caractere!</value>
   </data>
   <data name="NickPlaceHolder" xml:space="preserve">
-    <value>Type your nickname here</value>
+    <value>Porecla dvs. aici</value>
   </data>
   <data name="RequiredNickError" xml:space="preserve">
-    <value>Please provide a valid nickname in order to connect!</value>
+    <value>O porecla validă e necesară pentru conectare</value>
   </data>
   <data name="RoomsPlaceHolder" xml:space="preserve">
-    <value>Join rooms</value>
+    <value>Intră pe canale</value>
   </data>
   <data name="UniqueNickError" xml:space="preserve">
-    <value>This nick is already in use!</value>
+    <value>Aceasta poreclă este folosită!</value>
   </data>
   <data name="UnexpectedError" xml:space="preserve">
-    <value>An unexpected error occurred, please try again later!</value>
+    <value>Eroare neașteptată, vă rugăm reîncercați!</value>
   </data>
   <data name="ActionBoxTogglerTitle" xml:space="preserve">
-    <value>Toggle the actionbox</value>
+    <value>Comută bara de acțiuni</value>
   </data>
   <data name="ConnectButtonText" xml:space="preserve">
-    <value>Connect!</value>
+    <value>Conectează-te!</value>
   </data>
   <data name="DefaultRoom" xml:space="preserve">
-    <value>default</value>
+    <value>canal</value>
   </data>
   <data name="ErrorDialogContent" xml:space="preserve">
-    <value>A connection error occured, please reconnect!</value>
+    <value>Eroare de conexiune, vă rugăm să vă reconectați!</value>
   </data>
   <data name="ErrorDialogTitle" xml:space="preserve">
-    <value>Connection error!</value>
+    <value>Eroare de conexiune!</value>
   </data>
   <data name="FooterText" xml:space="preserve">
-    <value>Icons from {0}, licensed under {1}.</value>
+    <value>Iconițe oferite de {0}, licențiate sub {1}.</value>
   </data>
   <data name="JoinButtonText" xml:space="preserve">
-    <value>Join!</value>
+    <value>Intră pe canale!</value>
   </data>
   <data name="QuitButtonText" xml:space="preserve">
-    <value>Quit!</value>
+    <value>Deconectare!</value>
   </data>
   <data name="SendButtonText" xml:space="preserve">
-    <value>Send!</value>
+    <value>Trimite!</value>
   </data>
 </root>
