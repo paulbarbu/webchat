@@ -119,6 +119,13 @@ function display_rooms() {
             $('[name="join"]').effect("transfer", options, 700);
         }
     }
+
+    $('.nav.nav-tabs').sortable({        
+        containment: '.nav.nav-tabs',
+        revert: true,
+        placeholder: 'ui-effects-transfer',
+        forcePlaceholderSize: true,
+    });
 }
 
 /**
