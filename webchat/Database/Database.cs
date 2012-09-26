@@ -94,7 +94,7 @@ namespace webchat.Database {
         public List<string> GetRooms() {
             lock(roomUserListLock) return RoomUsersList.Keys.ToList();
         }
-
+        
         public List<string> GetBackupRooms(string nick) {
             lock(backupLock) return BackupRoomUsersList[nick];
         }
