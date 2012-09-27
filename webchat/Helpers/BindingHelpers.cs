@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 
 namespace webchat.Helpers {
-    public class BindingHelpers {
+    public class BindingHelper {
         /**
          * http://odetocode.com/blogs/scott/archive/2009/05/05/iterating-on-an-asp-net-mvc-model-binder.aspx
          */

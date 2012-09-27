@@ -9,9 +9,9 @@ namespace webchat.Filters {
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple=false, Inherited=true)]
     public class AuthenticationFilterAttribute : AuthorizeAttribute, IAuthorizationFilter {
 
-        public override void OnAuthorization(AuthorizationContext filterContext) {
-            if(null == filterContext.HttpContext.Session["nick"]) {
-                filterContext.Result = new RedirectToRouteResult(
+        public override void OnAuthorization(AuthorizationContext authorizationContext) {
+            if(null == authorizationContext.HttpContext.Session["nick"]) {
+                authorizationContext.Result = new RedirectToRouteResult(
                     new RouteValueDictionary(new {
                         action = "Index",
                         controller = "Index",

@@ -12,7 +12,7 @@ namespace webchat.Models {
             if(propertyDescriptor.Name == "Message") {
                 MessageModel model = (MessageModel)bindingContext.Model;
                     
-                model.Message = BindingHelpers.GetValue<string>(bindingContext, "message");
+                model.Message = BindingHelper.GetValue<string>(bindingContext, "message");
 
                 if(null == model.Message) {
                     model.Message = "";
