@@ -5,7 +5,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
-using webchat.Helpers;
+using webchat.Communication;
+using webchat.Logging;
 
 namespace webchat.Database {
     public class Db : IDatabase {

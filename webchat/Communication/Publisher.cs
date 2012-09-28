@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 
-namespace webchat.Database {
+namespace webchat.Communication {
     public class Publisher : IPublisher<ConcurrentQueue<StreamWriter>> {
         private const string eventPattern = "event: {0}\ndata: {1}\n\n";
 

@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web;
 
-namespace webchat.Helpers {
+namespace webchat.Logging {
     public class Logger : ILogger{
         public void Log(string message) {
             Trace.WriteLine(
