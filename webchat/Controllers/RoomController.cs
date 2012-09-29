@@ -12,10 +12,21 @@ using webchat.Validators;
 
 namespace webchat.Controllers
 {
-
+    /// <summary>
+    /// Handle the joning and leaving of rooms (channels)
+    /// </summary>
+    /// <remarks>In order to be able to join or leave rooms the user must be authenticated 
+    /// <seealso cref="AuthenticationFilterAttribute"/></remarks>
     [AuthenticationFilter]
     public class RoomController : Controller
     {
+        /// <summary>
+        /// Join a list of rooms
+        /// </summary>
+        /// <param name="roomsModel">The List of rooms to be joined</param>
+        /// <returns>Returns the user's currently joined rooms as JSON</returns>
+        /// <remarks>This may also return a localized error string if the room names are invalid 
+        /// <seealso cref="RoomsValidationAttribute"/></remarks>
         [HttpPost]
         [ValidateInput(false)]
         public string Join(RoomsModel roomsModel)
@@ -38,6 +49,15 @@ namespace webchat.Controllers
             return JsonConvert.SerializeObject(roomsModel.Rooms);
         }
 
+        /// <summary>
+        /// Leave a room
+        /// </summary>
+        /// <param name="leaveModel">The room to leave</param>
+        /// <returns>If the user is still connected on other rooms returns them as JSON 
+        /// or returns "" if the user left the only room he was connected to</returns>
+        /// <remarks>This may also return a localized error string if the user tries 
+        /// to leave a room he's not connected to 
+        /// <seealso cref="JoinedRoomValidationAttribute"/></remarks>
         [HttpPost]
         [ValidateInput(false)]
         public string Leave(LeaveModel leaveModel) {

@@ -15,7 +15,16 @@ using webchat.Helpers;
 
 namespace webchat.Controllers
 {
-    public class EventStreamController : ApiController {        
+    /// <summary>
+    /// Handle the Eventstream connections
+    /// </summary>
+    /// <remarks>The user cannot access this if he's not authenticated <seealso cref="AuthenticationFilterAttribute"/></remarks>
+    public class EventStreamController : ApiController {     
+        /// <summary>
+        /// Prepare the response headers for the EventStream
+        /// </summary>
+        /// <param name="request">The request from which the response will be generated</param>
+        /// <returns>Returns <see cref="HttpResponseMessage"/> whose content will be changed by <see cref="MvcApplication.Pub"/></returns>
         [AuthenticationFilter]
         public HttpResponseMessage Get(HttpRequestMessage request){
             HttpResponseMessage response = request.CreateResponse();
@@ -27,7 +36,13 @@ namespace webchat.Controllers
 
             return response;
         }
-        
+        /// <summary>
+        /// Registers the connection as a client to <see cref="MvcApplication.Pub"/>
+        /// </summary>
+        /// <param name="stream">The stream from which the StreamWriter will be created</param>
+        /// <param name="content"></param>
+        /// <param name="context"></param>
+        /// <remarks>This is a callback for <see cref="PushStreamContent"/></remarks>
         private void OnStreamAvailable(Stream stream, HttpContent content, TransportContext context) {
             StreamWriter streamWriter = new StreamWriter(stream);
             MvcApplication.Pub.Clients.Enqueue(streamWriter);

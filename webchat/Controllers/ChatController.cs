@@ -11,9 +11,18 @@ using webchat.Models;
 
 namespace webchat.Controllers
 {
+    /// <summary>
+    /// ChatController handles the main page of the appliaction
+    /// </summary>
+    /// <remarks>In order to enter the chat the user must be authenticated 
+    /// <seealso cref="AuthenticationFilterAttribute"/></remarks>
     [AuthenticationFilter]
     public class ChatController : Controller
     {
+        /// <summary>
+        /// Load the initial page where the user can send messages and join additional rooms
+        /// </summary>
+        /// <returns>Returns a <see cref="ChatModel"/></returns>
         public ActionResult Index() {
             ChatModel model = new ChatModel();
 
@@ -23,6 +32,10 @@ namespace webchat.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Log the user out
+        /// </summary>
+        /// <returns>Redirects the user to the <see cref="IndexController"/></returns>
         public ActionResult Disconnect() {
             List<string> rooms = MvcApplication.Db.GetRooms((string)Session["nick"]);
 

@@ -12,9 +12,21 @@ using webchat.Models;
 
 namespace webchat.Controllers
 {
+    /// <summary>
+    /// Handle the incoming messages
+    /// </summary>
+    /// <remarks>In order to send messages the user must be authenticated 
+    /// <seealso cref="AuthenticationFilterAttribute"/></remarks>
     [AuthenticationFilter]
     public class MessageController : Controller
     {
+        /// <summary>
+        /// Publish the message to every chat user on the corresponding channel
+        /// </summary>
+        /// <param name="m">The model which contains the intended message and channel
+        /// <seealso cref="MessageModel"/></param>
+        /// <returns>Returns a <seealso cref="HttpStatusCode"/> which represents 
+        /// whether the opperation was successful or not</returns>
         [HttpPost]
         [ValidateInput(false)]
         public HttpStatusCode Post(MessageModel m) {
