@@ -15,6 +15,7 @@ namespace webchat.Communication {
         /// A collection that holds the clients to whom messages will be published
         /// </summary>
         T Clients { get; }
+
         /// <summary>
         /// Define how to message is actually sent to the clients
         /// </summary>

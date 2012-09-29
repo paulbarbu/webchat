@@ -9,27 +9,68 @@ using webchat.Communication;
 using webchat.Logging;
 
 namespace webchat.Database {
+    /// <summary>
+    /// A concrete implementation for <see cref="IDatabase"/>
+    /// </summary>
     public class Db : IDatabase {
+        /// <summary>
+        /// The global user list, it;s global because it doesn't group users by room
+        /// </summary>
         private readonly HashSet<string> Users = new HashSet<string>();
 
+        /// <summary>
+        /// This is, in fact, the database where data is stored
+        /// </summary>
         private readonly ConcurrentDictionary<string, HashSet<string>> RoomUsersList = 
             new ConcurrentDictionary<string, HashSet<string>>();
 
+        /// <summary>
+        /// The backup used during PINGing the users
+        /// </summary>
         private readonly ConcurrentDictionary<string, List<string>> BackupRoomUsersList =
             new ConcurrentDictionary<string, List<string>>();
 
+        /// <summary>
+        /// An IPublisher object used to notify clients of modifications
+        /// </summary>
         private IPublisher<ConcurrentQueue<StreamWriter>> Pub;
+        
+        /// <summary>
+        /// An ILogger used to log errors
+        /// </summary>
         private ILogger Logger;
 
+        /// <summary>
+        /// Lock object used for the thread safety of the database
+        /// </summary>
         private readonly object roomUserListLock = new object();
+
+        /// <summary>
+        /// Lock object used for the thread safety of the global user list
+        /// </summary>
         private readonly object usersLock = new object();
+
+        /// <summary>
+        /// Lock object used for thread safety of the backup
+        /// </summary>
         private readonly object backupLock = new object();
 
+        /// <summary>
+        /// The Database's constructor
+        /// </summary>
+        /// <param name="p">A concrete implementation of an IPublisher</param>
+        /// <param name="l">A concrete implementation of an <see cref="ILogger"/></param>
         public Db(IPublisher<ConcurrentQueue<StreamWriter>> p, ILogger l) {
             Pub = p;
             Logger = l;
         }
 
+        /// <summary>
+        /// Add a user to the database
+        /// </summary>
+        /// <param name="rooms">Which rooms the user joined</param>
+        /// <param name="nick">The user's nickname</param>
+        /// <remarks>This also adds the user to <see cref="Users"/></remarks>
         public void AddUser(IEnumerable<string> rooms, string nick) {
             lock(roomUserListLock) {
                 foreach(var room in rooms) {
@@ -51,10 +92,20 @@ namespace webchat.Database {
                 JsonConvert.SerializeObject(GetUsers()));
         }
 
+        /// <summary>
+        /// Add a user tyo <see cref="Users"/>
+        /// </summary>
+        /// <param name="nick">The user's nickname</param>
         private void AddUserToGlobalList(string nick) {
             lock(usersLock) Users.Add(nick);
         }
         
+
+        /// <summary>
+        /// Delete a user from the database in case he leaves
+        /// </summary>
+        /// <param name="rooms">The rooms the user left</param>
+        /// <param name="nick">The user's nickname</param>
         public void DelUser(IEnumerable<string> rooms, string nick) {
             HashSet<string> user_list;
 
@@ -84,22 +135,36 @@ namespace webchat.Database {
                 JsonConvert.SerializeObject(GetUsers()));
         }
 
+        /// <summary>
+        /// Delete a user form the global list
+        /// </summary>
+        /// <param name="nick">The user's nickname</param>
         public void DelUserFromGlobalList(string nick) {
             lock(usersLock) Users.Remove(nick);
         }
 
+        /// <summary>
+        /// Get the users currently connected
+        /// </summary>
+        /// <returns>Returns a Dictionary&lt;string, HashSet&lt;string&gt;&gt;
+        /// of rooms as keys and user HashSet&lt;string&gt; as values</returns>
         public Dictionary<string, HashSet<string>> GetUsers() {
             lock(roomUserListLock) return RoomUsersList.ToDictionary(k => k.Key, k => k.Value);
         }
 
+        /// <summary>
+        /// Get all the rooms currently populated
+        /// </summary>
+        /// <returns>Returns a List&lt;string&gt; of rooms</returns>
         public List<string> GetRooms() {
             lock(roomUserListLock) return RoomUsersList.Keys.ToList();
         }
-        
-        public List<string> GetBackupRooms(string nick) {
-            lock(backupLock) return BackupRoomUsersList[nick];
-        }
 
+        /// <summary>
+        /// Get all the rooms currently joined by a user
+        /// </summary>
+        /// <param name="nick">The user's nickname</param>
+        /// <returns>Returns a List&lt;string&gt; of rooms</returns> 
         public List<string> GetRooms(string nick) {
             lock(roomUserListLock) {
                 var users = from n in RoomUsersList where RoomUsersList[n.Key].Contains(nick) select n.Key;
@@ -108,6 +173,18 @@ namespace webchat.Database {
             }
         }
 
+        /// <summary>
+        /// Get the rooms the user was connected to before the PING
+        /// </summary>
+        /// <param name="nick">The user's nickname</param>
+        /// <returns>Returns a List&lt;string&gt; of rooms</returns>
+        public List<string> GetBackupRooms(string nick) {
+            lock(backupLock) return BackupRoomUsersList[nick];
+        }
+        
+        /// <summary>
+        /// Do a backup of the database before sending a PING
+        /// </summary>
         public void Backup() {
             lock(backupLock){
                 foreach(var user in Users.ToList()) {
@@ -131,10 +208,19 @@ namespace webchat.Database {
             }
         }
 
+        /// <summary>
+        /// Check if there are users connected
+        /// </summary>
+        /// <returns>Returns true if there is at least one user, else returns false</returns>
         public bool IsPopulated() {
             lock(usersLock) return Users.Count > 0;
         }
 
+        /// <summary>
+        /// Check if a user is connected on at least a room
+        /// </summary>
+        /// <param name="nick">The user's nickname</param>
+        /// <returns>Return true if the user is connected, else false</returns>
         public bool IsUser(string nick) {
             lock(usersLock) return Users.Contains(nick);
         }

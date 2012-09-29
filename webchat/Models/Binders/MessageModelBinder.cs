@@ -1,13 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using webchat.Helpers;
 
 namespace webchat.Models.Binders {
+    /// <summary>
+    /// Binder for user sent messages
+    /// </summary>
     public class MessageModelBinder : DefaultModelBinder {
-        protected override void BindProperty(ControllerContext controllerContext, ModelBindingContext bindingContext, System.ComponentModel.PropertyDescriptor propertyDescriptor) {
+        /// <summary>
+        /// Overridden method to customly bind a string by trimming and escaping it
+        /// </summary>
+        /// <param name="controllerContext"></param>
+        /// <param name="bindingContext"></param>
+        /// <param name="propertyDescriptor"></param>
+        protected override void BindProperty(ControllerContext controllerContext, ModelBindingContext bindingContext, PropertyDescriptor propertyDescriptor) {
 
             if(propertyDescriptor.Name == "Message") {
                 MessageModel model = (MessageModel)bindingContext.Model;

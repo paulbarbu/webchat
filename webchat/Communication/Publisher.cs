@@ -7,7 +7,7 @@ using System.Web;
 
 namespace webchat.Communication {
     /// <summary>
-    /// Concrete implementation of <see cref="IPublisher"/>
+    /// Concrete implementation of IPublisher
     /// </summary>
     public class Publisher : IPublisher<ConcurrentQueue<StreamWriter>> {
         /// <summary>

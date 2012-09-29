@@ -6,11 +6,30 @@ using System.Web.Mvc;
 using System.Web.Routing;
 
 namespace webchat.Helpers {
+    /// <summary>
+    /// Helper to display errors
+    /// </summary>
     public static class ErrorSummaryHelper {
+        /// <summary>
+        /// Display errors using some default settings
+        /// </summary>
+        /// <param name="helper">The helper object</param>
+        /// <param name="id">The element's ID attribute</param>
+        /// <param name="errors">A list of string errors to be displayed</param>
+        /// <returns>Returns an <see cref="IHtmlString"/> containing the element's code</returns>
         public static IHtmlString ErrorSummary(this HtmlHelper helper, string id, List<string> errors) {
             return ErrorSummary(helper, id, errors, null, null);
         }
 
+        /// <summary>
+        /// Display errors using custom settings
+        /// </summary>
+        /// <param name="helper">The helper object</param>
+        /// <param name="id">The element's ID attribute</param>
+        /// <param name="errors">A list of string errors to be displayed</param>
+        /// <param name="outerHtmlAttributes">An annonymous object containing the outer's element attributes</param>
+        /// <param name="innertHtmlAttributes">An annonymous object containing the inner's element attributes</param>
+        /// <returns>Returns an <see cref="IHtmlString"/> containing the element's code</returns>
         public static IHtmlString ErrorSummary(this HtmlHelper helper, string id, List<string> errors,
             object outerHtmlAttributes, object innertHtmlAttributes) {
             

@@ -6,7 +6,14 @@ using System.Web.Mvc;
 using System.Web.Routing;
 
 namespace webchat {
+    /// <summary>
+    /// 
+    /// </summary>
     public class RouteConfig {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="routes"></param>
         public static void RegisterRoutes(RouteCollection routes) {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 

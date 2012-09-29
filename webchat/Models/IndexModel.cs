@@ -7,7 +7,13 @@ using webchat.Validators;
 using System.Web.Mvc;
 
 namespace webchat.Models {
+    /// <summary>
+    /// Model for the IndexController
+    /// </summary>
     public class IndexModel : RoomsModel {
+        /// <summary>
+        /// The user's nickname
+        /// </summary>
         [Required(ErrorMessageResourceName = "RequiredNickError",
             ErrorMessageResourceType=typeof(Resources.Strings))]
         [StringLength(30, MinimumLength = 3, ErrorMessageResourceName = "LengthNickError",
