@@ -24,7 +24,7 @@ namespace webchat.Validators {
         /// </summary>
         /// <param name="value">A List&lt;string&gt; of rooms to be checked</param>
         /// <returns>Returns true if all rooms are valid, else false</returns>
-        /// <remarks>A room name is considered valid if it matches the regex: ^[\w]+$</remarks>
+        /// <remarks>A room name is considered valid if it matches the regex: <c>^[\\w]+$</c></remarks>
         public override bool IsValid(object value) {
             List<string> rooms = (List<string>)value;
             

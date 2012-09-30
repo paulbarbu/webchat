@@ -7,7 +7,7 @@ using System.Web;
 
 namespace webchat.Communication {
     /// <summary>
-    /// Concrete implementation of IPublisher
+    /// Concrete implementation of <see cref="IPublisher<T>"/>
     /// </summary>
     public class Publisher : IPublisher<ConcurrentQueue<StreamWriter>> {
         /// <summary>
@@ -21,7 +21,8 @@ namespace webchat.Communication {
         private readonly ConcurrentQueue<StreamWriter> clients = new ConcurrentQueue<StreamWriter>();
 
         /// <summary>
-        /// Publish a certain message on a certain channel to all clients stored in <see cref="clients"/>
+        /// Publish a certain message on a certain channel to all clients by using the stream set up in 
+        /// <see cref="Controllers.EventStreamController"/>
         /// </summary>
         /// <param name="channel">The channel to publish messages on, this may be used for categorizing messages</param>
         /// <param name="message">The message to be sent to every client</param>
@@ -34,7 +35,7 @@ namespace webchat.Communication {
         }
 
         /// <summary>
-        /// The access to the private <see cref="clients"/> attribute is made through this getter
+        /// Get a list of all connected clients
         /// </summary>
         public ConcurrentQueue<StreamWriter> Clients {
             get { return clients; }

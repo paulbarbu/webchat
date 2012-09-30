@@ -12,17 +12,17 @@ using webchat.Models;
 namespace webchat.Controllers
 {
     /// <summary>
-    /// ChatController handles the main page of the appliaction
+    /// Handles the main page of the appliaction
     /// </summary>
     /// <remarks>In order to enter the chat the user must be authenticated 
-    /// <seealso cref="AuthenticationFilterAttribute"/></remarks>
+    /// <seealso cref="Filters.AuthenticationFilterAttribute"/></remarks>
     [AuthenticationFilter]
     public class ChatController : Controller
     {
         /// <summary>
         /// Load the initial page where the user can send messages and join additional rooms
         /// </summary>
-        /// <returns>Returns a <see cref="ChatModel"/></returns>
+        /// <returns>Returns a <see cref="Models.ChatModel"/></returns>
         public ActionResult Index() {
             ChatModel model = new ChatModel();
 

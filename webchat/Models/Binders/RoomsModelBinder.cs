@@ -7,7 +7,7 @@ using webchat.Helpers;
 
 namespace webchat.Models.Binders {
     /// <summary>
-    /// Binder for rooms
+    /// Binder for <see cref="RoomsModel"/>
     /// </summary>
     public class RoomsModelBinder : DefaultModelBinder {
         /// <summary>

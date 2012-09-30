@@ -22,17 +22,17 @@ namespace webchat {
     public class MvcApplication : System.Web.HttpApplication {
 
         /// <summary>
-        /// A singleton of a <see cref="Publisher"/> to use throughout the application
+        /// A singleton of a <see cref="Communication.IPublisher<T>"/> to use throughout the application
         /// </summary>
         public static IPublisher<ConcurrentQueue<StreamWriter>> Pub = new Publisher();
 
         /// <summary>
-        /// A singleton of an <see cref="ILogger"/> to use throughout the application
+        /// A singleton of an <see cref="Logging.ILogger"/> to use throughout the application
         /// </summary>
         public static ILogger Logger = new Logger();
 
         /// <summary>
-        /// A singleton of an <see cref="IDatabase"/> to use throughout the application
+        /// A singleton of an <see cref="Database.IDatabase"/> to use throughout the application
         /// </summary>
         public static IDatabase Db = new Db(Pub, Logger);
 

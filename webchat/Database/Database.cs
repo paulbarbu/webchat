@@ -10,7 +10,7 @@ using webchat.Logging;
 
 namespace webchat.Database {
     /// <summary>
-    /// A concrete implementation for <see cref="IDatabase"/>
+    /// A concrete implementation of <see cref="IDatabase"/>
     /// </summary>
     public class Db : IDatabase {
         /// <summary>
@@ -58,8 +58,8 @@ namespace webchat.Database {
         /// <summary>
         /// The Database's constructor
         /// </summary>
-        /// <param name="p">A concrete implementation of an IPublisher</param>
-        /// <param name="l">A concrete implementation of an <see cref="ILogger"/></param>
+        /// <param name="p">A concrete implementation of an <see cref="Communication.IPublisher<T>"/></param>
+        /// <param name="l">A concrete implementation of an <see cref="Logging.ILogger"/></param>
         public Db(IPublisher<ConcurrentQueue<StreamWriter>> p, ILogger l) {
             Pub = p;
             Logger = l;
@@ -70,7 +70,6 @@ namespace webchat.Database {
         /// </summary>
         /// <param name="rooms">Which rooms the user joined</param>
         /// <param name="nick">The user's nickname</param>
-        /// <remarks>This also adds the user to <see cref="Users"/></remarks>
         public void AddUser(IEnumerable<string> rooms, string nick) {
             lock(roomUserListLock) {
                 foreach(var room in rooms) {
@@ -147,7 +146,7 @@ namespace webchat.Database {
         /// Get the users currently connected
         /// </summary>
         /// <returns>Returns a Dictionary&lt;string, HashSet&lt;string&gt;&gt;
-        /// of rooms as keys and user HashSet&lt;string&gt; as values</returns>
+        /// of rooms as keys and users as values for the HastSet&lt;string&gt;</returns>
         public Dictionary<string, HashSet<string>> GetUsers() {
             lock(roomUserListLock) return RoomUsersList.ToDictionary(k => k.Key, k => k.Value);
         }

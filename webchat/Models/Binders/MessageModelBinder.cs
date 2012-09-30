@@ -8,7 +8,7 @@ using webchat.Helpers;
 
 namespace webchat.Models.Binders {
     /// <summary>
-    /// Binder for user sent messages
+    /// Binder for <see cref="MessageModel"/>
     /// </summary>
     public class MessageModelBinder : DefaultModelBinder {
         /// <summary>

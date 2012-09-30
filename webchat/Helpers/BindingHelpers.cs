@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace webchat.Helpers {
     /// <summary>
-    /// Binding helpers used in the Models.Binders
+    /// Binding helpers used by Models.Binders
     /// </summary>
     public class BindingHelper {
         /// <summary>

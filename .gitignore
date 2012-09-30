@@ -1,3 +1,5 @@
+docs/html
+docs/latex
 src/data/*
 *.pyc
 webchat-vhost.conf

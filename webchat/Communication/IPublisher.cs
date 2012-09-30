@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace webchat.Communication {
     /// <summary>
-    /// The Publisher interface used for defining publishing behaviour
+    /// Defines behaviour of publisher classes
     /// </summary>
     /// <typeparam name="T">The type of the Clients property 
     /// that the class implementing this interface will hold</typeparam>
@@ -17,7 +17,7 @@ namespace webchat.Communication {
         T Clients { get; }
 
         /// <summary>
-        /// Define how to message is actually sent to the clients
+        /// Define how the message is actually sent to the clients
         /// </summary>
         /// <param name="channel">The channel to publish messages on, this may be used for categorizing messages</param>
         /// <param name="message">The message to be sent to every client</param>

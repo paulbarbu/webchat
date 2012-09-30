@@ -8,7 +8,8 @@ using webchat.Validators;
 
 namespace webchat.Models {
     /// <summary>
-    /// Model used by IndexController and RoomController for joining rooms
+    /// Model used by <see cref="Controllers.IndexController"/> and 
+    /// <see cref="Controllers.RoomController"/> for joining rooms
     /// </summary>
     [ModelBinder(typeof(RoomsModelBinder))]
     public class RoomsModel {

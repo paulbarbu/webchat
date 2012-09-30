@@ -7,7 +7,7 @@ using System.Web.Routing;
 
 namespace webchat.Filters {
     /// <summary>
-    /// AuthorizationFilter used to check whether the user logged in or not
+    /// Checks whether the user is logged in or not
     /// </summary>
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple=false, Inherited=true)]
     public class AuthenticationFilterAttribute : AuthorizeAttribute, IAuthorizationFilter {

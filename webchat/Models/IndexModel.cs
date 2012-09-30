@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace webchat.Models {
     /// <summary>
-    /// Model for the IndexController
+    /// Model for the <see cref="Controllers.IndexController"/>
     /// </summary>
     public class IndexModel : RoomsModel {
         /// <summary>

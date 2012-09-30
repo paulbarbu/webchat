@@ -17,7 +17,7 @@ namespace webchat.Ping {
         private Timer timer;
 
         /// <summary>
-        /// Pinger's constructor
+        /// The constructor
         /// </summary>
         /// <param name="i">The time interval between two PINGs</param>
         public Pinger(int i = 60000) {
@@ -28,7 +28,7 @@ namespace webchat.Ping {
 
         /// <summary>
         /// Send the PING by using the <see cref="MvcApplication.Pub"/> and 
-        /// logging the action using <see cref="MvcApplication.Logger"/>
+        /// log the action using <see cref="MvcApplication.Logger"/>
         /// 
         /// The backup is done by <see cref="MvcApplication.Db"/>
         /// </summary>

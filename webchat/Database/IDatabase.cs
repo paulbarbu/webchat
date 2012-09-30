@@ -33,7 +33,7 @@ namespace webchat.Database {
         /// Get the users currently connected
         /// </summary>
         /// <returns>Returns a Dictionary&lt;string, HashSet&lt;string&gt;&gt;
-        /// of rooms as keys and user HashSet&lt;string&gt; as values</returns>
+        /// of rooms as keys and users as values for the HastSet&lt;string&gt;</returns>
         Dictionary<string, HashSet<string>> GetUsers();
 
         /// <summary>

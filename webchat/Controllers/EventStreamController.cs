@@ -16,9 +16,10 @@ using webchat.Helpers;
 namespace webchat.Controllers
 {
     /// <summary>
-    /// Handle the Eventstream connections
+    /// Handle the EventStream connections
     /// </summary>
-    /// <remarks>The user cannot access this if he's not authenticated <seealso cref="AuthenticationFilterAttribute"/></remarks>
+    /// <remarks>The user cannot access this if he's not authenticated 
+    /// <seealso cref="Filters.AuthenticationFilterAttribute"/></remarks>
     public class EventStreamController : ApiController {     
         /// <summary>
         /// Prepare the response headers for the EventStream

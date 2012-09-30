@@ -9,7 +9,7 @@ using webchat.Validators;
 
 namespace webchat.Models {
     /// <summary>
-    /// Model used by MessageController
+    /// Model used by <see cref="Controllers.MessageController"/>
     /// </summary>
     [ModelBinder(typeof(MessageModelBinder))]
     public class MessageModel {

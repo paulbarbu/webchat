@@ -7,7 +7,7 @@ using webchat.Validators;
 
 namespace webchat.Models {
     /// <summary>
-    /// Model used by RoomController when the user leaves rooms
+    /// Model used by <see cref="Controllers.RoomController"/> when the user leaves rooms
     /// </summary>
     public class LeaveModel {
         /// <summary>

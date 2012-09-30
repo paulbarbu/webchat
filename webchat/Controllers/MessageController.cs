@@ -16,7 +16,7 @@ namespace webchat.Controllers
     /// Handle the incoming messages
     /// </summary>
     /// <remarks>In order to send messages the user must be authenticated 
-    /// <seealso cref="AuthenticationFilterAttribute"/></remarks>
+    /// <seealso cref="Filters.AuthenticationFilterAttribute"/></remarks>
     [AuthenticationFilter]
     public class MessageController : Controller
     {
@@ -24,8 +24,8 @@ namespace webchat.Controllers
         /// Publish the message to every chat user on the corresponding channel
         /// </summary>
         /// <param name="m">The model which contains the intended message and channel
-        /// <seealso cref="MessageModel"/></param>
-        /// <returns>Returns a <seealso cref="HttpStatusCode"/> which represents 
+        /// <seealso cref="Models.MessageModel"/></param>
+        /// <returns>Returns a HttpStatusCode which represents 
         /// whether the opperation was successful or not</returns>
         [HttpPost]
         [ValidateInput(false)]

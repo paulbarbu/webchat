@@ -15,6 +15,7 @@ namespace webchat.Controllers
     /// <summary>
     /// The controller that handles the authentication page
     /// </summary>
+    /// <remarks><seealso cref="Filters.AuthenticationFilterAttribute"/></remarks>
     public class IndexController : Controller
     {
         /// <summary>
@@ -35,7 +36,7 @@ namespace webchat.Controllers
         /// <param name="indexModel">The model that has the user's data binded to</param>
         /// <param name="captchaValid">Whether the captcha is valid or not</param>
         /// <param name="captchaErrorMessage">If the user failed to provide a valid captcha this holds the reason</param>
-        /// <returns>Returns an <see cref="IndexModel"/> populated with data 
+        /// <returns>Returns an <see cref="Models.IndexModel"/> populated with data 
         /// if the user submitted invalid data or redirects the user to the chat if he logged in</returns>
         /// <remarks>This also handles the CSRF token which prevents an attacker to submit the form remotely.
         /// If the user doesn't provide some rooms to join, he's automatically connected to a default one</remarks>

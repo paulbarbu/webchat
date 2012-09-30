@@ -17,14 +17,14 @@ namespace webchat.Controllers
     /// Handles the PONG part of the PING PONG protocol
     /// </summary>
     /// <remarks>In order to be able to respond to pings the user must be authenticated 
-    /// <seealso cref="AuthenticationFilterAttribute"/></remarks>
+    /// <seealso cref="Filters.AuthenticationFilterAttribute"/></remarks>
     [AuthenticationFilter]
     public class PongController : Controller
     {
         /// <summary>
         /// Restore the user's state in the application if he has an active connection to it
         /// </summary>
-        /// <returns>Returns a <seealso cref="HttpStatusCode"/> which represents 
+        /// <returns>Returns a HttpStatusCode which represents 
         /// whether the opperation was successful or not</returns>
         [HttpPost]
         public HttpStatusCode Index()
