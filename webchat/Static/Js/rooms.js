@@ -66,7 +66,7 @@ function display_rooms() {
 
         $('#chat').append(
             $('<div>').attr({ class: 'row-fluid' }).append(
-                $('<div>').attr({ class: 'tab-content span11', id: 'content' }).append(
+                $('<div>').attr({ class: 'tab-content', id: 'content' }).append(
                     $('<div>').attr({
                         class: 'tab-pane active',
                         id: display_rooms[0],

@@ -19,6 +19,8 @@ body{
 
 #content{
     overflow-y: auto;
+    width: 90%;
+    float: left;
 }
 
 #user-list{
@@ -27,6 +29,8 @@ body{
     border-left: 2px solid #DDD;
     padding-left: 5px;
     margin-left: 5px;
+    float: right;
+    position: relative;
 }
 
 .actionbox-toolbar{
