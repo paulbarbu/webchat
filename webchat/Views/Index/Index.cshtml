@@ -30,3 +30,8 @@
     var errors = ViewData.ModelState.Values.SelectMany(v => v.Errors).Select(t => t.ErrorMessage);
     @Html.ErrorSummary("form-errors", errors.ToList(), null, new { @class = "alert alert-error" })
 }
+
+<script type="text/javascript" src="@Url.Content("~/Static/Js/helpers.js")"></script>
+<script type="text/javascript">
+    set_spacing();
+</script>

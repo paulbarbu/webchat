@@ -11,6 +11,8 @@ function load_chat(){
     stream.addEventListener('users', handle_event_users);
     stream.addEventListener('ping', handle_event_ping);
 
+    set_spacing();
+
     display_rooms();
     display_users($('.tab-pane.active').attr('id'));
     $('#text').attr('data-provide', 'typeahead');

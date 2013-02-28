@@ -211,3 +211,28 @@ function handle_tab_show(e) {
 function handle_event_ping(e) {
     $.post(Url.PongEvent, 'PONG!');
 }
+
+/**
+ * Set the spacing according to the device's resolution
+ * More specifically: when on mobile phones, remove some spacing
+ */
+function set_spacing() {
+    if (window.screen.availHeight < 600 && window.screen.availWidth < 600) {
+        $('body').css('margin', '0px 0px 0px 0px');
+        $('.nav.nav-tabs').css('margin', '0px 0px 0px 0px');
+        $('#user-list').css('padding', '0px');
+        $('#user-list').css('margin', '1px');
+        $('label[for=text]').css('margin-bottom', '0px');
+        $('#text').css('margin-bottom', '0px');
+        $('#join_rooms').css('margin-bottom', '0px');
+        $('.well').css('margin-bottom', '0px');
+        $('.help-block').css('margin-bottom', '0px');
+
+        if(document.URL.indexOf('Chat') == -1 ){
+            $('#rooms').css('margin-bottom', '0px');
+            $('#nick').css('margin-bottom', '0px');
+            $('form').css('margin', '0px 0px 0px 0px');
+            $('br')[1].remove()
+        }
+    }
+}
