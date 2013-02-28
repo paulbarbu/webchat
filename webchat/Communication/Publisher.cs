@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting;
 using System.Web;
 
 namespace webchat.Communication {
@@ -30,7 +31,12 @@ namespace webchat.Communication {
             //no need of locking because I use a ConcurrentQueue that I don't modify
             foreach(var subscriber in clients) {
                 subscriber.Write(eventPattern, channel, message);
-                subscriber.Flush();
+                try {
+                    subscriber.Flush();
+                }
+                catch(RemotingException e) {
+                    MvcApplication.Logger.Log(e.ToString(), "EXCEPTION");
+                }
             }
         }
 
