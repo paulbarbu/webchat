@@ -203,7 +203,7 @@ function leave_room(room, active_room) {
             Data.rooms = JSON.parse(e);
             display_users($('.active').children().attr('href').slice(1));
             $('#text').focus();
-            update_typeahead();
+            update_typeahead('#text', Data.users[$('.tab-pane.active').attr('id')]);
         });
 }
 
@@ -213,10 +213,7 @@ function leave_room(room, active_room) {
 function handle_event_rooms(e) {
     var data = JSON.parse(e.data);
     Data.all_rooms = data;
-
-    var autocomplete = $('#join_rooms').typeahead();
-
-    autocomplete.data('typeahead').source = data;
+    update_typeahead('#join_rooms', Data.all_rooms);
 
     console.log(data);
 }

@@ -24,5 +24,5 @@ function handle_event_users(e) {
 
     current_room = $('.tab-pane.active').attr('id');
     display_users(current_room);
-    update_typeahead();
+    update_typeahead('#text', Data.users[$('.tab-pane.active').attr('id')]);
 }

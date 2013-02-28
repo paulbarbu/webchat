@@ -142,7 +142,6 @@ function adjust_blocks() {
 /**
  * Callback for handling SSE errors
  */
-
 function handle_event_error(e) {
     if (e.readyState != EventSource.CLOSED) {
         this.close(); //here, `this` refers to `stream`
@@ -172,14 +171,16 @@ function toggle_actionbox() {
 
 
 /**
- * Update the data-source for typeahead with the users on the current room
+ * Update the data-source for typeahead 
  *
- * This should be called if the user changes rooms
+ * @param string id any valid jQuery identifier 
+ * @param object data any valid object that will be used as a source for the typeahead
+ * (for example an array)
  */
-function update_typeahead() {
-    var autocomplete = $('#text').typeahead();
+function update_typeahead(id, data) {
+    var autocomplete = $(id).typeahead();
 
-    autocomplete.data('typeahead').source = Data.users[$('.tab-pane.active').attr('id')];
+    autocomplete.data('typeahead').source = data;
 }
 
 /**
@@ -188,7 +189,7 @@ function update_typeahead() {
 function handle_tab_shown(e) {
     handle_update_scrollbar();
     $('#text').focus();
-    update_typeahead();
+    update_typeahead('#text', Data.users[$('.tab-pane.active').attr('id')]);
 }
 
 /**

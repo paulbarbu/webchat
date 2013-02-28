@@ -55,7 +55,7 @@
     Data = {
         users: JSON.parse('@Html.Raw(Json.Encode(Model.Users))'),
         rooms: JSON.parse('@Html.Raw(Json.Encode(Model.Rooms))'),
-        all_rooms: new Array(),
+        all_rooms: JSON.parse('@Html.Raw(Json.Encode(Model.AllRooms))'),
     };
 
     Actionbox = {

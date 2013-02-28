@@ -21,7 +21,8 @@ function load_chat(){
     $('#join_rooms').attr('data-provide', 'typeahead');
 
     $('#text').focus();
-    update_typeahead();
+    update_typeahead('#text', Data.users[$('.tab-pane.active').attr('id')]);
+    update_typeahead('#join_rooms', Data.all_rooms);
 }
 
 /**
