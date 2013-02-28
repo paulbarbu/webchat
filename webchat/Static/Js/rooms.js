@@ -214,6 +214,4 @@ function handle_event_rooms(e) {
     var data = JSON.parse(e.data);
     Data.all_rooms = data;
     update_typeahead('#join_rooms', Data.all_rooms);
-
-    console.log(data);
 }

@@ -173,7 +173,7 @@ $(document).keydown(function (e) {
     var end_pos = $('#text').caret().end;
     var len = $('#text').val().length;
     var message = $('#text').val();
-
+    
     if ('text' == e.target.id &&
        (0 == start_pos && 0 == end_pos || len == start_pos && len == end_pos)) {
 
