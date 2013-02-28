@@ -206,3 +206,17 @@ function leave_room(room, active_room) {
             update_typeahead();
         });
 }
+
+/**
+ * Update the typeahead when the rooms that users are connected to change
+ */
+function handle_event_rooms(e) {
+    var data = JSON.parse(e.data);
+    Data.all_rooms = data;
+
+    var autocomplete = $('#join_rooms').typeahead();
+
+    autocomplete.data('typeahead').source = data;
+
+    console.log(data);
+}

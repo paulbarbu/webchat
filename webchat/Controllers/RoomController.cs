@@ -46,6 +46,9 @@ namespace webchat.Controllers
             roomsModel.Rooms.Clear();
             roomsModel.Rooms.AddRange(MvcApplication.Db.GetRooms((string)Session["nick"]));
 
+            MvcApplication.Pub.Publish(Resources.Internals.RoomsEventChannel,
+                JsonConvert.SerializeObject(MvcApplication.Db.GetRooms()));
+
             return JsonConvert.SerializeObject(roomsModel.Rooms);
         }
 
@@ -73,6 +76,9 @@ namespace webchat.Controllers
 
             currentRooms.Clear();
             currentRooms.AddRange(MvcApplication.Db.GetRooms((string)Session["nick"]));
+
+            MvcApplication.Pub.Publish(Resources.Internals.RoomsEventChannel,
+                JsonConvert.SerializeObject(MvcApplication.Db.GetRooms()));
 
             if(0 == currentRooms.Count){
                 MvcApplication.Db.DelUserFromGlobalList((string)Session["nick"]);

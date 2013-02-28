@@ -174,7 +174,7 @@ function toggle_actionbox() {
 /**
  * Update the data-source for typeahead with the users on the current room
  *
- * This should be called if the user chages rooms
+ * This should be called if the user changes rooms
  */
 function update_typeahead() {
     var autocomplete = $('#text').typeahead();

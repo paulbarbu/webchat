@@ -29,6 +29,9 @@ namespace webchat.Controllers
             model.Users = MvcApplication.Db.GetUsers();
             model.Rooms = MvcApplication.Db.GetRooms((string)Session["nick"]);
 
+            MvcApplication.Pub.Publish(Resources.Internals.RoomsEventChannel,
+                JsonConvert.SerializeObject(MvcApplication.Db.GetRooms()));
+
             return View(model);
         }
 

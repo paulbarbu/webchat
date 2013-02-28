@@ -129,6 +129,9 @@
   <data name="PingEventChannel" xml:space="preserve">
     <value>ping</value>
   </data>
+  <data name="RoomsEventChannel" xml:space="preserve">
+    <value>rooms</value>
+  </data>
   <data name="UsersEventChannel" xml:space="preserve">
     <value>users</value>
   </data>

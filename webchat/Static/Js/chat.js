@@ -10,12 +10,16 @@ function load_chat(){
 
     stream.addEventListener('users', handle_event_users);
     stream.addEventListener('ping', handle_event_ping);
+    stream.addEventListener('rooms', handle_event_rooms);
 
     set_spacing();
 
     display_rooms();
     display_users($('.tab-pane.active').attr('id'));
+
     $('#text').attr('data-provide', 'typeahead');
+    $('#join_rooms').attr('data-provide', 'typeahead');
+
     $('#text').focus();
     update_typeahead();
 }
@@ -50,6 +54,7 @@ $(document).keypress(function(e){
 
 load_chat();
 override_typeahead('#text');
+override_typeahead('#join_rooms');
 
 $('[name="send"]').click(publish_message);
 $('[name="join"]').click(join_rooms);

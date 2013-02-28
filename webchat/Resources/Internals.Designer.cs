@@ -97,6 +97,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to rooms.
+        /// </summary>
+        public static string RoomsEventChannel {
+            get {
+                return ResourceManager.GetString("RoomsEventChannel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to users.
         /// </summary>
         public static string UsersEventChannel {

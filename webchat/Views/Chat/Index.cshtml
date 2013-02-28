@@ -27,7 +27,10 @@
             value="@Resources.Strings.SendButtonText"/>
         
         @Html.Label("join_rooms", Resources.Strings.JoinRoomsLabel)
-        @Html.TextBox("join_rooms", null, new { tabindex = 3 })
+        @Html.TextBox("join_rooms", null, new { 
+            tabindex = 3,
+            autocomplete = "off",
+        })
 
         <input id="join" name="join" tabindex="4" type="submit" value="@Resources.Strings.JoinButtonText" />
     }
@@ -52,6 +55,7 @@
     Data = {
         users: JSON.parse('@Html.Raw(Json.Encode(Model.Users))'),
         rooms: JSON.parse('@Html.Raw(Json.Encode(Model.Rooms))'),
+        all_rooms: new Array(),
     };
 
     Actionbox = {
