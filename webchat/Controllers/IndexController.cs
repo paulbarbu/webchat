@@ -27,7 +27,10 @@ namespace webchat.Controllers
                 return RedirectToAction("Index", "Chat");
             }
 
-            return View();
+            IndexModel m = new IndexModel();
+            m.Rooms = MvcApplication.Db.GetRooms();
+
+            return View(m);
         }
 
         /// <summary>

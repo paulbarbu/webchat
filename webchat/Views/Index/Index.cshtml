@@ -13,9 +13,10 @@
     
     <br />
     
-    @Html.TextBox("rooms", null, new {
+    @Html.TextBox("rooms", "", new {
         tabindex = 2,
         placeholder = Resources.Strings.RoomsPlaceHolder,
+        autocomplete = "off",
     })
     
     <span class="help-block">@Resources.Strings.JoinRoomsHelpBlock</span>
@@ -26,12 +27,24 @@
     <input type="submit" name="submit" class="btn btn-primary" value="@Resources.Strings.ConnectButtonText"/>
 }
 
-@if(!ViewData.ModelState.IsValid){
+@if(!ViewData.ModelState.IsValid) {
     var errors = ViewData.ModelState.Values.SelectMany(v => v.Errors).Select(t => t.ErrorMessage);
     @Html.ErrorSummary("form-errors", errors.ToList(), null, new { @class = "alert alert-error" })
 }
 
+
+<script type="text/javascript" src="@Url.Content("~/Static/Js/lib/bootstrap.js")"></script>
 <script type="text/javascript" src="@Url.Content("~/Static/Js/helpers.js")"></script>
 <script type="text/javascript">
     set_spacing();
+
+    Data = {
+        rooms: JSON.parse('@Html.Raw(Json.Encode(Model.Rooms))'),
+    };
+
+    $('#rooms').attr('data-provide', 'typeahead');
+    var autocomplete = $('#rooms').typeahead();
+    autocomplete.data('typeahead').source = Data.rooms;
+    
+    override_typeahead('#rooms');
 </script>
