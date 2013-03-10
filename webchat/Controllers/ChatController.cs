@@ -25,10 +25,12 @@ namespace webchat.Controllers
         /// <returns>Returns a <see cref="Models.ChatModel"/></returns>
         public ActionResult Index() {
             ChatModel model = new ChatModel();
+            model.AllRooms = new RoomsModel();
+            model.ConnectedRooms = new RoomsModel();
 
             model.Users = MvcApplication.Db.GetUsers();
-            model.Rooms = MvcApplication.Db.GetRooms((string)Session["nick"]);
-            model.AllRooms = MvcApplication.Db.GetRooms();
+            model.ConnectedRooms.Rooms = MvcApplication.Db.GetRooms((string)Session["nick"]);
+            model.AllRooms.Rooms = MvcApplication.Db.GetRooms();
 
             MvcApplication.Pub.Publish(Resources.Internals.RoomsEventChannel,
                 JsonConvert.SerializeObject(MvcApplication.Db.GetRooms()));

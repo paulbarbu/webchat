@@ -214,6 +214,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Internals.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Strings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

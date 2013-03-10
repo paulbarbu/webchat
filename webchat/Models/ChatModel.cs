@@ -7,7 +7,7 @@ namespace webchat.Models {
     /// <summary>
     /// Model for the <see cref="Controllers.ChatController"/>
     /// </summary>
-    public class ChatModel : RoomsModel {
+    public class ChatModel {
         /// <summary>
         /// A copy of the database used to display the connected users on every room
         /// </summary>
@@ -16,11 +16,11 @@ namespace webchat.Models {
         /// <summary>
         /// The rooms the user connected to
         /// </summary>
-        public List<string> Rooms { get; set; }
+        public RoomsModel ConnectedRooms { get; set; }
 
         /// <summary>
         /// The rooms that any user is connected to
         /// </summary>
-        public List<string> AllRooms { get; set; }
+        public RoomsModel AllRooms { get; set; }
     }
 }

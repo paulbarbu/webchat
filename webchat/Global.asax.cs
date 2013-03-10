@@ -22,7 +22,7 @@ namespace webchat {
     public class MvcApplication : System.Web.HttpApplication {
 
         /// <summary>
-        /// A singleton of a <see cref="Communication.IPublisher<T>"/> to use throughout the application
+        /// A singleton of a <see cref="Communication.IPublisher&lt;T&gt;"/> to use throughout the application
         /// </summary>
         public static IPublisher<ConcurrentQueue<StreamWriter>> Pub = new Publisher();
 
