@@ -28,7 +28,10 @@ namespace webchat.Controllers
             }
 
             IndexModel m = new IndexModel();
-            m.Rooms = MvcApplication.Db.GetRooms();
+            m.Rooms = new RoomsModel();
+            m.Rooms.Rooms = new List<string>();
+            m.AvailableRooms = new RoomsModel();
+            m.AvailableRooms.Rooms = MvcApplication.Db.GetRooms();
 
             return View(m);
         }
@@ -52,16 +55,19 @@ namespace webchat.Controllers
                 ModelState.AddModelError("captcha", Resources.Strings.CaptchaError);
             }
             else if(ModelState.IsValid) {
-                if(1 == indexModel.Rooms.Count && "" == indexModel.Rooms[0].Trim()) {
-                    indexModel.Rooms[0] = Resources.Strings.DefaultRoom;
+                if(1 == indexModel.Rooms.Rooms.Count && "" == indexModel.Rooms.Rooms[0].Trim()) {
+                    indexModel.Rooms.Rooms[0] = Resources.Strings.DefaultRoom;
                 }
 
-                MvcApplication.Db.AddUser(indexModel.Rooms, indexModel.Nick);
+                MvcApplication.Db.AddUser(indexModel.Rooms.Rooms, indexModel.Nick);
                 
                 Session["nick"] = indexModel.Nick;
                 
                 return RedirectToAction("Index", "Chat");
             }
+
+            indexModel.AvailableRooms = new RoomsModel();
+            indexModel.AvailableRooms.Rooms = MvcApplication.Db.GetRooms();
 
             return View(indexModel);
         }

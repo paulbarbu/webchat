@@ -21,7 +21,7 @@ namespace webchat.Models.Binders {
             if(propertyDescriptor.Name == "Rooms") {
                 RoomsModel model = (RoomsModel)bindingContext.Model;
 
-                model.Rooms = BindingHelper.GetValue<string>(bindingContext, "rooms")
+                model.Rooms = BindingHelper.GetValue<string>(bindingContext, "Rooms.Rooms")
                     .Trim()
                     .Split(" ".ToCharArray())
                     .Distinct()

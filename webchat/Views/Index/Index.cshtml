@@ -12,13 +12,13 @@
     })
     
     <br />
-    
-    @Html.TextBox("rooms", "", new {
+
+    @Html.TextBoxFor(x => x.Rooms.Rooms, new {
         tabindex = 2,
         placeholder = Resources.Strings.RoomsPlaceHolder,
         autocomplete = "off",
+        @Value = Model.Rooms.Rooms.Count != 0 ? String.Join(" ", Model.Rooms.Rooms.ToArray()) : "",
     })
-    
     <span class="help-block">@Resources.Strings.JoinRoomsHelpBlock</span>
     
     @Html.Raw(Html.GenerateCaptcha("captcha", "clean"))
@@ -32,19 +32,18 @@
     @Html.ErrorSummary("form-errors", errors.ToList(), null, new { @class = "alert alert-error" })
 }
 
-
 <script type="text/javascript" src="@Url.Content("~/Static/Js/lib/bootstrap.js")"></script>
 <script type="text/javascript" src="@Url.Content("~/Static/Js/helpers.js")"></script>
 <script type="text/javascript">
     set_spacing();
 
     Data = {
-        rooms: JSON.parse('@Html.Raw(Json.Encode(Model.Rooms))'),
+        rooms: JSON.parse('@Html.Raw(Model.AvailableRooms != null ? Json.Encode(Model.AvailableRooms.Rooms) : "[]")'),
     };
 
-    $('#rooms').attr('data-provide', 'typeahead');
-    var autocomplete = $('#rooms').typeahead();
+    $('#Rooms_Rooms').attr('data-provide', 'typeahead');
+    var autocomplete = $('#Rooms_Rooms').typeahead();
     autocomplete.data('typeahead').source = Data.rooms;
     
-    override_typeahead('#rooms');
+    override_typeahead('#Rooms_Rooms');
 </script>

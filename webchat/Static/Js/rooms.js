@@ -133,7 +133,7 @@ function display_rooms() {
  */
 function join_rooms(e) {
     e.preventDefault();
-    $.post(Url.JoinRooms, { 'rooms': $('#join_rooms').val() })
+    $.post(Url.JoinRooms, { 'Rooms.Rooms': $('#join_rooms').val() })
         .fail(handle_join_error)
         .success(function (e) {
             if ("" != e) {

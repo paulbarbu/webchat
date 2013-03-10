@@ -10,7 +10,7 @@ namespace webchat.Models {
     /// <summary>
     /// Model for the <see cref="Controllers.IndexController"/>
     /// </summary>
-    public class IndexModel : RoomsModel {
+    public class IndexModel {
         /// <summary>
         /// The user's nickname
         /// </summary>
@@ -22,5 +22,15 @@ namespace webchat.Models {
             ErrorMessageResourceType = typeof(Resources.Strings))]
         [UniqueNickValidation]
         public string Nick { get; set; }
+
+        /// <summary>
+        /// The rooms that the user wants to connect to
+        /// </summary>
+        public RoomsModel Rooms {get; set;}
+
+        /// <summary>
+        /// Rooms that are already populated by users
+        /// </summary>
+        public RoomsModel AvailableRooms { get; set; }
     }
 }

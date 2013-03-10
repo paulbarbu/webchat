@@ -230,7 +230,7 @@ function set_spacing() {
         $('.help-block').css('margin-bottom', '0px');
 
         if(document.URL.indexOf('Chat') == -1 ){
-            $('#rooms').css('margin-bottom', '0px');
+            $('#Rooms_Rooms').css('margin-bottom', '0px');
             $('#nick').css('margin-bottom', '0px');
             $('form').css('margin', '0px 0px 0px 0px');
             $('br')[1].remove()
