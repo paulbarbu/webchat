@@ -20,19 +20,13 @@ function notify_activity(room_name) {
     }
 
     if (User.away) {
-        Notificon("!", {
-            font: '10px arial',
-            color: '#ffffff',
-            stroke: 'rgba(240, 61, 37, 1)',
-            width: 7,
-        });
+        document.title = '\u2709 Webchat'; // \u2709 is an envelope UTF-8 character
     }
 }
 
-//if the browser or the browser's tab is not focused display a Notificon
 $(window).focus(function () {
     User.away = false;
-    Notificon('');
+    document.title = 'Webchat';
 });
 
 $(window).blur(function () {
